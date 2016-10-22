@@ -1,14 +1,13 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Location;
-//import com.monsterhunters.pa165.enums.Type;
+//import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.List;
 
 /**
  * LocationDao
  *
  * @author Tomas Durcak
- * @since 22.10.2016
  */
 public interface LocationDao {
 
@@ -50,5 +49,5 @@ public interface LocationDao {
     public void delete(Location location);
 
     //not sure we need that this
-//    public List<Location> getLocationWithMonsterType(Type type);
+//    public List<Location> getLocationWithMonsterType(MonsterType type);
 }

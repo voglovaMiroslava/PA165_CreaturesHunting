@@ -1,4 +1,3 @@
-
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Location;
@@ -11,7 +10,6 @@ import javax.persistence.PersistenceContext;
  * LocationDao implementation
  *
  * @author Tomas Durcak
- * @since 22.10.2016
  */
 public class LocationDaoImpl implements LocationDao {
 

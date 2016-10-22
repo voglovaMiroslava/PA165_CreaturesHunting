@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.monsterhunters.pa165.entity;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
@@ -14,14 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
  * Entity Location
  *
  * @author Tomas Durcak
- * @since 22.10.2016
  */
 @Entity
 public class Location {
@@ -35,11 +28,11 @@ public class Location {
     private String name;
 
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String description;
 
-    @ManyToMany
-    private List<Monster> monsters = new ArrayList<Monster>();
+    @OneToMany(mappedBy = "location")
+    private List<Monster> monsters = new ArrayList<>();
 
     //TODO Later add list of comments with coresponding methods
     
@@ -80,10 +73,6 @@ public class Location {
 
     public void addMonster(Monster monster) {
         this.monsters.add(monster);
-    }
-
-    public void setMonsters(Collection<Monster> monsters) {
-        this.monsters = new ArrayList<>(monsters);
     }
 
     @Override
