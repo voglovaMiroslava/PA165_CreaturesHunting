@@ -6,12 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Miroslava Voglova
  */
 @Transactional
+@Repository
 public class MonsterDaoImpl implements MonsterDao {
 
     @PersistenceContext
@@ -29,12 +31,12 @@ public class MonsterDaoImpl implements MonsterDao {
 
     @Override
     public void update(Monster m) {
-        em.refresh(m);
+        em.merge(m);
     }
 
     @Override
     public void delete(Monster m) {
-            em.remove(m);
+        em.remove(m);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class MonsterDaoImpl implements MonsterDao {
     public Monster findByName(String name) {
         try {
             return em.createQuery("Select m from Monster m where m.name = :name", Monster.class)
-                    .setParameter(":name", name)
+                    .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

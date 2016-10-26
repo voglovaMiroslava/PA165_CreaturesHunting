@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,7 @@ public class Monster {
     private Location location;
 
     @ElementCollection
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @NotNull
     private Set<MonsterType> types = new HashSet<>();
 
@@ -121,7 +122,6 @@ public class Monster {
         hash = 89 * hash + Objects.hashCode(this.getWeight());
         hash = 89 * hash + this.getPower();
         hash = 89 * hash + Objects.hashCode(this.getLocation());
-        hash = 89 * hash + Objects.hashCode(this.getTypes());
         return hash;
     }
 
@@ -149,9 +149,6 @@ public class Monster {
         if (!Objects.equals(this.getWeight(), other.getWeight())) {
             return false;
         }
-        if (!Objects.equals(this.getLocation(), other.getLocation())) {
-            return false;
-        }
-        return Objects.equals(this.getTypes(), other.getTypes());
+        return Objects.equals(this.getLocation(), other.getLocation());
     }
 }
