@@ -1,10 +1,10 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Weapon;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
+
 
 /**
  * Created by babcang on 22.10.2016.
