@@ -47,6 +47,13 @@ public interface LocationDao {
      * @param location the instance to delete
      */
     public void delete(Location location);
+    
+    /**
+     * Update location
+     *
+     * @param location the instance to update
+     */
+    public Location update(Location location);
 
     //not sure we need that this
 //    public List<Location> getLocationWithMonsterType(MonsterType type);

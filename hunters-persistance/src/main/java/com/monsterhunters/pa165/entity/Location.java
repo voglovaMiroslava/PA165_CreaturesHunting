@@ -1,8 +1,8 @@
 package com.monsterhunters.pa165.entity;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +32,7 @@ public class Location {
     private String description;
 
     @OneToMany(mappedBy = "location")
-    private List<Monster> monsters = new ArrayList<>();
+    private Set<Monster> monsters = new HashSet<>();
 
     //TODO Later add list of comments with coresponding methods
     
@@ -67,8 +67,8 @@ public class Location {
         this.description = description;
     }
 
-    public List<Monster> getMonsters() {
-        return Collections.unmodifiableList(monsters);
+    public Set<Monster> getMonsters() {
+        return Collections.unmodifiableSet(monsters);
     }
 
     public void addMonster(Monster monster) {

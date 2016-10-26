@@ -35,11 +35,17 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public void create(Location location) {
         em.persist(location);
+        //em.flush();
     }
 
     @Override
     public void delete(Location location) throws IllegalArgumentException {
         em.remove(location);
+    }
+    
+    @Override
+    public Location update(Location location) {
+        return em.merge(location);
     }
 
     @Override
