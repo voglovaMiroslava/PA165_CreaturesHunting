@@ -1,10 +1,10 @@
 package com.monsterhunters.pa165.entity;
 
 import com.monsterhunters.pa165.enums.MonsterType;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -40,7 +40,7 @@ public class Monster {
 
     @Enumerated
     @NotNull
-    private List<MonsterType> types = new ArrayList<>();
+    private Set<MonsterType> types = new HashSet<>();
 
     public Monster() {
     }
@@ -93,8 +93,22 @@ public class Monster {
         this.location = location;
     }
 
-    public List<MonsterType> getTypes() {
-        return Collections.unmodifiableList(types);
+    public Set<MonsterType> getTypes() {
+        return Collections.unmodifiableSet(types);
+    }
+
+    public void addType(MonsterType type) {
+        if (type == null) {
+            return;
+        }
+        types.add(type);
+    }
+
+    public void removeType(MonsterType type) {
+        if (type == null) {
+            return;
+        }
+        types.remove(type);
     }
 
     @Override
@@ -137,5 +151,5 @@ public class Monster {
             return false;
         }
         return Objects.equals(this.getTypes(), other.getTypes());
-    } 
+    }
 }
