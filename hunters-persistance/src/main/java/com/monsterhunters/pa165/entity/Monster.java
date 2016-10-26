@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -38,6 +39,7 @@ public class Monster {
     @ManyToOne
     private Location location;
 
+    @ElementCollection
     @Enumerated
     @NotNull
     private Set<MonsterType> types = new HashSet<>();
