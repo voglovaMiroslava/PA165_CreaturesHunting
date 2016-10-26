@@ -1,6 +1,9 @@
 package com.monsterhunters.pa165;
 
 import com.monsterhunters.pa165.dao.WeaponDao;
+import com.monsterhunters.pa165.dao.MonsterDao;
+import com.monsterhunters.pa165.dao.LocationDao;
+
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +25,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories
-@ComponentScan(basePackageClasses={WeaponDao.class})
+@ComponentScan(basePackageClasses={WeaponDao.class, LocationDao.class, MonsterDao.class})
 public class PersistenceSampleApplicationContext {
 	
 	@Bean
