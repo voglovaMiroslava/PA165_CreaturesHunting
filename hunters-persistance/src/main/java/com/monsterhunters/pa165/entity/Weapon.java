@@ -1,11 +1,14 @@
 package com.monsterhunters.pa165.entity;
 
+import com.monsterhunters.pa165.enums.MonsterType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by babcang on 22.10.2016.
+ *
  * @author Babcan G
  */
 
@@ -13,32 +16,25 @@ import java.util.List;
 public class Weapon {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(nullable=false,unique=true)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column
     private int gunReach;
 
-    @NotNull
-    @Column(nullable=false)
+    @Column
     private int ammo;
 
     @Column
     private int damage;
 
-
-    //TODO create new list and add methods
-/*
-    @ManyToMany
-    private List<Type> effectiveAgainst;
-*/
-
-    @OneToMany()
-    private List<Comment> comments;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<MonsterType> effectiveAgainst = new HashSet<>();
 
 
     public Weapon() {
@@ -84,33 +80,37 @@ public class Weapon {
         this.damage = damage;
     }
 
-/*
-    public List<Type> getEffectiveAgainst() {
-        return effectiveAgainst;
+    public Set<MonsterType> getEffectiveAgainst() {
+        return Collections.unmodifiableSet(effectiveAgainst);
     }
 
-    public void setEffectiveAgainst(List<Type> effectiveAgainst) {
+    public void setEffectiveAgainst(Set<MonsterType> effectiveAgainst) {
         this.effectiveAgainst = effectiveAgainst;
     }
-*/
+
+    public void addEffectiveAgainst(MonsterType monsterType) {
+        effectiveAgainst.add(monsterType);
+    }
+
+    public void removeEffectiveAgainst(MonsterType monsterType) {
+        effectiveAgainst.remove(monsterType);
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null )
+        if (o == null)
             return false;
-        if(!(o instanceof Weapon))
+        if (!(o instanceof Weapon))
             return false;
 
         Weapon other = (Weapon) o;
-        if (name == null)
-        {
-            if (other.name != null)
+        if (name == null) {
+            if (other.getName() != null)
                 return false;
-        }else if (!name.equals(other.getName()))
-            return false;
-        if (ammo != other.getAmmo())
+        } else if (!name.equals(other.getName()))
             return false;
         return true;
     }
@@ -119,8 +119,7 @@ public class Weapon {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name==null) ? 0 : name.hashCode());
-        result = prime * result + ammo;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 }

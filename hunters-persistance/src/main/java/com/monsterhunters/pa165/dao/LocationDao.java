@@ -55,6 +55,4 @@ public interface LocationDao {
      */
     public void update(Location location);
 
-    //not sure we need that this
-//    public List<Location> getLocationWithMonsterType(MonsterType type);
 }
