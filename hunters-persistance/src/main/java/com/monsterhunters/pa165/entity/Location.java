@@ -31,9 +31,6 @@ public class Location {
     @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "location")
-    private Set<Monster> monsters = new HashSet<>();
-
     //TODO Later add list of comments with coresponding methods
     
     public Location() {
@@ -65,14 +62,6 @@ public class Location {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<Monster> getMonsters() {
-        return Collections.unmodifiableSet(monsters);
-    }
-
-    public void addMonster(Monster monster) {
-        this.monsters.add(monster);
     }
 
     @Override
@@ -112,10 +101,5 @@ public class Location {
         }
         return true;
     }
-
-//    @Override
-//    public String toString() {
-//        return "com.monsterhunters.pa165.entity.Location[ id=" + id + " ]";
-//    }
 
 }

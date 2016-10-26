@@ -57,11 +57,4 @@ public class LocationDaoImpl implements LocationDao {
         return em.createQuery("select l from Location l", Location.class)
                 .getResultList();
     }
-
-//    @Override
-//    public List<Location> getLocationWithMonsterType(Type type) {
-//        return em.createQuery("select l from Location l join l.monsters m where :monsterType in m.type",
-//                Location.class).setParameter(":monsterType", type)
-//                .getResultList();
-//    }
 }
