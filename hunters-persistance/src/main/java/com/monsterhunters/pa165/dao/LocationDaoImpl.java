@@ -5,12 +5,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import org.springframework.stereotype.Repository;
 
 /**
  * LocationDao implementation
  *
  * @author Tomas Durcak
  */
+@Repository
+@Transactional
 public class LocationDaoImpl implements LocationDao {
 
     @PersistenceContext
@@ -25,7 +29,7 @@ public class LocationDaoImpl implements LocationDao {
     public Location findByName(String name) {
         try {
             return em.createQuery("select c from Location c where c.name = :name",
-                    Location.class).setParameter(":name", name)
+                    Location.class).setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException nrf) {
             return null;
@@ -44,8 +48,8 @@ public class LocationDaoImpl implements LocationDao {
     }
     
     @Override
-    public Location update(Location location) {
-        return em.merge(location);
+    public void update(Location location) {
+        em.merge(location);
     }
 
     @Override

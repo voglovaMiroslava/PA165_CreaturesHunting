@@ -53,7 +53,7 @@ public interface LocationDao {
      *
      * @param location the instance to update
      */
-    public Location update(Location location);
+    public void update(Location location);
 
     //not sure we need that this
 //    public List<Location> getLocationWithMonsterType(MonsterType type);
