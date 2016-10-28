@@ -22,6 +22,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 
@@ -74,7 +75,12 @@ public class MonsterDaoImplTest extends AbstractTestNGSpringContextTests {
         troll.addType(MonsterType.GROUND);
 
         monsterDao.create(dragon);
-        //loc.addMonster(dragon);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void clean() {
+        em.createQuery("DELETE FROM Monster");
+        em.createQuery("DELETE FROM Location");
     }
 
     /**
@@ -104,7 +110,6 @@ public class MonsterDaoImplTest extends AbstractTestNGSpringContextTests {
         monsterDao.create(troll);
         Monster sameMonster = monsterDao.findById(troll.getId());
         Assert.assertEquals(troll, sameMonster);
-        monsterDao.delete(troll);
     }
 
     /**
@@ -118,9 +123,6 @@ public class MonsterDaoImplTest extends AbstractTestNGSpringContextTests {
         Monster sameMonster = monsterDao.findByName("drago");
         Assert.assertNotNull(sameMonster);
         Assert.assertEquals(sameMonster.getId(), dragon.getId());
-
-        dragon.setName("Dragon");
-        monsterDao.update(dragon);
     }
 
     /**
@@ -148,10 +150,7 @@ public class MonsterDaoImplTest extends AbstractTestNGSpringContextTests {
         expectedResult.add(troll);
 
         Assert.assertEquals(foundMonsters.size(), expectedResult.size());
-//        for (int i = 0; i < expectedResult.size(); i++) {
-//            Assert.assertEquals(expectedResult.get(i), foundMonsters.get(i));
-//        }
-        monsterDao.delete(troll);
+        Assert.assertTrue(expectedResult.containsAll(foundMonsters));
     }
 
 }

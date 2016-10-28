@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Monster;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -42,11 +43,25 @@ public class LocationDaoImpl implements LocationDao {
         //em.flush();
     }
 
+    private List<Monster> getMonstersWithLocation(Location l) {
+        try {
+            return em.createQuery("Select m from Monster m where m.location = :location", Monster.class)
+                    .setParameter("location", l)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     @Override
     public void delete(Location location) throws IllegalArgumentException {
+        List<Monster> mList= getMonstersWithLocation(location);
+        for(Monster monster: mList)
+            em.remove(monster);
+        
         em.remove(location);
     }
-    
+
     @Override
     public void update(Location location) {
         em.merge(location);
