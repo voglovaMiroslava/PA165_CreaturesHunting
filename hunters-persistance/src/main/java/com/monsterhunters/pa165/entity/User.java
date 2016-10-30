@@ -16,7 +16,7 @@ public class User {
 
     @NotNull
     @Column(nullable = false, unique = true)
-    private String nickName;
+    private String nickname;
 
     @NotNull
     @Column(nullable = false, unique = true)
@@ -30,12 +30,12 @@ public class User {
         return id;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getEmail() {
@@ -72,7 +72,7 @@ public class User {
         if (!id.equals(user.id)) {
             return false;
         }
-        if (!nickName.equals(user.nickName)) {
+        if (!nickname.equals(user.nickname)) {
             return false;
         }
         return email.equals(user.email);
@@ -81,7 +81,7 @@ public class User {
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + nickName.hashCode();
+        result = 31 * result + nickname.hashCode();
         result = 89 * result + email.hashCode();
         result = 313 * result + (isAdmin ? 1 : 0);
         return result;
