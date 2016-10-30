@@ -1,9 +1,10 @@
 package com.monsterhunters.pa165.dao;
 
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Weapon;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+//import javax.transaction.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -43,6 +44,11 @@ public class WeaponDaoImpl implements WeaponDao {
     @Override
     public void delete(Weapon w) {
         if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        List<Comment> comments = findAssignedComments(w);
+        for (Comment comment : comments) {
+            comment.setWeapon(null);
+            em.merge(comment);
+        }
         em.remove(em.contains(w) ? w : em.merge(w));
     }
 
@@ -56,11 +62,21 @@ public class WeaponDaoImpl implements WeaponDao {
     public Weapon findByName(String name) {
         if (name.isEmpty() || name == null) throw new IllegalArgumentException(Weapon.class.getName());
         try {
-            return em
-                    .createQuery("select w from  Weapon w where name = :name",
-                            Weapon.class).setParameter("name", name)
+            return em.createQuery("select w from  Weapon w where name = :name",
+                    Weapon.class).setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException nrf) {
+            return null;
+        }
+    }
+
+    private List<Comment> findAssignedComments(Weapon w) {
+        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        try {
+            return em.createQuery("SELECT c from Comment c where c.weapon = :weapon", Comment.class)
+                    .setParameter("weapon", w)
+                    .getResultList();
+        } catch (NoResultException e) {
             return null;
         }
     }
