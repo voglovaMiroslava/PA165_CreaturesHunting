@@ -1,8 +1,6 @@
-package com.monsterhunters.pa165.testdao;
+package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.LocationDao;
-import com.monsterhunters.pa165.dao.MonsterDao;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;

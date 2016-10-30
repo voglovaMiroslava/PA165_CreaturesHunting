@@ -1,8 +1,6 @@
-package com.monsterhunters.pa165.testdao;
+package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.CommentDao;
-import com.monsterhunters.pa165.dao.UserDao;
 import com.monsterhunters.pa165.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,25 +33,17 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void createUserTest() {
-        User user = new User();
-        user.setEmail("myNickname");
-        user.setNickname("MyEmail@asdf.com");
-        user.setAdmin(true);
-
-        User user2 = new User();
-        user2.setEmail("myNickname2");
-        user2.setNickname("MyEmail2@asdf.com");
-        user2.setAdmin(true);
+        User user = new User("myNickname", "MyEmail@asdf.com", true);
+        User user2 = new User("myNickname2", "MyEmail2@asdf.com", true);
 
         userDao.create(user);
         userDao.create(user2);
 
         User user3 = userDao.findByEmail("MyEmail@asdf.com");
-        Assert.assertEquals(user3.getId(), new Long(1));
+        Assert.assertEquals(user3.getNickname(), "myNickname");
 
         User user4 = userDao.findByEmail("MyEmail@asdf.com");
-        Assert.assertEquals(user4.getId(), new Long(2));
+        Assert.assertEquals(user4.getNickname(), "myNickname2");
     }
-
 
 }

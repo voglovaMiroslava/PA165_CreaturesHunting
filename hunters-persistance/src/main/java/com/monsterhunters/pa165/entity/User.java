@@ -1,7 +1,12 @@
 package com.monsterhunters.pa165.entity;
 
-import javax.persistence.*;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * Created by Snurka on 10/30/2016.
@@ -11,8 +16,10 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, length = 36)
+    @Type(type = "uuid-char")
+    @NotNull
+    private UUID id;
 
     @NotNull
     @Column(nullable = false, unique = true)
@@ -26,7 +33,18 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    public Long getId() {
+    public User(String nickname, String email, boolean isAdmin) {
+        this.id = UUID.randomUUID();
+        this.nickname = nickname;
+        this.email = email;
+        this.isAdmin = isAdmin;
+    }
+
+    protected User() {
+
+    }
+
+    public UUID getId() {
         return id;
     }
 
@@ -34,24 +52,12 @@ public class User {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public boolean isAdmin() {
         return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     @Override
@@ -59,20 +65,11 @@ public class User {
         if (this == o) {
             return true;
         }
-        if (o == null) {
-            return false;
-        }
         if (!(o instanceof User)) {
             return false;
         }
         User user = (User) o;
-        if (isAdmin != user.isAdmin) {
-            return false;
-        }
-        if (!nickname.equals(user.nickname)) {
-            return false;
-        }
-        return email.equals(user.email);
+        return getId().equals(user.getId());
     }
 
     @Override

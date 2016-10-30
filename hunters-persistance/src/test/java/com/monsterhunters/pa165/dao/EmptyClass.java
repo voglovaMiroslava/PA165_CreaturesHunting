@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.monsterhunters.pa165.testdao;
+package com.monsterhunters.pa165.dao;
 
 /**
  *
  * @author voglovam
  */
 public class EmptyClass {
-    
+
 }
