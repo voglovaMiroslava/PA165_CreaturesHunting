@@ -32,7 +32,7 @@ public class User {
     private String email;
 
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String passwordHash;
 
     @NotNull
