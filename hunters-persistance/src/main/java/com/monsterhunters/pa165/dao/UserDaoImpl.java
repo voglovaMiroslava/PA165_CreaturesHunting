@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @Transactional
@@ -19,7 +20,7 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public User findById(Long id) {
+    public User findById(UUID id) {
         return entityManager.find(User.class, id);
     }
 
@@ -37,16 +38,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findByEmail(String email) {
         try {
-            return entityManager.createQuery("select c from User c where c.email = :email", User.class)
+            return entityManager
+                    .createQuery("select u from User u where u.email = :email", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
-        } catch (NoResultException nrf) {
+        } catch (NoResultException e) {
             return null;
         }
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> findAll() {
         return entityManager.createQuery("select l from User l", User.class)
                 .getResultList();
     }

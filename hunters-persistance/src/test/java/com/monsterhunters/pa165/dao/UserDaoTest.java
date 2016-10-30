@@ -39,7 +39,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         userDao.create(user);
         userDao.create(user2);
 
-        User user3 = userDao.findByEmail("MyEmail@asdf.com");
+        User user3 = userDao.findByNickname("myNickname");
         Assert.assertEquals(user3.getNickname(), "myNickname");
 
         User user4 = userDao.findByEmail("MyEmail@asdf.com");
