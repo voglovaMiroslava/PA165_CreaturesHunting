@@ -1,15 +1,8 @@
 package com.monsterhunters.pa165.entity;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Entity Location
@@ -31,8 +24,9 @@ public class Location {
     @Column(nullable = false)
     private String description;
 
-    //TODO Later add list of comments with coresponding methods
-    
+    @OneToMany
+    private List<Comment> commentList;
+
     public Location() {
     }
 
@@ -62,6 +56,14 @@ public class Location {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     @Override

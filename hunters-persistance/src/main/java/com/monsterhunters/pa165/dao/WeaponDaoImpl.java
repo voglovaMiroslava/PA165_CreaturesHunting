@@ -44,11 +44,6 @@ public class WeaponDaoImpl implements WeaponDao {
     @Override
     public void delete(Weapon w) {
         if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
-        List<Comment> comments = findAssignedComments(w);
-        for (Comment comment : comments) {
-            comment.setWeapon(null);
-            em.merge(comment);
-        }
         em.remove(em.contains(w) ? w : em.merge(w));
     }
 
@@ -62,7 +57,7 @@ public class WeaponDaoImpl implements WeaponDao {
     public Weapon findByName(String name) {
         if (name.isEmpty() || name == null) throw new IllegalArgumentException(Weapon.class.getName());
         try {
-            return em.createQuery("select w from  Weapon w where name = :name",
+            return em.createQuery("select w from  Weapon w where w.name = :name",
                     Weapon.class).setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException nrf) {
@@ -70,15 +65,15 @@ public class WeaponDaoImpl implements WeaponDao {
         }
     }
 
-    private List<Comment> findAssignedComments(Weapon w) {
-        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
-        try {
-            return em.createQuery("SELECT c from Comment c where c.weapon = :weapon", Comment.class)
-                    .setParameter("weapon", w)
-                    .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
+//    private List<Comment> findAssignedComments(Weapon w) {
+//        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+//        try {
+//            return em.createQuery("SELECT c from Comment c where c.weapon = :weapon", Comment.class)
+//                    .setParameter("weapon", w)
+//                    .getResultList();
+//        } catch (NoResultException e) {
+//            return null;
+//        }
+//    }
 
 }
