@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.utils.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -31,6 +32,9 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private CommentDao commentDao;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void createUserTest() {
         User user = new User("myNickname", "MyEmail@asdf.com", "myPasswordHash", true);
@@ -44,6 +48,12 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
         User user4 = userDao.findByEmail("MyEmail@asdf.com");
         Assert.assertEquals(user4.getNickname(), "myNickname");
+    }
+
+    @Test
+    public void userServiceTest() {
+        User user = userService.createUser("asdf", "adsf@adsf.com", "123", true);
+        Assert.assertNotEquals("123", user.getPasswordHash());
     }
 
 }

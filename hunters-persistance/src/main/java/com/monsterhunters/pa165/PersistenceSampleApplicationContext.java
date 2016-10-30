@@ -1,6 +1,8 @@
 package com.monsterhunters.pa165;
 
+import com.monsterhunters.pa165.utils.UserService;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -24,6 +28,8 @@ import javax.sql.DataSource;
 @EnableJpaRepositories
 @ComponentScan(basePackages = "com.monsterhunters.pa165")
 public class PersistenceSampleApplicationContext {
+
+	private static final int BCRYPT_STRENGTH = 10;
 
 	@Bean
 	public PersistenceExceptionTranslationPostProcessor postProcessor() {
@@ -62,5 +68,16 @@ public class PersistenceSampleApplicationContext {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.DERBY).build();
 		return db;
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(BCRYPT_STRENGTH);
+	}
+
+	@Bean
+	@Autowired
+	public UserService userService(PasswordEncoder passwordEncoder) {
+		return new UserService(passwordEncoder);
 	}
 }

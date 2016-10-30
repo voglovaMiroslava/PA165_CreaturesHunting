@@ -67,6 +67,10 @@ public class User {
         return isAdmin;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
