@@ -2,15 +2,19 @@ package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * Created by Snurka on 10/30/2016.
  */
+@Transactional
+@Repository
 public class CommentDaoImpl implements CommentDao {
 
     @PersistenceContext
