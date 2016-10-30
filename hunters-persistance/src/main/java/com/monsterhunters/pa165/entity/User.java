@@ -32,13 +32,18 @@ public class User {
     private String email;
 
     @NotNull
+    @Column(nullable = false, unique = true)
+    private String passwordHash;
+
+    @NotNull
     @Column(nullable = false)
     private boolean isAdmin;
 
-    public User(String nickname, String email, boolean isAdmin) {
+    public User(String nickname, String email, String passwordHash, boolean isAdmin) {
         this.id = UUID.randomUUID();
         this.nickname = nickname;
         this.email = email;
+        this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;
     }
 
@@ -60,6 +65,22 @@ public class User {
 
     public boolean isAdmin() {
         return isAdmin;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     @Override

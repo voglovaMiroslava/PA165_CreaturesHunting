@@ -33,8 +33,8 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void createUserTest() {
-        User user = new User("myNickname", "MyEmail@asdf.com", true);
-        User user2 = new User("myNickname2", "MyEmail2@asdf.com", true);
+        User user = new User("myNickname", "MyEmail@asdf.com", "myPasswordHash", true);
+        User user2 = new User("myNickname2", "MyEmail2@asdf.com", "myPasswordHash2", true);
 
         userDao.create(user);
         userDao.create(user2);
