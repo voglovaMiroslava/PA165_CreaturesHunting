@@ -1,9 +1,5 @@
 package com.monsterhunters.pa165;
 
-import com.monsterhunters.pa165.dao.WeaponDao;
-import com.monsterhunters.pa165.dao.MonsterDao;
-import com.monsterhunters.pa165.dao.LocationDao;
-
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories
-@ComponentScan(basePackageClasses={WeaponDao.class, LocationDao.class, MonsterDao.class})
+@ComponentScan(basePackages = "com.monsterhunters.pa165")
 public class PersistenceSampleApplicationContext {
 
 	@Bean
@@ -38,7 +34,7 @@ public class PersistenceSampleApplicationContext {
 	public JpaTransactionManager transactionManager(){
 		return  new JpaTransactionManager(entityManagerFactory().getObject());
 	}
-	
+
 	/**
 	 * Starts up a container that emulates behavior prescribed in JPA spec for container-managed EntityManager
 	 * @return
@@ -51,7 +47,7 @@ public class PersistenceSampleApplicationContext {
 		jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 		return jpaFactoryBean;
 	}
-	
+
 	@Bean
 	public LocalValidatorFactoryBean localValidatorFactoryBean(){
 		return new LocalValidatorFactoryBean();
@@ -60,7 +56,7 @@ public class PersistenceSampleApplicationContext {
 	public LoadTimeWeaver instrumentationLoadTimeWeaver() {
 		return new InstrumentationLoadTimeWeaver();
 	}
-	
+
 	@Bean
 	public DataSource db(){
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
