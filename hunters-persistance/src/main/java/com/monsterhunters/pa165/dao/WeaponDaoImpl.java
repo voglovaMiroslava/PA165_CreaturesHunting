@@ -44,6 +44,9 @@ public class WeaponDaoImpl implements WeaponDao {
     @Override
     public void delete(Weapon w) {
         if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        for(Comment comment : w.getCommentSet()) {
+            em.remove(comment);
+        }
         em.remove(em.contains(w) ? w : em.merge(w));
     }
 

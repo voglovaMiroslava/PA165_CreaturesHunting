@@ -37,7 +37,7 @@ public class Weapon {
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
 
     @OneToMany
-    private List<Comment> commentList;
+    private Set<Comment> commentSet = new HashSet<>();
 
     public Weapon() {
     }
@@ -98,12 +98,12 @@ public class Weapon {
         effectiveAgainst.remove(monsterType);
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public Set<Comment> getCommentSet() {
+        return commentSet;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+    public void setCommentSet(Set<Comment> commentSet) {
+        this.commentSet = commentSet;
     }
 
     @Override

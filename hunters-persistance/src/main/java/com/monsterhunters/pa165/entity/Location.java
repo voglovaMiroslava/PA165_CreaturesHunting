@@ -2,7 +2,8 @@ package com.monsterhunters.pa165.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Entity Location
@@ -25,7 +26,7 @@ public class Location {
     private String description;
 
     @OneToMany
-    private List<Comment> commentList;
+    private Set<Comment> commentSet = new HashSet<>();
 
     public Location() {
     }
@@ -58,12 +59,12 @@ public class Location {
         this.description = description;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public Set<Comment> getCommentSet() {
+        return commentSet;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+    public void setCommentSet(Set<Comment> commentList) {
+        this.commentSet = commentList;
     }
 
     @Override

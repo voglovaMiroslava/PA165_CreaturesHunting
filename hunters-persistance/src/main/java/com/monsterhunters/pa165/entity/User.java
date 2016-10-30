@@ -69,9 +69,6 @@ public class User {
         if (isAdmin != user.isAdmin) {
             return false;
         }
-        if (!id.equals(user.id)) {
-            return false;
-        }
         if (!nickname.equals(user.nickname)) {
             return false;
         }
@@ -80,8 +77,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + nickname.hashCode();
+        int result = nickname.hashCode();
         result = 89 * result + email.hashCode();
         result = 313 * result + (isAdmin ? 1 : 0);
         return result;
