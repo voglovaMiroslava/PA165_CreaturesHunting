@@ -36,6 +36,9 @@ public class Weapon {
     @Enumerated(EnumType.STRING)
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
 
+    @NotNull
+    @OneToMany
+    private List<Comment> commentList;
 
     public Weapon() {
     }
@@ -96,6 +99,13 @@ public class Weapon {
         effectiveAgainst.remove(monsterType);
     }
 
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
 
     @Override
     public boolean equals(Object o) {
