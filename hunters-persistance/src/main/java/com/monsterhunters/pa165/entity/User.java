@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 
 @Entity
-@Table(name = "User")
+@Table(name = "MonsterUser")
 public class User {
 
     @Id
