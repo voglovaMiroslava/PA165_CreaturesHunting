@@ -79,6 +79,10 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
@@ -88,18 +92,20 @@ public class User {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof User)) {
+        if (!(o instanceof User))  {
             return false;
         }
         User user = (User) o;
-        return getId().equals(user.getId());
+        if (!getNickname().equals(user.getNickname()))  {
+            return false;
+        }
+        return getEmail().equals(user.getEmail());
     }
 
     @Override
     public int hashCode() {
-        int result = nickname.hashCode();
-        result = 89 * result + email.hashCode();
-        result = 313 * result + (isAdmin ? 1 : 0);
+        int result = getNickname().hashCode();
+        result = 31 * result + getEmail().hashCode();
         return result;
     }
 }

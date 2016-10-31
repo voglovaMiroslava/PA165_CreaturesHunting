@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 /**
  * Created by Snurka on 10/30/2016.
  */
@@ -22,14 +19,8 @@ import javax.persistence.PersistenceContext;
 @Transactional
 public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
-    @PersistenceContext
-    public EntityManager em;
-
     @Autowired
     UserDao userDao;
-
-    @Autowired
-    private CommentDao commentDao;
 
     @Test
     public void createUserTest() {
