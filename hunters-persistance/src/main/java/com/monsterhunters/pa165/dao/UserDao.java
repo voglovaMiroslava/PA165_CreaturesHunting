@@ -10,18 +10,58 @@ import java.util.UUID;
  */
 public interface UserDao {
 
+    /**
+     * Find user by id
+     *
+     * @param id is generated id of user
+     * @return user specified by id
+     */
     User findById(UUID id);
 
+    /**
+     * Find user by nickaname
+     *
+     * @param nickname is name of user
+     * @return user specified by nickname
+     */
     User findByNickname(String nickname);
 
+    /**
+     * Find user by email
+     *
+     * @param email is email of user
+     * @return user specified by email
+     */
     User findByEmail(String email);
 
+
+    /**
+     * return all users
+     *
+     * @return list of users
+     */
     List<User> findAll();
 
+    /**
+     * Persists User into DB
+     *
+     * @param user object of type User
+     */
     void create(User user);
 
+    /**
+     * Deletes User from DB
+     *
+     * @param user object of type User
+     */
     void delete(User user);
 
+
+    /**
+     * Updates User into DB
+     *
+     * @param user object of type User
+     */
     void update(User user);
 
 }
