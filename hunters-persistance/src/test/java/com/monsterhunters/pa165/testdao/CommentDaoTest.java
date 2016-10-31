@@ -12,10 +12,12 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +37,8 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
     @PersistenceContext
     public EntityManager em;
 
-    private Comment createTestComment(String content, User user) {
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setUser(user);
-        return comment;
-    }
+    @AfterMethod
+    publi
 
     @Test
     public void deleteCommentTest() {
@@ -56,36 +54,72 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findAllTest() {
-        User user = new User("Vahy", "vahy@jeDrsnej.com", "asdf123", true);
-        User user2 = new User("VelkejTypek", "VelkejTypek@jeDrsnej.com", "asdf123", true);
-        Comment comment = createTestComment("VahyJeDrsnejTypek", user);
-        Comment comment2 = createTestComment("VahyJeDobrejTypek", user);
-        Comment comment3 = createTestComment("VahyJekrutoprisnejTypek", user);
-        Comment comment4 = createTestComment("adf", user2);
-        userDao.create(user);
-        userDao.create(user2);
-        Assert.assertEquals(commentDao.findAll().size(), 0);
-        commentDao.create(comment);
-        em.flush();
-        Assert.assertEquals(commentDao.findAll().size(), 1);
-        commentDao.create(comment2);
-        em.flush();
-        Assert.assertEquals(commentDao.findAll().size(), 2);
-        commentDao.create(comment3);
-        em.flush();
-        Assert.assertEquals(commentDao.findAll().size(), 3);
-        commentDao.create(comment4);
-        em.flush();
-        Assert.assertEquals(commentDao.findAll().size(), 4);
-        List<Comment> commentList = commentDao.findAll();
-        Assert.assertEquals(commentList.stream().filter(x -> x.getUser().getId().equals(user.getId())).count(), 3);
-        Assert.assertEquals(commentList.stream().filter(x -> x.getUser().getId().equals(user2.getId())).count(), 1);
+        List<User> userList = createUserDomain();
+        List<Comment> commentList = createCommentDomain(userList);
+        assertCreateBasicDomainModelAndAssert(userList, commentList);
+        List<Comment> commentListFound = commentDao.findAll();
+        Assert.assertEquals(commentListFound.stream().filter(x -> x.getUser().getId().equals(userList.get(0).getId())).count(), 3);
+        Assert.assertEquals(commentListFound.stream().filter(x -> x.getUser().getId().equals(userList.get(1).getId())).count(), 1);
     }
 
-//    @Test
-//    public void findbyUserTest() {
-//        new User("Vahy", "vahy@jeDrsnej.com", "asdf123", true))
-//        commentDao.create(createTestComment("VahyJeDrsnejTypek", );
-//    }
+    @Test
+    public void findByUserTest() {
+        List<User> userList = createUserDomain();
+        List<Comment> commentList = createCommentDomain(userList);
+        assertCreateBasicDomainModelAndAssert(userList, commentList);
+        List<Comment> commentListFound = commentDao.findByUser(userList.get(0));
+        Assert.assertEquals(commentListFound.size(), 3);
+        Assert.assertEquals(commentListFound.stream().filter(x -> x.getUser().getId().equals(userList.get(0).getId())).count(), 3);
+        List<Comment> commentListFound2 = commentDao.findByUser(userList.get(1));
+        Assert.assertEquals(commentListFound2.size(), 1);
+        Assert.assertEquals(commentListFound2.stream().filter(x -> x.getUser().getId().equals(userList.get(1).getId())).count(), 1);
+    }
+
+    @Test
+    public void findByIdTest() {
+        List<User> userList = createUserDomain();
+        List<Comment> commentList = createCommentDomain(userList);
+        assertCreateBasicDomainModelAndAssert(userList, commentList);
+
+        Assert.assertTrue(commentDao.findById(1L).getContent().equals(commentList.get(0).getContent()));
+        Assert.assertTrue(commentDao.findById(2L).getContent().equals(commentList.get(1).getContent()));
+        Assert.assertTrue(commentDao.findById(3L).getContent().equals(commentList.get(2).getContent()));
+        Assert.assertTrue(commentDao.findById(4L).getContent().equals(commentList.get(3).getContent()));
+    }
+
+    private List<User> createUserDomain() {
+        List<User> userList = new ArrayList<>();
+        userList.add(new User("Vahy", "vahy@jeDrsnej.com", "asdf123", true));
+        userList.add(new User("VelkejTypek", "VelkejTypek@jeDrsnej.com", "asdf123", true));
+        return userList;
+    }
+
+    private List<Comment> createCommentDomain(List<User> userList) {
+        List<Comment> commentList = new ArrayList<>();
+        commentList.add(createTestComment("VahyJeDrsnejTypek", userList.get(0)));
+        commentList.add(createTestComment("VahyJeDobrejTypek", userList.get(0)));
+        commentList.add(createTestComment("VahyJeKrutoprisnejTypek", userList.get(0)));
+        commentList.add(createTestComment("adf", userList.get(1)));
+        return commentList;
+    }
+
+    private Comment createTestComment(String content, User user) {
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setUser(user);
+        return comment;
+    }
+
+    private void assertCreateBasicDomainModelAndAssert(List<User> userList, List<Comment> commentList) {
+        for (User user : userList) {
+            userDao.create(user);
+        }
+        Assert.assertEquals(commentDao.findAll().size(), 0);
+        for (int i = 0; i < commentList.size(); i++) {
+            commentDao.create(commentList.get(i));
+            em.flush();
+            Assert.assertEquals(commentDao.findAll().size(), i + 1);
+        }
+    }
 
 }
