@@ -31,8 +31,9 @@ public class Location {
     @Column(nullable = false)
     private String description;
 
-    //TODO Later add list of comments with coresponding methods
-    
+    @OneToMany
+    private Set<Comment> comments = new HashSet<>();
+
     public Location() {
     }
 
@@ -58,6 +59,14 @@ public class Location {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+    
+    public void addComment(Comment comment){
+        comments.add(comment);
     }
 
     @Override

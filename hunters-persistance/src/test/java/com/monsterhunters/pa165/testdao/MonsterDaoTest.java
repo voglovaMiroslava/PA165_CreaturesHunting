@@ -34,7 +34,7 @@ import org.testng.annotations.BeforeMethod;
 @ContextConfiguration(classes = PersistenceSampleApplicationContext.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
-public class MonsterDaoImplTest extends AbstractTestNGSpringContextTests {
+public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceContext
     public EntityManager em;

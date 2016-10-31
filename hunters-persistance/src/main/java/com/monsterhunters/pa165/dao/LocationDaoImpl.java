@@ -1,13 +1,17 @@
 package com.monsterhunters.pa165.dao;
 
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
-import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * LocationDao implementation
@@ -55,10 +59,14 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public void delete(Location location) throws IllegalArgumentException {
-        List<Monster> mList= getMonstersWithLocation(location);
-        for(Monster monster: mList)
+        List<Monster> monsterList = getMonstersWithLocation(location);
+        for (Monster monster : monsterList) {
             em.remove(monster);
-        
+        }
+
+        for (Comment comment : location.getComments()) {
+            em.remove(comment);
+        }
         em.remove(location);
     }
 
