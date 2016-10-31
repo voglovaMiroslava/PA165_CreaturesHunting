@@ -12,7 +12,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
@@ -36,9 +35,6 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceContext
     public EntityManager em;
-
-    @AfterMethod
-    publi
 
     @Test
     public void deleteCommentTest() {
