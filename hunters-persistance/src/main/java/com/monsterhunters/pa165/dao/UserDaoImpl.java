@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by Snurka on 10/30/2016.
+ */
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao {
