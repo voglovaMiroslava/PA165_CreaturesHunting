@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
