@@ -1,4 +1,4 @@
-package com.monsterhunters.pa165;
+package com.monsterhunters.pa165.config;
 
 import com.monsterhunters.pa165.domain.dao.WeaponDao;
 import com.monsterhunters.pa165.domain.dao.MonsterDao;

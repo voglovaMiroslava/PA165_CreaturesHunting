@@ -1,6 +1,6 @@
 package com.monsterhunters.pa165.testdao;
 
-import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
+import com.monsterhunters.pa165.config.PersistenceSampleApplicationContext;
 import com.monsterhunters.pa165.domain.dao.UserDao;
 import com.monsterhunters.pa165.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
