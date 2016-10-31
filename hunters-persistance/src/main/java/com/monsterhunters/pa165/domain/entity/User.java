@@ -1,4 +1,4 @@
-package com.monsterhunters.pa165.entity;
+package com.monsterhunters.pa165.domain.entity;
 
 import org.hibernate.annotations.Type;
 

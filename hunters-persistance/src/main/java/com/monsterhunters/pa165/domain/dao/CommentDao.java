@@ -1,7 +1,7 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.domain.entity.Comment;
+import com.monsterhunters.pa165.domain.entity.User;
 
 import java.util.List;
 

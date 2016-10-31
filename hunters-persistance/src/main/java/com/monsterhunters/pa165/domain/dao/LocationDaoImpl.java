@@ -1,16 +1,14 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.entity.Location;
-import com.monsterhunters.pa165.entity.Monster;
-
+import com.monsterhunters.pa165.domain.entity.Comment;
+import com.monsterhunters.pa165.domain.entity.Location;
+import com.monsterhunters.pa165.domain.entity.Monster;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 /**
@@ -63,7 +61,6 @@ public class LocationDaoImpl implements LocationDao {
         for (Monster monster : monsterList) {
             em.remove(monster);
         }
-
         for (Comment comment : location.getComments()) {
             em.remove(comment);
         }

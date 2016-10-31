@@ -1,6 +1,6 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.domain.entity.Weapon;
 
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.monsterhunters.pa165.entity;
+package com.monsterhunters.pa165.domain.entity;
 
-import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.domain.enums.MonsterType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

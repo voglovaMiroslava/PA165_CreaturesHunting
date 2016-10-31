@@ -1,11 +1,11 @@
 package com.monsterhunters.pa165.testdao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.LocationDao;
-import com.monsterhunters.pa165.dao.MonsterDao;
-import com.monsterhunters.pa165.entity.Location;
-import com.monsterhunters.pa165.entity.Monster;
-import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.domain.dao.LocationDao;
+import com.monsterhunters.pa165.domain.dao.MonsterDao;
+import com.monsterhunters.pa165.domain.entity.Location;
+import com.monsterhunters.pa165.domain.entity.Monster;
+import com.monsterhunters.pa165.domain.enums.MonsterType;
 import java.util.ArrayList;
 import java.util.List;
 
