@@ -1,10 +1,14 @@
 package com.monsterhunters.pa165.testdao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
+import com.monsterhunters.pa165.dao.CommentDao;
 import com.monsterhunters.pa165.dao.LocationDao;
 import com.monsterhunters.pa165.dao.MonsterDao;
+import com.monsterhunters.pa165.dao.UserDao;
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
+import com.monsterhunters.pa165.entity.User;
 import com.monsterhunters.pa165.enums.MonsterType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,12 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private MonsterDao monsterDao;
+
+    @Autowired
+    private CommentDao commentDao;
+
+    @Autowired
+    UserDao userDao;
 
     private Location location1;
     private Location location2;
@@ -95,7 +105,7 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void shouldUpdateNewLocation() throws Exception {
+    public void shouldUpdateLocation() throws Exception {
         Location location = locationDao.findById(location1.getId());
         location.setDescription("This is new description of Location1");
         locationDao.update(location);
@@ -117,6 +127,28 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
         locationDao.delete(location);
         assertNull(locationDao.findById(location.getId()));
         assertEquals(locationDao.findAll().size(), 2);
+    }
+
+    @Test
+    public void shouldDeleteLocationWithComments() throws Exception {
+        User user = new User("Franky", "userko@user.com", "passHash", false);
+        userDao.create(user);
+
+        Comment comment = new Comment();
+        comment.setContent("This is content of Comment");
+        comment.setUser(user);
+        commentDao.create(comment);
+
+        Location location = createLocation("Location", "This is Location witch will have Comment");
+        location.addComment(comment);
+        locationDao.create(location);
+
+        assertNotNull(locationDao.findById(location.getId()));
+        assertEquals(locationDao.findAll().size(), 3);
+        locationDao.delete(location);
+        assertNull(locationDao.findById(location.getId()));
+        assertEquals(locationDao.findAll().size(), 2);
+        assertNull(commentDao.findById(comment.getId()));
     }
 
     @Test
@@ -186,7 +218,8 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
 
     /**
      * This method creates new instance of Location
-     * @param name is used to set name of location
+     *
+     * @param name        is used to set name of location
      * @param description is used to set description of location
      * @return instance of location with assigned parameters
      */
@@ -199,7 +232,8 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
 
     /**
      * This method creates new instance of Monster
-     * @param name is used to set name of monster
+     *
+     * @param name        is used to set name of monster
      * @param monsterType is used to addType of monster
      * @return instance of monster with assigned parameters
      */
