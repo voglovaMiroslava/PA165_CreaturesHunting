@@ -76,11 +76,9 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         List<User> userList = createUserDomain();
         List<Comment> commentList = createCommentDomain(userList);
         assertCreateBasicDomainModelAndAssert(userList, commentList);
-
-        Assert.assertTrue(commentDao.findById(1L).getContent().equals(commentList.get(0).getContent()));
-        Assert.assertTrue(commentDao.findById(2L).getContent().equals(commentList.get(1).getContent()));
-        Assert.assertTrue(commentDao.findById(3L).getContent().equals(commentList.get(2).getContent()));
-        Assert.assertTrue(commentDao.findById(4L).getContent().equals(commentList.get(3).getContent()));
+        for (Comment comment : commentList) {
+            Assert.assertTrue(commentDao.findById(comment.getId()).getContent().equals(comment.getContent()));
+        }
     }
 
     private List<User> createUserDomain() {
