@@ -23,12 +23,6 @@ public class Comment {
     @NotNull
     private String content;
 
-    @ManyToOne
-    private Weapon weapon;
-
-    @ManyToOne
-    private Location location;
-
     public Comment() {
     }
 
@@ -54,22 +48,6 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     @Override
