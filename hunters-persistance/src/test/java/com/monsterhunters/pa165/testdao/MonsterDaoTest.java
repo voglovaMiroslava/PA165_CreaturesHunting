@@ -46,35 +46,25 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
     LocationDao locationDao;
 
     private Monster dragon;
-    private Monster troll;
+    //private Monster troll;
     private Location loc;
 
     @BeforeMethod
     public void setUpClass() {
-        dragon = new Monster();
-        troll = new Monster();
         loc = new Location();
-
         loc.setName("Island");
         loc.setDescription("Cold and wet.");
-        locationDao.create(loc);
 
-        // loc.addMonster(troll);
-        dragon.setHeight(120.45);
+        locationDao.create(loc);
+        Assert.assertNotNull(locationDao.findById(loc.getId()));
+
+        dragon = new Monster();
         dragon.setName("Dragon");
-        dragon.setPower(1000);
-        dragon.setWeight(8000.0);
         dragon.setLocation(loc);
         dragon.addType(MonsterType.FIRE);
 
-        troll.setName("Troll");
-        troll.setHeight(80.5);
-        troll.setWeight(542.0);
-        troll.setPower(200);
-        troll.setLocation(loc);
-        troll.addType(MonsterType.GROUND);
-
         monsterDao.create(dragon);
+        Assert.assertNotNull(monsterDao.findById(dragon.getId()));
     }
 
     @AfterMethod(alwaysRun = true)
@@ -88,8 +78,9 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testFindById() {
-        Monster sameMonster = monsterDao.findById(dragon.getId());
-        Assert.assertEquals(dragon, sameMonster);
+        Monster found = monsterDao.findById(dragon.getId());
+        Assert.assertEquals(found.getName(), "Dragon");
+        Assert.assertEquals(dragon, found);
     }
 
     /**
@@ -107,7 +98,9 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testCreate() {
+        Monster troll = createTroll();
         monsterDao.create(troll);
+
         Monster sameMonster = monsterDao.findById(troll.getId());
         Assert.assertEquals(troll, sameMonster);
     }
@@ -130,10 +123,9 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testDelete() {
-        monsterDao.create(troll);
-        Assert.assertNotNull(monsterDao.findById(troll.getId()));
-        monsterDao.delete(troll);
-        Assert.assertNull(monsterDao.findById(troll.getId()));
+        Assert.assertNotNull(monsterDao.findById(dragon.getId()));
+        monsterDao.delete(dragon);
+        Assert.assertNull(monsterDao.findById(dragon.getId()));
     }
 
     /**
@@ -141,6 +133,7 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testFindAll() {
+        Monster troll = createTroll();
         monsterDao.create(troll);
 
         List<Monster> foundMonsters = monsterDao.findAll();
@@ -153,4 +146,11 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertTrue(expectedResult.containsAll(foundMonsters));
     }
 
+    private Monster createTroll() {
+        Monster troll = new Monster();
+        troll.setName("Troll");
+        troll.setLocation(loc);
+        troll.addType(MonsterType.GROUND);
+        return troll;
+    }
 }
