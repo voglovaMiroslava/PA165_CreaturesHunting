@@ -28,16 +28,16 @@ import java.util.List;
 public class CommentDaoTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    CommentDao commentDao;
+    private CommentDao commentDao;
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @PersistenceContext
-    public EntityManager em;
+    private EntityManager em;
 
     @Test
-    public void deleteCommentTest() {
+    public void createDeleteCommentTest() {
         User user = new User("Vahy", "vahy@jeDrsnej.com", "asdf123", true);
         Comment comment = createTestComment("VahyJeDrsnejTypek", user);
         userDao.create(user);
@@ -48,7 +48,22 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(commentDao.findAll().size(), 0);
     }
 
-    @Test
+    @Test(dependsOnMethods = "createDeleteCommentTest")
+    public void updateCommentTest() {
+        User user = new User("Vahy", "vahy@jeDrsnej.com", "asdf123", true);
+        Comment comment = createTestComment("VahyJeDrsnejTypek", user);
+        userDao.create(user);
+        commentDao.create(comment);
+        em.flush();
+        comment.setContent("asdf");
+        commentDao.update(comment);
+        em.flush();
+        List<Comment> commentList = commentDao.findByUser(user);
+        Assert.assertEquals(commentList.size(), 1);
+        Assert.assertEquals(commentList.get(0).getContent(), comment.getContent());
+    }
+
+    @Test(dependsOnMethods = "createDeleteCommentTest")
     public void findAllTest() {
         List<User> userList = createUserDomain();
         List<Comment> commentList = createCommentDomain(userList);
@@ -58,7 +73,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(commentListFound.stream().filter(x -> x.getUser().getId().equals(userList.get(1).getId())).count(), 1);
     }
 
-    @Test
+    @Test(dependsOnMethods = "createDeleteCommentTest")
     public void findByUserTest() {
         List<User> userList = createUserDomain();
         List<Comment> commentList = createCommentDomain(userList);
@@ -71,7 +86,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(commentListFound2.stream().filter(x -> x.getUser().getId().equals(userList.get(1).getId())).count(), 1);
     }
 
-    @Test
+    @Test(dependsOnMethods = "createDeleteCommentTest")
     public void findByIdTest() {
         List<User> userList = createUserDomain();
         List<Comment> commentList = createCommentDomain(userList);
@@ -79,6 +94,29 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         for (Comment comment : commentList) {
             Assert.assertTrue(commentDao.findById(comment.getId()).getContent().equals(comment.getContent()));
         }
+    }
+
+    @Test
+    public void NonExistingEntityTest() {
+        Assert.assertTrue(commentDao.findById(-1L) == null);
+    }
+
+    @Test
+    public void deleteNonExistentEntityTest() {
+        User user = new User("Lalala", "asdf@asdfadf.com", "asdf123", false);
+        Comment comment = createTestComment("JeduVTanku", user);
+        userDao.create(user);
+        commentDao.delete(comment);
+    }
+
+    @Test
+    public void findByNonExistingUser() {
+        User user = new User("Lalala", "asdf@asdfadf.com", "asdf123", false);
+        Comment comment = createTestComment("JeduVTanku", user);
+        userDao.create(user);
+        commentDao.delete(comment);
+        User user2 = new User("wakawaka", "yeah@yeah.yeah", "its time for africa", false);
+        Assert.assertTrue(commentDao.findByUser(user2).isEmpty());
     }
 
     private List<User> createUserDomain() {
