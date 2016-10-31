@@ -54,8 +54,7 @@ public interface WeaponDao {
      * Update information about weapon
      *
      * @param w indicates which instance want to update
-     * @return weapon with updated information
      */
-    public Weapon update(Weapon w);
+    public void update(Weapon w);
 
 }

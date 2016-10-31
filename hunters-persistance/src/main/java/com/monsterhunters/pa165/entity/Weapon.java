@@ -36,6 +36,8 @@ public class Weapon {
     @Enumerated(EnumType.STRING)
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
 
+    @OneToMany()
+    private Set<Comment> comments = new HashSet<>();
 
     public Weapon() {
     }
@@ -94,6 +96,22 @@ public class Weapon {
 
     public void removeEffectiveAgainst(MonsterType monsterType) {
         effectiveAgainst.remove(monsterType);
+    }
+
+    public Set<Comment> getComments() {
+        return Collections.unmodifiableSet(comments);
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment c) {
+        comments.add(c);
+    }
+
+    public void removeComment(Comment c) {
+        comments.remove(c);
     }
 
 
