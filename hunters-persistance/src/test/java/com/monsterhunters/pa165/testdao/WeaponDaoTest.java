@@ -2,6 +2,8 @@ package com.monsterhunters.pa165.testdao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
 import com.monsterhunters.pa165.dao.WeaponDao;
+import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.User;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +142,26 @@ public class WeaponDaoTest extends AbstractTransactionalTestNGSpringContextTests
             Assert.assertEquals(wepsFromDB, expectedWeapons, "Deleting null weapon damaged entries in database.");
             throw e;
         }
+    }
+
+    @Test(expectedExceptions = NoResultException.class)
+    public void testDeleteWithComments() {
+        User user = new User("nickname", "email", "passwordHash", true);
+        Comment comment = new Comment();
+        comment.setUser(user);
+        comment.setContent("Original content.");
+        Weapon wep = new Weapon();
+        wep.setName("Weapon with comments");
+        wep.addComment(comment);
+        em.persist(user);
+        em.persist(comment);
+        em.persist(wep);
+
+        weaponDao.delete(wep);
+        Comment commentFromDB = em.createQuery("SELECT c from Comment c where c.id = :id", Comment.class)
+                .setParameter("id", comment.getId())
+                .getSingleResult();
+        Assert.fail("Comment which belongs to the deleted weapon should have been deleted.");
     }
 
     @Test
