@@ -1,23 +1,13 @@
 package com.monsterhunters.pa165.testdao;
 
-import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.WeaponDao;
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.entity.User;
-import com.monsterhunters.pa165.entity.Weapon;
-import com.monsterhunters.pa165.enums.MonsterType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import com.monsterhunters.pa165.config.PersistenceSampleApplicationContext;
+import com.monsterhunters.pa165.domain.dao.WeaponDao;
+import com.monsterhunters.pa165.domain.entity.Comment;
+import com.monsterhunters.pa165.domain.entity.User;
+import com.monsterhunters.pa165.domain.entity.Weapon;
+import com.monsterhunters.pa165.domain.enums.MonsterType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +15,15 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  *

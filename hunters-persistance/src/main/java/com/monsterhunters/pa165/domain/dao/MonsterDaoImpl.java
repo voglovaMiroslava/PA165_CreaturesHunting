@@ -1,6 +1,6 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Monster;
+import com.monsterhunters.pa165.domain.entity.Monster;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

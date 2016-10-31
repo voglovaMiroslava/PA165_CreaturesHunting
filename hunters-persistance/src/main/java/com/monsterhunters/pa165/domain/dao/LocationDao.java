@@ -1,7 +1,7 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Location;
-//import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.domain.entity.Location;
+//import com.monsterhunters.pa165.domain.enums.MonsterType;
 import java.util.List;
 
 /**
@@ -47,7 +47,7 @@ public interface LocationDao {
      * @param location the instance to delete
      */
     public void delete(Location location);
-    
+
     /**
      * Update location
      *

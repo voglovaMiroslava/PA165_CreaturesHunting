@@ -1,4 +1,4 @@
-package com.monsterhunters.pa165.enums;
+package com.monsterhunters.pa165.domain.enums;
 
 /**
  *

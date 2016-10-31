@@ -1,7 +1,7 @@
-package com.monsterhunters.pa165.dao;
+package com.monsterhunters.pa165.domain.dao;
 
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.domain.entity.Comment;
+import com.monsterhunters.pa165.domain.entity.Weapon;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
