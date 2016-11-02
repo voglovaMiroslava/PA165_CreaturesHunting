@@ -67,12 +67,6 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertNotNull(monsterDao.findById(dragon.getId()));
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void clean() {
-        em.createQuery("DELETE FROM Monster");
-        em.createQuery("DELETE FROM Location");
-    }
-
     /**
      * Test of findByName method, of monsterDao class.
      */
