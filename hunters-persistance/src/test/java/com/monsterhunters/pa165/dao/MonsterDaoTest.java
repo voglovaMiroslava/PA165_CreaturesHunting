@@ -1,4 +1,4 @@
-package com.monsterhunters.pa165.testdao;
+package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
 import com.monsterhunters.pa165.dao.LocationDao;
