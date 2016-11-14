@@ -8,10 +8,9 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.monsterhunters</groupId>
     <artifactId>hunters-persistance</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>hunters-persistance</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
