@@ -34,6 +34,8 @@
     </build>
     <modules>
         <module>hunters-persistance</module>
+        <module>API</module>
+        <module>service</module>
     </modules>
 
     <dependencies>
