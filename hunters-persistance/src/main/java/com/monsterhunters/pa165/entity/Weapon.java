@@ -37,6 +37,7 @@ public class Weapon {
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
 
     @OneToMany()
+    @JoinColumn(name="Weapon_FK")
     private Set<Comment> comments = new HashSet<>();
 
     public Weapon() {
@@ -139,5 +140,18 @@ public class Weapon {
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Weapon{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gunReach=" + gunReach +
+                ", ammo=" + ammo +
+                ", damage=" + damage +
+                ", effectiveAgainst=" + effectiveAgainst +
+                ", comments=" + comments +
+                '}';
     }
 }

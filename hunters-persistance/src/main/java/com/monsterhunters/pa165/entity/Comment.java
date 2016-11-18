@@ -78,4 +78,13 @@ public class Comment {
         result = prime * result + ((user == null) ? 0 : user.hashCode());
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", user=" + user +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
