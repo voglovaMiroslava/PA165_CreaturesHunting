@@ -1,7 +1,5 @@
 package com.monsterhunters.pa165.dto;
 
-import com.monsterhunters.pa165.entity.User;
-
 import java.util.UUID;
 
 /**
@@ -60,10 +58,10 @@ public class UserDTO {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof User))  {
+        if (!(o instanceof UserDTO))  {
             return false;
         }
-        User user = (User) o;
+        UserDTO user = (UserDTO) o;
         if (!getNickname().equals(user.getNickname()))  {
             return false;
         }
