@@ -17,7 +17,7 @@ public class Comment {
     private Long id;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade=CascadeType.ALL)
     private User user;
 
     @NotNull

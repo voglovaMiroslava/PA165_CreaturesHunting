@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public User findById(UUID id) {
+    public User findById(Long id) {
         if(id == null) {
             throw new IllegalArgumentException("Id can't ne null");
         }

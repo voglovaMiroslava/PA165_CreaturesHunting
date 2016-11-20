@@ -1,8 +1,6 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.CommentDao;
-import com.monsterhunters.pa165.dao.UserDao;
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +114,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         userDao.create(user);
         commentDao.delete(comment);
         User user2 = new User("wakawaka", "yeah@yeah.yeah", "its time for africa", false);
+        userDao.create(user2);
         Assert.assertTrue(commentDao.findByUser(user2).isEmpty());
     }
 
