@@ -1,23 +1,31 @@
 package com.monsterhunters.pa165.dto;
 
-import java.util.UUID;
+import com.monsterhunters.pa165.entity.User;
 
 /**
  * Created by Snurka on 11/20/2016.
  */
 public class UserDTO {
 
-    private UUID id;
+    public static UserDTO create(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setNickname(user.getNickname());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAdmin(user.isAdmin());
+        return userDTO;
+    }
+
+    private Long id;
     private String nickname;
     private String email;
-    private String passwordHash;
     private boolean isAdmin;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -35,14 +43,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public boolean isAdmin() {
@@ -73,5 +73,15 @@ public class UserDTO {
         int result = getNickname().hashCode();
         result = 31 * result + getEmail().hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

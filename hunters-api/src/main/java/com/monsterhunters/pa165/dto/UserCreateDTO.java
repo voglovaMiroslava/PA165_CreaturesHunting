@@ -1,7 +1,33 @@
 package com.monsterhunters.pa165.dto;
 
-/**
- * Created by Snurka on 11/20/2016.
- */
+
 public class UserCreateDTO {
+
+    private String nickname;
+    private String email;
+    private String plainPassword;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
+    }
 }
