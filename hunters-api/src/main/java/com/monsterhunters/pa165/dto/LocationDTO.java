@@ -1,8 +1,8 @@
 package com.monsterhunters.pa165.dto;
 
-//import java.util.HashSet;
-//import java.util.Set;
-//import com.monsterhunters.pa165.dto.CommentDTO;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author Tomas Durcak
@@ -12,7 +12,7 @@ public class LocationDTO {
     private Long id;
     private String name;
     private String description;
- //   private Set<CommentDTO> comments = new HashSet<>();
+    private Set<CommentDTO> comments = new HashSet<>();
 
     public LocationDTO() {
     }
@@ -34,9 +34,9 @@ public class LocationDTO {
         return description;
     }
 
-//    public Set<CommentDTO> getComments() {
-//        return comments;
-//    }
+    public Set<CommentDTO> getComments() {
+        return comments;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -50,9 +50,9 @@ public class LocationDTO {
         this.description = description;
     }
 
-//    public void addComment(CommentDTO comment) {
-//        comments.add(comment);
-//    }
+    public void addComment(CommentDTO comment) {
+        comments.add(comment);
+    }
 
     @Override
     public int hashCode() {

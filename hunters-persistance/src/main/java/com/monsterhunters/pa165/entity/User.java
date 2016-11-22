@@ -1,13 +1,7 @@
 package com.monsterhunters.pa165.entity;
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Created by Snurka on 10/30/2016.
@@ -18,10 +12,8 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(nullable = false, length = 36)
-    @Type(type = "uuid-char")
-    @NotNull
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
@@ -40,18 +32,17 @@ public class User {
     private boolean isAdmin;
 
     public User(String nickname, String email, String passwordHash, boolean isAdmin) {
-        this.id = UUID.randomUUID();
         this.nickname = nickname;
         this.email = email;
         this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;
     }
 
-    protected User() {
+    public User() {
 
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

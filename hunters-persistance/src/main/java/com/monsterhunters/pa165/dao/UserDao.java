@@ -3,7 +3,6 @@ package com.monsterhunters.pa165.dao;
 import com.monsterhunters.pa165.entity.User;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Snurka on 10/30/2016.
@@ -16,7 +15,7 @@ public interface UserDao {
      * @param id is generated id of user
      * @return user specified by id
      */
-    User findById(UUID id);
+    User findById(Long id);
 
     /**
      * Find user by nickaname
