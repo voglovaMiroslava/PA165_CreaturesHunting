@@ -38,21 +38,23 @@ public interface LocationDao {
      * Create new location
      *
      * @param location the instance of new location
+     * @return true if creation succes
      */
-    public void create(Location location);
+    public boolean create(Location location);
 
     /**
      * Delete location
      *
      * @param location the instance to delete
+     * @return true if delete succes
      */
-    public void delete(Location location);
+    public boolean delete(Location location);
     
     /**
      * Update location
      *
      * @param location the instance to update
      */
-    public void update(Location location);
+    public Location update(Location location);
 
 }

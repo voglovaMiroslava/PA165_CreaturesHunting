@@ -2,7 +2,9 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.LocationDao;
 import com.monsterhunters.pa165.dao.LocationDaoImpl;
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 
 import java.util.List;
 
@@ -20,11 +22,33 @@ import org.springframework.stereotype.Service;
  * @author Tomas Durcak
  */
 @Service
-@ComponentScan(basePackageClasses={LocationDaoImpl.class})
+@ComponentScan(basePackageClasses = {LocationDaoImpl.class})
 public class LocationServiceImpl implements LocationService {
 
-    @Inject
+    @Autowired
     private LocationDao locationDao;
+
+    @Override
+    public Location create(Location location) {
+        if (locationDao.create(location)) {
+            return location;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean remove(Location location) {
+        if (location != null) {
+            return locationDao.delete(location);
+        }
+        return false;
+    }
+
+    @Override
+    public Location update(Location location) {
+        locationDao.update(location);
+        return location;
+    }
 
     @Override
     public Location findById(Long id) {
@@ -37,18 +61,22 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void create(Location location) {
-        locationDao.create(location);
-    }
-
-    @Override
-    public void remove(Location c) {
-        locationDao.delete(c);
-    }
-
-    @Override
     public Location findByName(String locationName) {
         return locationDao.findByName(locationName);
+    }
+
+    @Override
+    public void addComment(Location location, Comment comment) {
+        if (location.getComments().contains(comment)) {
+            throw new HuntersServiceException("Same comment already exists for this location."
+                    + " Weapon ID:" + location.getId() + " Comment ID:" + comment.getId());
+        }
+        location.addComment(comment);
+    }
+
+    @Override
+    public void removeComment(Location location, Comment comment) {
+        location.removeComment(comment);
     }
 
 }

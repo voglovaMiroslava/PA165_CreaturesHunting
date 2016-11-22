@@ -42,9 +42,13 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public void create(Location location) {
+    public boolean create(Location location) {
+        if (em.contains(location)) {
+            return false;
+        }
         em.persist(location);
         //em.flush();
+        return true;
     }
 
     private List<Monster> getMonstersWithLocation(Location l) {
@@ -58,7 +62,14 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public void delete(Location location) throws IllegalArgumentException {
+    public boolean delete(Location location) throws NullPointerException {
+        if (location == null) {
+            throw new NullPointerException("Location is null. Nothing to delete");
+        }
+        if (!em.contains(location)) {
+            return false;
+        }
+
         List<Monster> monsterList = getMonstersWithLocation(location);
         for (Monster monster : monsterList) {
             em.remove(monster);
@@ -68,11 +79,12 @@ public class LocationDaoImpl implements LocationDao {
             em.remove(comment);
         }
         em.remove(location);
+        return true;
     }
 
     @Override
-    public void update(Location location) {
-        em.merge(location);
+    public Location update(Location location) {
+        return em.merge(location);
     }
 
     @Override
