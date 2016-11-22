@@ -74,11 +74,5 @@
             <version>4.0.6.RELEASE</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>com.monsterhunters</groupId>
-            <artifactId>hunters-persistance</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 </project>
