@@ -5,16 +5,10 @@ import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import javafx.collections.transformation.SortedList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -74,34 +68,23 @@ public class MonsterServiceImpl implements MonsterService {
 
     @Override
     public List<Location> getLocationsWithMostMonsterType(MonsterType type) {
-        List<Monster> monsters = monsterDao.findAll();
-        Map<Location, Integer> locations = new TreeMap<>();
+        List<Monster> monsters = monsterDao.findByType(type);
+        Map<Location, Integer> locations = new HashMap<>();
 
         for (Monster m : monsters) {
-            if (m.getTypes().contains(type)) {
-                locations.put(m.getLocation(), locations.get(m.getLocation()) + 1);
-            }
+            locations.put(m.getLocation(), locations.get(m.getLocation()) + 1);
         }
-        return getLocationsWithHighestValues(locations);
-    }
 
-    
-    //TODO do it nicer
-    private List<Location> getLocationsWithHighestValues(Map<Location, Integer> locations) {
-        List<Location> locs = new LinkedList<>();
-        SortedSet<Map.Entry<Location, Integer>> sortedEntries = new TreeSet<>(
-                (Map.Entry<Location, Integer> e1, Map.Entry<Location, Integer> e2) -> {
-                    int res = e1.getValue().compareTo(e2.getValue());
-                    return res != 0 ? res : 1;
-        });
-        sortedEntries.addAll(locations.entrySet());
-        int maxValue = sortedEntries.first().getValue();
-        for(Map.Entry<Location, Integer> sorted : sortedEntries){
-            if(sorted.getValue() < maxValue){
-                break;
+        int highestCount = Collections.max(locations.values());
+
+        List<Location> mostLocation = new LinkedList<>();
+
+        for (Location loc : locations.keySet()) {
+            if (locations.get(loc).equals(highestCount)) {
+                mostLocation.add(loc);
             }
-            locs.add(sorted.getKey());
         }
-        return locs;
+
+        return mostLocation;
     }
 }
