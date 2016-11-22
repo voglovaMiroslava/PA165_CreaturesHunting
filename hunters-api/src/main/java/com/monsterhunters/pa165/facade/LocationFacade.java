@@ -33,4 +33,28 @@ public interface LocationFacade {
      * @return locationDTO id
      */
     Long createLocation(LocationCreateDTO locationCreateDTO);
+
+    /**
+     * Remove LocationDTO object
+     *
+     * @param id
+     * @return true if deletion succes
+     */
+    boolean removeLocation(Long id);
+
+    /**
+     * Add comment to location
+     *
+     * @param locationId
+     * @param commentId
+     */
+    void addComment(Long locationId, Long commentId);
+
+    /**
+     * Remove comment from location
+     *
+     * @param locationId
+     * @param commentId
+     */
+    void removeComment(Long locationId, Long commentId);
 }
