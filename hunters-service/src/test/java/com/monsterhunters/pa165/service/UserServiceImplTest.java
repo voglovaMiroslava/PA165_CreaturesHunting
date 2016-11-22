@@ -1,12 +1,9 @@
 package com.monsterhunters.pa165.service;
 
-import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -14,9 +11,7 @@ import org.testng.annotations.Test;
  * Created by Snurka on 11/20/2016.
  */
 
-@ContextConfiguration(classes = PersistenceSampleApplicationContext.class)
-@TestExecutionListeners(TransactionalTestExecutionListener.class)
-@Transactional
+@ContextConfiguration(classes = MappingConfiguration.class)
 public class UserServiceImplTest extends AbstractTestNGSpringContextTests {
 
     @Test
