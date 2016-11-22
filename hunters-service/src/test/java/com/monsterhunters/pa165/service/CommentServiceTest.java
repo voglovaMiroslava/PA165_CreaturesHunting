@@ -41,6 +41,8 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
 
     private List<Comment> expectedComments = new ArrayList<>();
 
+    private User testUser = new User("user", "user@user.com", "myPasswordHash", false);
+
     @BeforeMethod
     private void prepareCommentForTest() {
         Comment comment1 = createComment("This is comment one");
@@ -80,29 +82,50 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void shouldDeleteComment(Comment comment) {
+        int startSize = expectedComments.size();
+        doAnswer(invoke -> {
+            Comment mockingComment = invoke.getArgumentAt(0, Comment.class);
+            expectedComments.remove(mockingComment);
+            return mockingComment;
+        }).when(commentDao).delete(any(Comment.class));
+        Comment commentToDelete = expectedComments.get(0);
+        commentService.deleteComment(commentToDelete);
 
+        verify(commentDao).delete(commentToDelete);
+        assertEquals(expectedComments.size(), startSize - 1);
     }
 
     @Test
     public void shouldFindById(Long id) {
+        Comment foundComment;
+        when(commentDao.findById(1L)).thenReturn(expectedComments.get(0));
+        foundComment = commentService.findById(1L);
 
+        verify(commentDao).findById(1L);
+        assertEquals(foundComment, expectedComments.get(0));
     }
 
     @Test
     public void shouldFindAllComments() {
+        when(commentDao.findAll()).thenReturn(expectedComments);
 
+        assertEquals(commentService.findAll(), expectedComments);
+        verify(commentDao).findAll();
     }
 
     @Test
     public void shouldFindByUser() {
+        when(commentDao.findByUser(testUser)).thenReturn(expectedComments);
 
+        assertEquals(commentService.findByUser(testUser), expectedComments);
+        verify(commentDao).findByUser(testUser);
     }
 
     //simple method to create comment
     private Comment createComment(String content) {
         Comment comment = new Comment();
         comment.setContent(content);
-        comment.setUser(new User("user", "user@user.com", "myPasswordHash", false));
+        comment.setUser(testUser);
         return comment;
     }
 
