@@ -1,8 +1,6 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.PersistenceSampleApplicationContext;
-import com.monsterhunters.pa165.dao.LocationDao;
-import com.monsterhunters.pa165.dao.MonsterDao;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
@@ -11,18 +9,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-//import javax.persistence.PersistenceException;
-//import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 
@@ -37,7 +31,7 @@ import org.testng.annotations.BeforeMethod;
 public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceContext
-    public EntityManager em;
+    private EntityManager em;
 
     @Autowired
     MonsterDao monsterDao;
@@ -46,7 +40,7 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
     LocationDao locationDao;
 
     private Monster dragon;
-    //private Monster troll;
+
     private Location loc;
 
     @BeforeMethod
@@ -138,6 +132,36 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
 
         Assert.assertEquals(foundMonsters.size(), expectedResult.size());
         Assert.assertTrue(expectedResult.containsAll(foundMonsters));
+    }
+
+    @Test
+    public void testFindByTypeExistent() {
+        prepareTestTypeData();
+        List<Monster> monsters = monsterDao.findByType(MonsterType.FIRE);
+        Assert.assertEquals(monsters.size(), 2);
+        for (Monster monster : monsters) {
+            Assert.assertTrue(monster.getName().equals("Fire lady")
+                    || monster.getName().equals("Dragon"));
+        }
+    }
+
+    @Test
+    public void testFindByTypeNonExistent() {
+        List<Monster> monsters = monsterDao.findByType(MonsterType.FAIRY);
+        Assert.assertEquals(monsters.size(), 0);
+    }
+
+    private void prepareTestTypeData() {
+        Location loca = new Location();
+        loca.setName("Desert");
+        loca.setDescription("Cold and dry.");
+        em.persist(loca);
+
+        Monster mony = new Monster();
+        mony.setName("Fire lady");
+        mony.setLocation(loca);
+        mony.addType(MonsterType.FIRE);
+        em.persist(mony);
     }
 
     private Monster createTroll() {

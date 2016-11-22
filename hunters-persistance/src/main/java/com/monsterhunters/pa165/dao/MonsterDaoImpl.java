@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Monster;
+import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -47,11 +48,18 @@ public class MonsterDaoImpl implements MonsterDao {
     @Override
     public Monster findByName(String name) {
         try {
-            return em.createQuery("Select m from Monster m where m.name = :name", Monster.class)
+            return em.createQuery("SELECT m from Monster m WHERE m.name = :name", Monster.class)
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Monster> findByType(MonsterType type) {
+        return em.createQuery("SELECT m from Monster m WHERE :type MEMBER OF m.types", Monster.class)
+                .setParameter("type", type)
+                .getResultList();
     }
 }
