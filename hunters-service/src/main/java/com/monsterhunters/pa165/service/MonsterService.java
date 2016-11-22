@@ -4,11 +4,13 @@ import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Miroslava Voglova
  */
+@Service
 public interface MonsterService {
 
     void createMonster(Monster m);

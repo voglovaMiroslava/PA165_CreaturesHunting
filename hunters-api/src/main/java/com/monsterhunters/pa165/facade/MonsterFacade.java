@@ -18,8 +18,6 @@ public interface MonsterFacade {
     
     MonsterDTO getMonsterById(Long monsterId);
     
-    List<MonsterDTO> getAllMonsters();
-    
     void updateMonster(MonsterDTO m);
 
     MonsterDTO findById(Long id);
