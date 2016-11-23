@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MonsterService {
 
-    void createMonster(Monster m);
+    Monster createMonster(Monster m);
 
     void deleteMonster(Monster m);
 
-    void updateMonster(Monster m);
+    Monster updateMonster(Monster m);
 
     Monster findById(Long id);
 

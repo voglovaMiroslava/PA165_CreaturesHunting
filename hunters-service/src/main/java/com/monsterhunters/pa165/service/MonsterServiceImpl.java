@@ -23,8 +23,9 @@ public class MonsterServiceImpl implements MonsterService {
     private MonsterDao monsterDao;
 
     @Override
-    public void createMonster(Monster m) {
+    public Monster createMonster(Monster m) {
         monsterDao.create(m);
+        return m;
     }
 
     @Override
@@ -33,8 +34,9 @@ public class MonsterServiceImpl implements MonsterService {
     }
 
     @Override
-    public void updateMonster(Monster m) {
-        monsterDao.delete(m);
+    public Monster updateMonster(Monster m) {
+        monsterDao.update(m);
+        return m;
     }
 
     @Override
@@ -74,12 +76,17 @@ public class MonsterServiceImpl implements MonsterService {
         Map<Location, Integer> locations = new HashMap<>();
 
         for (Monster m : monsters) {
-            locations.put(m.getLocation(), locations.get(m.getLocation()) + 1);
+            Integer valueInMap = locations.get(m.getLocation());
+            locations.put(m.getLocation(), valueInMap == null ? 0 : valueInMap + 1);
         }
-
+        
+        List<Location> mostLocation = new LinkedList<>();
+        if (locations.isEmpty()){
+            return mostLocation;
+        }
+        
         int highestCount = Collections.max(locations.values());
 
-        List<Location> mostLocation = new LinkedList<>();
 
         for (Location loc : locations.keySet()) {
             if (locations.get(loc).equals(highestCount)) {
