@@ -1,14 +1,12 @@
 package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.UserDao;
-import com.monsterhunters.pa165.dao.UserDaoImpl;
 import com.monsterhunters.pa165.entity.User;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.inject.Inject;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
@@ -17,10 +15,9 @@ import java.util.List;
  * Created by Snurka on 11/20/2016.
  */
 @Service
-@ComponentScan(basePackageClasses={UserDaoImpl.class})
 public class UserServiceImpl implements UserService {
 
-    @Inject
+    @Autowired
     private UserDao userDao;
 
     @Override
