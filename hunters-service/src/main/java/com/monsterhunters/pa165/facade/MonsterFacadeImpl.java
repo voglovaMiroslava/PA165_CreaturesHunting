@@ -45,15 +45,6 @@ public class MonsterFacadeImpl implements MonsterFacade {
     }
 
     @Override
-    public MonsterDTO getMonsterById(Long monsterId) {
-        Monster m = monsterService.findById(monsterId);
-        if (m == null) {
-            return null;
-        }
-        return mappingService.mapTo(m, MonsterDTO.class);
-    }
-
-    @Override
     public void updateMonster(MonsterDTO m) {
         Monster monster = mappingService.mapTo(m, Monster.class);
         monsterService.updateMonster(monster);
@@ -90,15 +81,15 @@ public class MonsterFacadeImpl implements MonsterFacade {
     @Override
     public void relocateMonster(LocationDTO newLocation, MonsterDTO m) {
         Monster monster = mappingService.mapTo(m, Monster.class);
-        Location location = mappingService.mapTo(m, Location.class);
+        Location location = mappingService.mapTo(newLocation, Location.class);
         monster.setLocation(location);
         monsterService.updateMonster(monster);
     }
 
     @Override
     public List<LocationDTO> getLocationsWithMostMonsterType(MonsterType type) {
-        List<Location> monsters = monsterService.getLocationsWithMostMonsterType(type);
-        return mappingService.mapTo(monsters, LocationDTO.class);
+        List<Location> locations = monsterService.getLocationsWithMostMonsterType(type);
+        return mappingService.mapTo(locations, LocationDTO.class);
     }
 
 }

@@ -16,8 +16,6 @@ public interface MonsterFacade {
     
     void deleteMonster(Long monsterId);
     
-    MonsterDTO getMonsterById(Long monsterId);
-    
     void updateMonster(MonsterDTO m);
 
     MonsterDTO findById(Long id);
