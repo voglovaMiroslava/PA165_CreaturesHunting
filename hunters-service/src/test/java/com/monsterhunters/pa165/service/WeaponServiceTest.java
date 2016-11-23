@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -138,7 +139,7 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
     public void shouldFindAll() {
         Weapon testWeapon = createWeapon("Grenade", 95, 1);
         expectedWeapons.add(testWeapon);
-        when(weaponDao.findAll()).thenReturn(expectedWeapons);
+        when(weaponDao.findAll()).thenReturn(Collections.unmodifiableList(expectedWeapons));
 
         assertEquals(weaponService.findAll(), expectedWeapons);
         verify(weaponDao).findAll();
