@@ -31,19 +31,25 @@ public class WeaponDaoImpl implements WeaponDao {
 
     @Override
     public void create(Weapon w) {
-        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        if (w == null) {
+            throw new IllegalArgumentException(Weapon.class.getName());
+        }
         em.persist(w);
     }
 
     @Override
     public void update(Weapon w) {
-        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        if (w == null) {
+            throw new IllegalArgumentException(Weapon.class.getName());
+        }
         em.merge(w);
     }
 
     @Override
     public void delete(Weapon w) {
-        if (w == null) throw new IllegalArgumentException(Weapon.class.getName());
+        if (w == null) {
+            throw new IllegalArgumentException(Weapon.class.getName());
+        }
         for (Comment c : w.getComments()) {
             em.remove(em.contains(c) ? c : em.merge(c));
         }
@@ -58,7 +64,9 @@ public class WeaponDaoImpl implements WeaponDao {
 
     @Override
     public Weapon findByName(String name) {
-        if (name.isEmpty() || name == null) throw new IllegalArgumentException(Weapon.class.getName());
+        if (name.isEmpty() || name == null) {
+            throw new IllegalArgumentException(Weapon.class.getName());
+        }
         try {
             return em.createQuery("select w from  Weapon w where name = :name",
                     Weapon.class).setParameter("name", name)

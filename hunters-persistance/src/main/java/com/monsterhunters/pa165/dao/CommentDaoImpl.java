@@ -30,19 +30,25 @@ public class CommentDaoImpl implements CommentDao {
 
     @Override
     public void create(Comment c) {
-        if (c == null) throw new IllegalArgumentException(Comment.class.getName());
+        if (c == null) {
+            throw new IllegalArgumentException(Comment.class.getName());
+        }
         em.persist(c);
     }
 
     @Override
     public void update(Comment c) {
-        if (c == null) throw new IllegalArgumentException(Comment.class.getName());
+        if (c == null) {
+            throw new IllegalArgumentException(Comment.class.getName());
+        }
         em.merge(c);
     }
 
     @Override
     public void delete(Comment c) {
-        if (c == null) throw new IllegalArgumentException(Comment.class.getName());
+        if (c == null) {
+            throw new IllegalArgumentException(Comment.class.getName());
+        }
         em.remove(em.contains(c) ? c : em.merge(c));
     }
 
