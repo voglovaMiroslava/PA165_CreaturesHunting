@@ -21,6 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,7 +82,7 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void shouldDeleteComment(Comment comment) {
+    public void shouldDeleteComment() {
         int startSize = expectedComments.size();
         doAnswer(invoke -> {
             Comment mockingComment = invoke.getArgumentAt(0, Comment.class);
@@ -96,7 +97,7 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void shouldFindById(Long id) {
+    public void shouldFindById() {
         Comment foundComment;
         when(commentDao.findById(1L)).thenReturn(expectedComments.get(0));
         foundComment = commentService.findById(1L);
@@ -109,7 +110,7 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     public void shouldFindAllComments() {
         when(commentDao.findAll()).thenReturn(expectedComments);
 
-        assertEquals(commentService.findAll(), expectedComments);
+        assertEquals(commentService.findAll(), Collections.unmodifiableList(expectedComments));
         verify(commentDao).findAll();
     }
 
