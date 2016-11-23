@@ -6,6 +6,7 @@ import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.User;
 import com.monsterhunters.pa165.service.CommentService;
 import com.monsterhunters.pa165.service.MappingService;
+import com.monsterhunters.pa165.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class CommentFacadeImpl implements CommentFacade {
     @Autowired
     private CommentService commentService;
 
-//    @Autowired
-//    private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private MappingService mappingService;
@@ -43,31 +44,31 @@ public class CommentFacadeImpl implements CommentFacade {
     @Override
     public CommentDTO getCommentById(Long commentId) {
         Comment comment = commentService.findById(commentId);
-        if (comment == null)
+        if (comment == null) {
             return null;
-        else {
+        } else {
             return mappingService.mapTo(comment, CommentDTO.class);
         }
     }
 
     @Override
     public List<CommentDTO> getAllComments() {
-        List <Comment> comments = commentService.findAll();
+        List<Comment> comments = commentService.findAll();
+        if (comments == null) {
+            return null;
+        } else {
+            return mappingService.mapTo(comments, CommentDTO.class);
+        }
+    }
+
+    @Override
+    public List<CommentDTO> getCommentsByUserNickname(String nickname) {
+        User user = userService.findByNickname(nickname);
+        List<Comment> comments = commentService.findByUser(user);
         if (comments == null)
             return null;
         else {
             return mappingService.mapTo(comments, CommentDTO.class);
         }
     }
-
-//    @Override
-//    public List<CommentDTO> getCommentsByUserNickname(String nickname) {
-//        User user = userService.findByNickname(nickname);
-//        List<Comment> comments = commentService.findByUser(user);
-//        if (comments == null)
-//            return null;
-//        else {
-//            return mappingService.mapTo(comments, CommentDTO.class);
-//        }
-//    }
 }
