@@ -26,6 +26,7 @@ public class WeaponDTO {
 
     private Set<CommentDTO> comments = new HashSet<>();
 
+
     public Long getId() {
         return id;
     }
@@ -74,6 +75,10 @@ public class WeaponDTO {
         this.effectiveAgainst = effectiveAgainst;
     }
 
+    public void addEffectiveAgainst(MonsterType monsterType) {effectiveAgainst.add(monsterType);}
+
+    public void removeEffectiveAgainst(MonsterType monsterType) {effectiveAgainst.remove(monsterType);}
+
     public Set<CommentDTO> getComments() {
         return comments;
     }
@@ -81,6 +86,12 @@ public class WeaponDTO {
     public void setComments(Set<CommentDTO> comments) {
         this.comments = comments;
     }
+
+    public void addComment(CommentDTO comment) {
+        comments.add(comment);
+    }
+
+    public void removeComment(CommentDTO comment) {comments.remove(comment);}
 
     @Override
     public boolean equals(Object obj) {
