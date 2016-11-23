@@ -12,9 +12,6 @@ import com.monsterhunters.pa165.entity.User;
 import com.monsterhunters.pa165.entity.Weapon;
 import org.dozer.loader.api.BeanMappingBuilder;
 
-//import com.monsterhunters.pa165.dto.WeaponDTO;
-//import com.monsterhunters.pa165.dto.MosnterDTO;
-
 // TODO: make mapping of monster...
 
 /**
