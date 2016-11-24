@@ -189,7 +189,7 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
         assertFalse(weapon.getEffectiveAgainst().contains(MonsterType.GROUND));
     }
 
-    @Test
+    @Test(expectedExceptions = {HuntersServiceException.class})
     public void shouldntRemoveNotContainingEffectiveAgainst() throws Exception{
         Weapon weapon = createWeapon("Kalach", 60, 30);
         weapon.addEffectiveAgainst(MonsterType.GROUND);
