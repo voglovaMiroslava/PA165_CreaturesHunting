@@ -1,11 +1,11 @@
 package com.monsterhunters.pa165.facade;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Snurka on 11/20/2016.
@@ -57,11 +57,20 @@ public interface UserFacade {
     boolean authenticateUser(UserAuthenticateDTO userAuthenticateDTO);
 
     /**
+     *
+     */
+    boolean changePassword(UserChangePassDTO userChangePassDTO);
+
+    /**
      * Check if the given user is admin.
      */
     boolean isAdmin(UserDTO userDTO);
 
-
+    /**
+     * removes user
+     * @param userDTO
+     */
+    void remove(UserDTO userDTO);
 
 
 }

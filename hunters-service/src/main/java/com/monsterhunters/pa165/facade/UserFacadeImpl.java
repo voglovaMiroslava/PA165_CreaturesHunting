@@ -1,14 +1,16 @@
 package com.monsterhunters.pa165.facade;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -18,10 +20,10 @@ import java.util.List;
 @Service
 public class UserFacadeImpl implements UserFacade {
 
-    @Inject
+    @Autowired
     private MappingService mappingService;
 
-    @Inject
+    @Autowired
     private UserService userService;
 
     @Override
@@ -53,15 +55,34 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public boolean authenticateUser(UserAuthenticateDTO userAuthenticateDTO) {
+        User user = userService.findByNickname(userAuthenticateDTO.getNickname());
+        if(user == null) {
+            throw new UserDoesNotExistsException(userAuthenticateDTO.getNickname());
+        }
         return userService.authenticate(
-                userService.findByNickname(userAuthenticateDTO.getNickname()),
+                user,
                 userAuthenticateDTO.getPassword()
         );
     }
 
     @Override
+    public boolean changePassword(UserChangePassDTO userChangePassDTO) {
+        if(authenticateUser(userChangePassDTO.getUserAuthenticateDTO())) {
+            userService.changePassword(userService.findByNickname(userChangePassDTO.getNickname()), userChangePassDTO.getNewPassword());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean isAdmin(UserDTO userDTO) {
         return userService.isAdmin(mappingService.mapTo(userDTO, User.class));
+    }
+
+    @Override
+    public void remove(UserDTO userDTO) {
+        userService.remove(mappingService.mapTo(userDTO, User.class));
     }
 
     private UserDTO checkNullAndMap(User user) {
