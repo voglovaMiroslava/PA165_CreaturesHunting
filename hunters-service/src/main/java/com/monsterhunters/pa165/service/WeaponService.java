@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
@@ -86,4 +87,14 @@ public interface WeaponService {
      * @return found weapon
      */
     Weapon findByName(String wName) throws HuntersServiceException;
+
+    /** Method get all monsters which could be killed with weapon
+     *  Each shot of weapon should take down some amount of power of monster.
+     *  Size of amount will be the damage of weapon. Weapon is possible to shot
+     *  while ammo is bigger than 0
+     *
+     * @param w is weapon
+     * @return list of monsters which can be killed by specified weapon
+     */
+    List<Monster> findKillableMonsters(Weapon w) throws HuntersServiceException;
 }

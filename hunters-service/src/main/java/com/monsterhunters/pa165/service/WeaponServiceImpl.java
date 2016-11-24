@@ -1,14 +1,17 @@
 package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.CommentDao;
+import com.monsterhunters.pa165.dao.MonsterDao;
 import com.monsterhunters.pa165.dao.WeaponDao;
 import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +27,9 @@ public class WeaponServiceImpl implements WeaponService {
 
     @Autowired
     private WeaponDao weaponDao;
+
+    @Autowired
+    MonsterDao monsterDao;
 
     @Override
     public Weapon createWeapon(Weapon w) throws HuntersServiceException {
@@ -140,5 +146,52 @@ public class WeaponServiceImpl implements WeaponService {
         } catch (Throwable e) {
             throw new HuntersServiceException("Cannot get weapon with name:" + wName, e);
         }
+    }
+
+    @Override
+    public List<Monster> findKillableMonsters(Weapon w) {
+        if (w == null) {
+            throw new IllegalArgumentException("Weapon is null");
+        }
+        List<Monster> monsters;
+        List<Monster> killableMonsters = new ArrayList<>();
+        try {
+            monsters = monsterDao.findAll();
+        } catch (Throwable e) {
+            throw new HuntersServiceException("Cannot get list of monsters", e);
+        }
+        for (Monster m : monsters) {
+            if (IsMonsterKillable(w, m)) {
+                killableMonsters.add(m);
+            }
+        }
+        return killableMonsters;
+    }
+
+    //Test if weapon is able to kill monster. 
+    private boolean IsMonsterKillable(Weapon w, Monster m) {
+        if (w == null) {
+            throw new IllegalArgumentException("Weapon is null");
+        }
+        if (m == null) {
+            throw new IllegalArgumentException("Monster is null");
+        }
+        int powerOfMonster = m.getPower();
+        int weaponAmmo = w.getAmmo();
+        int weaponDamage = w.getDamage();
+        for (MonsterType mType : m.getTypes()) {
+            if (w.getEffectiveAgainst().contains(mType)) {
+                do {
+                    powerOfMonster = powerOfMonster - weaponDamage;
+                    weaponAmmo--;
+                } while ((powerOfMonster > 0) && (weaponAmmo > 0));
+                if (powerOfMonster <= 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }
