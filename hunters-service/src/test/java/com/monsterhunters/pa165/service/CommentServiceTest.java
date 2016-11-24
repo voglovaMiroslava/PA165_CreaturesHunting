@@ -117,16 +117,6 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void shouldntFindByNonExistentId() {
-        Comment comment;
-        when(commentDao.findById(1L)).thenReturn(expectedComments.get(0));
-        comment = commentService.findById(100L);
-
-        verify(commentDao).findById(100L);
-        assertEquals(comment, null);
-    }
-
-    @Test
     public void shouldFindAllComments() {
         when(commentDao.findAll()).thenReturn(expectedComments);
 
