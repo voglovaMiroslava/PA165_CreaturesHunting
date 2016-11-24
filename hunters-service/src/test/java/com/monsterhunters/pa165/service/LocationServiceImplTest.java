@@ -189,7 +189,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
     @Test
     public void testAddComment() {
         Location klin = new Location("Klin", "Taka diera v lese.");
-        assertEquals(0, klin.getComments().size());
+        assertEquals(klin.getComments().size(), 0);
         locationService.addComment(klin, comment);
         assertEquals(klin.getComments().size(), 1);
     }
