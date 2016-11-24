@@ -160,6 +160,7 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
 
         when(locationDao.create(any(Location.class))).thenReturn(true);
         when(locationDao.findById(any(Long.class))).thenReturn(klin);
+        when(commentDao.findById(any(Long.class))).thenReturn(comment);
         locationFacade.createLocation(klinCreateDTO);
 
         locationFacade.addComment(klin.getId(), comment.getId());
