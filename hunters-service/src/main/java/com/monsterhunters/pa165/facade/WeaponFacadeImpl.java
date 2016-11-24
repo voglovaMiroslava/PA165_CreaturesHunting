@@ -1,7 +1,9 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponCreateDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.service.CommentService;
@@ -108,6 +110,18 @@ public class WeaponFacadeImpl implements WeaponFacade {
             return null;
         } else {
             return mappingService.mapTo(weapon, WeaponDTO.class);
+        }
+    }
+
+    @Override
+    public List<MonsterDTO> getKillableMonsters(Long weaponId) {
+        Weapon weapon = weaponService.findById(weaponId);
+        if (weapon == null) {
+            return null;
+        } else {
+            List<Monster> killableMonsters;
+            killableMonsters = weaponService.findKillableMonsters(weapon);
+            return mappingService.mapTo(killableMonsters, MonsterDTO.class);
         }
     }
 }

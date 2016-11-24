@@ -1,5 +1,6 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponCreateDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
@@ -80,5 +81,12 @@ public interface WeaponFacade {
      * @return found weaponDTO
      */
     WeaponDTO getWeaponByName(String name);
+
+    /** Get all monsters which could be killed with weapon
+     *
+     * @param weaponId id of weapon
+     * @return list of monsters which can be killed with specified weapon
+     */
+    List<MonsterDTO> getKillableMonsters(Long weaponId);
 
 }
