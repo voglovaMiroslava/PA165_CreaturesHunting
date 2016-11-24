@@ -67,7 +67,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
 
         when(locationDao.findById(any(Long.class))).thenReturn(klin);
         Location result = locationService.findById(1l);
-        assertEquals(klin, result);
+        assertEquals(result, klin);
     }
 
     /**
@@ -88,12 +88,12 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
         locationService.createLocation(mutne);
         locationService.createLocation(breza);
         locationService.createLocation(novot);
-        
+
         when(locationDao.findAll()).thenReturn(expectedResult);
         List<Location> foundLocations = locationService.findAll();
-        Assert.assertEquals(expectedResult.size(), foundLocations.size());
+        Assert.assertEquals(foundLocations.size(), expectedResult.size());
         for (int i = 0; i < expectedResult.size(); i++) {
-            Assert.assertEquals(expectedResult.get(i), foundLocations.get(i));
+            Assert.assertEquals(foundLocations.get(i), expectedResult.get(i));
         }
     }
 
@@ -105,7 +105,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
         Location klin = new Location("Klin", "Taka diera v lese.");
         when(locationDao.create(any(Location.class))).thenReturn(true);
         Location createdLocation = locationService.createLocation(klin);
-        assertEquals(klin, createdLocation);
+        assertEquals(createdLocation, klin);
     }
 
     /**
@@ -132,7 +132,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
 
         when(locationDao.delete(any(Location.class))).thenReturn(true);
         boolean result = locationService.deleteLocation(klin);
-        assertEquals(true, result);
+        assertEquals(result, true);
     }
 
     /**
@@ -153,7 +153,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
         klin.setDescription("Novy popis.");
         when(locationDao.update(any(Location.class))).thenReturn(klin);
         Location result = locationService.updateLocation(klin);
-        assertEquals(klin, result);
+        assertEquals(result, klin);
     }
 
     /**
@@ -164,7 +164,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
         Location klin = new Location("Klin", "Taka diera v lese.");
         when(locationDao.findByName(any(String.class))).thenReturn(klin);
         Location result = locationService.findByName("Klin");
-        assertEquals(klin, result);
+        assertEquals(result, klin);
     }
 
     /**
@@ -173,8 +173,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
     @Test(expectedExceptions = HuntersServiceException.class)
     public void testFindByInvalidName() {
         when(locationDao.findByName(any(String.class))).thenReturn(null);
-        Location result = locationService.findByName("WrongName");
-        assertEquals(null, result);
+        locationService.findByName("WrongName");
     }
 
     /**

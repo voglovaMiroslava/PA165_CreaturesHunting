@@ -110,7 +110,7 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
         Location klin = new Location("Klin", "Pekna dedinka v udoli.");
         when(locationDao.findById(any(Long.class))).thenReturn(klin);
         LocationDTO result = locationFacade.getLocationById(1l);
-        assertEquals(mappingService.mapTo(klin, LocationDTO.class), result);
+        assertEquals(result, mappingService.mapTo(klin, LocationDTO.class));
     }
 
     /**
@@ -121,8 +121,8 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
         Location klin = new Location("Klin", "Pekna dedinka v udoli.");
         when(locationDao.delete(any(Location.class))).thenReturn(true);
         when(locationDao.findById(any(Long.class))).thenReturn(klin);
-        boolean expectedResult = locationFacade.deleteLocation(1l);
-        assertEquals(true, expectedResult);
+        boolean result = locationFacade.deleteLocation(1l);
+        assertEquals(result, true);
     }
 
     /**
@@ -130,12 +130,7 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testAddComment() {
-        User userOne;
-        userOne = new User("User1", "user1@user.com", "myPasswordHash", true);
-        Comment comment = new Comment();
-        comment.setContent("This is comment one");
-        comment.setUser(userOne);
-        comment.setId(1l);
+        Comment comment = createComment();
 
         Location klin = new Location("Klin", "Pekna dedinka v udoli.");
         LocationCreateDTO klinCreateDTO = new LocationCreateDTO();
@@ -156,10 +151,8 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testRemoveComment() {
-        Comment comment = new Comment();
-        comment.setId(2L);
-        comment.setContent("This is another");
-        comment.setUser(new User("NickName", "mail@user.com", "passHash", false));
+        Comment comment = createComment();
+
         Location klin = new Location("Klin", "Pekna dedinka v udoli.");
         LocationCreateDTO klinCreateDTO = new LocationCreateDTO();
         klinCreateDTO.setName(klin.getName());
@@ -177,4 +170,11 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
         assertEquals(commentList2.size(), 0);
     }
 
+    private Comment createComment() {
+        Comment comment = new Comment();
+        comment.setId(2L);
+        comment.setContent("This is another");
+        comment.setUser(new User("NickName", "mail@user.com", "passHash", false));
+        return comment;
+    }
 }
