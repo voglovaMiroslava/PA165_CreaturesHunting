@@ -4,6 +4,7 @@ import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +54,12 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public boolean authenticateUser(UserAuthenticateDTO userAuthenticateDTO) {
+        User user = userService.findByNickname(userAuthenticateDTO.getNickname());
+        if(user == null) {
+            throw new UserDoesNotExistsException(userAuthenticateDTO.getNickname());
+        }
         return userService.authenticate(
-                userService.findByNickname(userAuthenticateDTO.getNickname()),
+                user,
                 userAuthenticateDTO.getPassword()
         );
     }
@@ -64,7 +69,7 @@ public class UserFacadeImpl implements UserFacade {
         return userService.isAdmin(mappingService.mapTo(userDTO, User.class));
     }
 
-    private UserDTO checkNullAndMap(User user) {
+        private UserDTO checkNullAndMap(User user) {
         return (user == null) ? null : mappingService.mapTo(user, UserDTO.class);
     }
 }
