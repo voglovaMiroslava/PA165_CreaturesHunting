@@ -59,6 +59,14 @@ public interface UserService {
     boolean authenticate(User user, String plainPassword);
 
     /**
+     * changes password to new one
+     * @param user
+     * @param plainOldPassword
+     * @param plainNewPassword
+     */
+    void changePassword(User user, String plainNewPassword);
+
+    /**
      * Removes User
      *
      * @param user object

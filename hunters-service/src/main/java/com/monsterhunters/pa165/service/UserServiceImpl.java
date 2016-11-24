@@ -65,9 +65,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changePassword(User user, String plainNewPassword) {
+       user.setPasswordHash(createHash(plainNewPassword));
+       userDao.update(user);
+    }
+
+    @Override
     public boolean authenticate(User user, String plainPassword) {
         return validatePassword(plainPassword, user.getPasswordHash());
     }
+
 
     // TODO: replace this with BCRYPT
     //see  https://crackstation.net/hashing-security.htm#javasourcecode

@@ -84,7 +84,7 @@ public class UserDaoImpl implements UserDao {
         for(Comment comment: commentList) {
             entityManager.remove(comment);
         }
-        entityManager.remove(user);
+        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
         entityManager.flush();
     }
 

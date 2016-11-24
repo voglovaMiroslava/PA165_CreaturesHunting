@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.facade;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.exceptions.user.EmailAlreadyExistsException;
@@ -157,6 +158,40 @@ public class UserFacadeImplTest extends AbstractTransactionalTestNGSpringContext
         userCreateDTO.setPlainPassword("userPassword");
         UserDTO userDTO = userFacade.registerUser(userCreateDTO);
         Assert.assertFalse(userFacade.isAdmin(userDTO));
+    }
+
+    @Test
+    public void removeTest() {
+        UserCreateDTO userCreateDTO = new UserCreateDTO();
+        userCreateDTO.setEmail("asdf@asdf.com");
+        userCreateDTO.setNickname("DrsnejTypek");
+        userCreateDTO.setPlainPassword("userPassword");
+        UserDTO userDTO = userFacade.registerUser(userCreateDTO);
+        Assert.assertEquals(userFacade.getUserByEmail("asdf@asdf.com").getNickname(), userCreateDTO.getNickname());
+        userFacade.remove(userDTO);
+        Assert.assertNull(userFacade.getUserByEmail("asdf@asdf.com"));
+    }
+
+    @Test
+    public void changePasswordTest() {
+        UserCreateDTO userCreateDTO = new UserCreateDTO();
+        userCreateDTO.setEmail("asdf@asdf.com");
+        userCreateDTO.setNickname("DrsnejTypek");
+        userCreateDTO.setPlainPassword("userPassword");
+        userFacade.registerUser(userCreateDTO);
+        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO();
+        userAuthenticateDTO.setNickname(userCreateDTO.getNickname());
+        userAuthenticateDTO.setPassword(userCreateDTO.getPlainPassword());
+        Assert.assertTrue(userFacade.authenticateUser(userAuthenticateDTO));
+        UserChangePassDTO userChangePassDTO = new UserChangePassDTO();
+        userChangePassDTO.setUserAuthenticateDTO(userAuthenticateDTO);
+        userChangePassDTO.setNewPassword("newPassword");
+        UserAuthenticateDTO newUserAuthenticateDTO = new UserAuthenticateDTO();
+        newUserAuthenticateDTO.setNickname(userCreateDTO.getNickname());
+        newUserAuthenticateDTO.setPassword(userChangePassDTO.getNewPassword());
+        Assert.assertFalse(userFacade.authenticateUser(newUserAuthenticateDTO));
+        userFacade.changePassword(userChangePassDTO);
+        Assert.assertTrue(userFacade.authenticateUser(newUserAuthenticateDTO));
     }
 
 }

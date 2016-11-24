@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.facade;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.entity.User;
@@ -65,11 +66,26 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
+    public boolean changePassword(UserChangePassDTO userChangePassDTO) {
+        if(authenticateUser(userChangePassDTO.getUserAuthenticateDTO())) {
+            userService.changePassword(userService.findByNickname(userChangePassDTO.getNickname()), userChangePassDTO.getNewPassword());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean isAdmin(UserDTO userDTO) {
         return userService.isAdmin(mappingService.mapTo(userDTO, User.class));
     }
 
-        private UserDTO checkNullAndMap(User user) {
+    @Override
+    public void remove(UserDTO userDTO) {
+        userService.remove(mappingService.mapTo(userDTO, User.class));
+    }
+
+    private UserDTO checkNullAndMap(User user) {
         return (user == null) ? null : mappingService.mapTo(user, UserDTO.class);
     }
 }
