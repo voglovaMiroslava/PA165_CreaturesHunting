@@ -1,7 +1,9 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponCreateDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.service.CommentService;
@@ -37,15 +39,15 @@ public class WeaponFacadeImpl implements WeaponFacade {
     private MappingService mappingService;
 
     @Override
-    public Long createWeapon(WeaponCreateDTO w) {
-        Weapon mappedWeapon = mappingService.mapTo(w, Weapon.class);
+    public Long createWeapon(WeaponCreateDTO weaponCreateDTO) {
+        Weapon mappedWeapon = mappingService.mapTo(weaponCreateDTO, Weapon.class);
         Weapon newWeapon = weaponService.createWeapon(mappedWeapon);
         return newWeapon.getId();
     }
 
     @Override
-    public Long updateWeapon(WeaponDTO w){
-        Weapon mappedWeapon = mappingService.mapTo(w, Weapon.class);
+    public Long updateWeapon(WeaponDTO weaponDTO) {
+        Weapon mappedWeapon = mappingService.mapTo(weaponDTO, Weapon.class);
         Weapon updatedWeapon = weaponService.updateWeapon(mappedWeapon);
         return updatedWeapon.getId();
     }
@@ -54,7 +56,6 @@ public class WeaponFacadeImpl implements WeaponFacade {
     public void deleteWeapon(Long weaponId) {
         Weapon weapon = weaponService.findById(weaponId);
         weaponService.deleteWeapon(weapon);
-        // weaponService.deleteWeapon(new Weapon(weapon));
     }
 
     @Override
@@ -78,16 +79,16 @@ public class WeaponFacadeImpl implements WeaponFacade {
 
     @Override
     public void removeEffectiveAgainst(Long weaponId, MonsterType m) {
-        weaponService.addEffectiveAgainst(weaponService.findById(weaponId),
+        weaponService.removeEffectiveAgainst(weaponService.findById(weaponId),
                 m);
     }
 
     @Override
     public List<WeaponDTO> getAllWeapons() {
         List<Weapon> weapons = weaponService.findAll();
-        if (weapons == null)
+        if (weapons == null) {
             return null;
-        else {
+        } else {
             return mappingService.mapTo(weapons, WeaponDTO.class);
         }
     }
@@ -95,9 +96,9 @@ public class WeaponFacadeImpl implements WeaponFacade {
     @Override
     public WeaponDTO getWeaponById(Long weaponId) {
         Weapon weapon = weaponService.findById(weaponId);
-        if (weapon == null)
+        if (weapon == null) {
             return null;
-        else {
+        } else {
             return mappingService.mapTo(weapon, WeaponDTO.class);
         }
     }
@@ -105,10 +106,22 @@ public class WeaponFacadeImpl implements WeaponFacade {
     @Override
     public WeaponDTO getWeaponByName(String name) {
         Weapon weapon = weaponService.findByName(name);
-        if (weapon == null)
+        if (weapon == null) {
             return null;
-        else {
+        } else {
             return mappingService.mapTo(weapon, WeaponDTO.class);
+        }
+    }
+
+    @Override
+    public List<MonsterDTO> getKillableMonsters(Long weaponId) {
+        Weapon weapon = weaponService.findById(weaponId);
+        if (weapon == null) {
+            return null;
+        } else {
+            List<Monster> killableMonsters;
+            killableMonsters = weaponService.findKillableMonsters(weapon);
+            return mappingService.mapTo(killableMonsters, MonsterDTO.class);
         }
     }
 }
