@@ -89,7 +89,12 @@ public class WeaponServiceImpl implements WeaponService {
     @Override
     public void removeComment(Weapon w, Comment c) throws HuntersServiceException {
         try {
-            w.removeComment(c);
+            if (w.getComments().contains(c)) {
+                w.removeComment(c);
+            } else {
+                throw new HuntersServiceException("Cannot remove comment " + c +
+                        " from weapon " + w + ". Comment doesn't belong to weapon.");
+            }
         } catch (Throwable e) {
             throw new HuntersServiceException("Cannot remove comment " + c +
                     " from weapon " + w, e);
