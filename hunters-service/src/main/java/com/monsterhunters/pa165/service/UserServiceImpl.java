@@ -2,6 +2,8 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.UserDao;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.exceptions.user.EmailAlreadyExistsException;
+import com.monsterhunters.pa165.exceptions.user.NicknameAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(User user, String plainPassword) {
+        if(userDao.findByEmail(user.getEmail()) != null) {
+            throw new EmailAlreadyExistsException(user.getEmail());
+        }
+        if(userDao.findByNickname(user.getNickname()) != null){
+            throw new NicknameAlreadyExistsException(user.getNickname());
+        }
         user.setPasswordHash(createHash(plainPassword));
         userDao.create(user);
     }
