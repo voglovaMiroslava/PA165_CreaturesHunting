@@ -40,7 +40,7 @@ public interface LocationFacade {
      * @param id
      * @return true if deletion succes
      */
-    boolean removeLocation(Long id);
+    boolean deleteLocation(Long id);
 
     /**
      * Add comment to location

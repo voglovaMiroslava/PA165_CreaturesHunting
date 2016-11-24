@@ -30,7 +30,7 @@ public class Location {
 
     public Location() {
     }
-    
+
     public Location(String name, String description) {
         this.name = name;
         this.description = description;
@@ -46,6 +46,10 @@ public class Location {
 
     public String getName() {
         return name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -64,12 +68,12 @@ public class Location {
         return comments;
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
+    public boolean addComment(Comment comment) {
+        return comments.add(comment);
     }
 
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
+    public boolean removeComment(Comment comment) {
+        return comments.remove(comment);
     }
 
     @Override

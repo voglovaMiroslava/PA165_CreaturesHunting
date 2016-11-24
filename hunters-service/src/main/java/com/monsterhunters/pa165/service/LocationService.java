@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -14,65 +15,73 @@ import org.springframework.stereotype.Service;
 public interface LocationService {
 
     /**
-     * Returns finding Location
-     *
-     * @param id Location id
-     * @return Lcoation object of finding Location
-     */
-    Location findById(Long id);
-
-    /**
-     * Returns list of all locations
-     *
-     * @return list of Location objects
-     */
-    List<Location> findAll();
-
-    /**
      * Creates new location
      *
      * @param location object
      * @return Location object
+     * @throws HuntersServiceException when an error occures
      */
-    Location create(Location location);
+    Location createLocation(Location location) throws HuntersServiceException;
 
     /**
      * Removes Location
      *
      * @param location object
      * @return true if removing succes
+     * @throws HuntersServiceException when an error occures
      */
-    boolean remove(Location location);
+    boolean deleteLocation(Location location) throws HuntersServiceException;
 
     /**
      * Update Location
      *
      * @param location object
      * @return Location object
+     * @throws HuntersServiceException when an error occures
      */
-    Location update(Location location);
+    Location updateLocation(Location location) throws HuntersServiceException;
+
+    /**
+     * Returns finding Location
+     *
+     * @param id Location id
+     * @return Lcoation object of finding Location
+     * @throws HuntersServiceException when an error occures
+     */
+    Location findById(Long id) throws HuntersServiceException;
+
+    /**
+     * Returns list of all locations
+     *
+     * @return list of Location objects
+     * @throws HuntersServiceException when an error occures
+     */
+    List<Location> findAll() throws HuntersServiceException;
 
     /**
      * Returns finding Location
      *
      * @param locationName Location name
      * @return Location object of finding location
+     * @throws HuntersServiceException when an error occures
      */
-    Location findByName(String locationName);
+    Location findByName(String locationName) throws HuntersServiceException;
 
     /**
      * Add comment to list of comments of location
      *
      * @param location is location object
      * @param comment is a comment object which will be added to list
+     * @throws HuntersServiceException when an error occures
      */
-    void addComment(Location location, Comment comment);
+    void addComment(Location location, Comment comment) throws HuntersServiceException;
 
     /**
      * Remove comment from list of comments of location
      *
      * @param location is location object
      * @param comment is a comment object to removed from list
+     * @throws HuntersServiceException when an error occures
      */
-    void removeComment(Location location, Comment comment);
+    void removeComment(Location location, Comment comment) throws HuntersServiceException;
 }

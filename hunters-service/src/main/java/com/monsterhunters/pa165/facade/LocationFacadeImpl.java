@@ -47,13 +47,13 @@ public class LocationFacadeImpl implements LocationFacade {
         Location location = new Location();
         location.setName(locationCreateDTO.getName());
         location.setDescription(locationCreateDTO.getDescription());
-        locationService.create(location);
+        locationService.createLocation(location);
         return location.getId();
     }
 
     @Override
-    public boolean removeLocation(Long id) {
-        return locationService.remove(locationService.findById(id));
+    public boolean deleteLocation(Long id) {
+        return locationService.deleteLocation(locationService.findById(id));
     }
 
     @Override
