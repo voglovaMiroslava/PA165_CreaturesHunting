@@ -8,9 +8,12 @@ package com.monsterhunters.pa165.service;
 import com.monsterhunters.pa165.dao.LocationDao;
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.InjectMocks;
 import static org.mockito.Matchers.any;
@@ -40,23 +43,17 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
     @InjectMocks
     private LocationService locationService;
 
-    private Location mutne;
-    private Location novot;
-    private Location mutneCopy;
-    private Location klin;
-    private Location breza;
-    private Location lomna;
+    private Comment comment;
 
     @BeforeClass
     public void setUp() throws ServiceException {
         MockitoAnnotations.initMocks(this);
 
-        mutne = new Location("Mutne", "Pekna dedinka v udoli.");
-        mutneCopy = mutne;
-        novot = new Location("Novot", "Hned za kopcom blizko dulova, very nice");
-        klin = new Location("Klin", "Taka diera v lese.");
-        breza = new Location("Breza", "Kedysi tam rastli brezy.");
-        lomna = new Location("Lomna", "Tam kde sa muchy otacaju.");
+        User userOne;
+        userOne = new User("User1", "user1@user.com", "myPasswordHash", true);
+        comment = new Comment();
+        comment.setContent("This is comment one");
+        comment.setUser(userOne);
     }
 
     /**
@@ -64,9 +61,13 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
      */
     @Test
     public void testFindById() {
-        when(locationDao.findById(any(Long.class))).thenReturn(mutneCopy);
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        locationService.createLocation(klin);
+
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
         Location result = locationService.findById(1l);
-        assertEquals(mutneCopy, result);
+        assertEquals(klin, result);
     }
 
     /**
@@ -74,11 +75,20 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
      */
     @Test
     public void testFindAll() {
+        Location mutne = new Location("Mutne", "Pekna dedinka v udoli.");
+        Location novot = new Location("Novot", "Hned za kopcom blizko dulova, very nice");
+        Location breza = new Location("Breza", "Kedysi tam rastli brezy.");
+
         List<Location> expectedResult = new ArrayList<>();
-        expectedResult.add(this.mutne);
-        expectedResult.add(this.novot);
-        expectedResult.add(this.klin);
-        expectedResult.add(this.breza);
+        expectedResult.add(mutne);
+        expectedResult.add(novot);
+        expectedResult.add(breza);
+
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        locationService.createLocation(mutne);
+        locationService.createLocation(breza);
+        locationService.createLocation(novot);
+        
         when(locationDao.findAll()).thenReturn(expectedResult);
         List<Location> foundLocations = locationService.findAll();
         Assert.assertEquals(expectedResult.size(), foundLocations.size());
@@ -88,51 +98,62 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
     }
 
     /**
-     * Test of create method, of class LocationServiceImpl.
+     * Test of createLocation method, of class LocationServiceImpl.
      */
     @Test
     public void testCreate() {
+        Location klin = new Location("Klin", "Taka diera v lese.");
         when(locationDao.create(any(Location.class))).thenReturn(true);
-        Location createdLocation = locationService.create(mutne);
-        assertEquals(mutne, createdLocation);
+        Location createdLocation = locationService.createLocation(klin);
+        assertEquals(klin, createdLocation);
     }
 
     /**
-     * Test of create method, of class LocationServiceImpl.
+     * Test of createLocation method, of class LocationServiceImpl.
      */
-    @Test
+    @Test(expectedExceptions = HuntersServiceException.class)
     public void testCreateExistingLocation() {
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        locationService.createLocation(klin);
+
         when(locationDao.create(any(Location.class))).thenReturn(false);
-        Location createdLocation = locationService.create(mutne);
-        assertEquals(null, createdLocation);
+        locationService.createLocation(klin);
     }
 
     /**
-     * Test of remove method, of class LocationServiceImpl.
+     * Test of deleteLocation method, of class LocationServiceImpl.
      */
     @Test
     public void testRemove() {
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        locationService.createLocation(klin);
+
         when(locationDao.delete(any(Location.class))).thenReturn(true);
-        boolean result = locationService.remove(lomna);
+        boolean result = locationService.deleteLocation(klin);
         assertEquals(true, result);
     }
 
-    @Test
-    public void testupdate() {
-        lomna.setDescription("Novy popis.");
-        when(locationDao.update(any(Location.class))).thenReturn(lomna);
-        Location result = locationService.update(lomna);
-        assertEquals(lomna, result);
+    /**
+     * Test of deleteLocation method, of class LocationServiceImpl.
+     */
+    @Test(expectedExceptions = HuntersServiceException.class)
+    public void testRemoveNonExistingLocation() {
+        when(locationDao.delete(any(Location.class))).thenReturn(false);
+        Location lokca = new Location("Lokca", "Podpalaci tam byvaju.");
+        locationService.deleteLocation(lokca);
     }
 
-    /**
-     * Test of remove method, of class LocationServiceImpl.
-     */
-    @Test
-    public void testRemoveNonExistingoLocation() {
-        when(locationDao.delete(any(Location.class))).thenReturn(false);
-        boolean result = locationService.remove(lomna);
-        assertEquals(false, result);
+    public void testupdate() {
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        locationService.createLocation(klin);
+
+        klin.setDescription("Novy popis.");
+        when(locationDao.update(any(Location.class))).thenReturn(klin);
+        Location result = locationService.updateLocation(klin);
+        assertEquals(klin, result);
     }
 
     /**
@@ -140,17 +161,38 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
      */
     @Test
     public void testFindByName() {
-        when(locationDao.findByName(any(String.class))).thenReturn(novot);
-        Location result = locationService.findByName("Novot");
-        assertEquals(novot, result);
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        when(locationDao.findByName(any(String.class))).thenReturn(klin);
+        Location result = locationService.findByName("Klin");
+        assertEquals(klin, result);
+    }
+
+    /**
+     * Test of findByName method, of class LocationServiceImpl.
+     */
+    @Test(expectedExceptions = HuntersServiceException.class)
+    public void testFindByInvalidName() {
+        when(locationDao.findByName(any(String.class))).thenReturn(null);
+        Location result = locationService.findByName("WrongName");
+        assertEquals(null, result);
     }
 
     /**
      * Test of addComment method, of class LocationServiceImpl.
      */
+    @Test(expectedExceptions = HuntersServiceException.class)
+    public void testAddDuplicateComment() {
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        locationService.addComment(klin, comment);
+        locationService.addComment(klin, comment);
+    }
+
     @Test
     public void testAddComment() {
-        // TO DO
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        assertEquals(0, klin.getComments().size());
+        locationService.addComment(klin, comment);
+        assertEquals(klin.getComments().size(), 1);
     }
 
     /**
@@ -158,7 +200,22 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
      */
     @Test
     public void testRemoveComment() {
-        // TO DO
+        Location klin = new Location("Klin", "Taka diera v lese.");
+        locationService.addComment(klin, comment);
+        Set<Comment> commentList = klin.getComments();
+        assertEquals(commentList.size(), 1);
+        locationService.removeComment(klin, comment);
+        Set<Comment> commentList2 = klin.getComments();
+        assertEquals(commentList2.size(), 0);
+    }
+
+    /**
+     * Test of removeComment method, of class LocationServiceImpl.
+     */
+    @Test(expectedExceptions = HuntersServiceException.class)
+    public void testRemoveNonExistingComment() {
+        Location tapesovo = new Location("Tapesovo", "Hned za kopcom blizko dulova, very nice");
+        locationService.removeComment(tapesovo, comment);
     }
 
 }

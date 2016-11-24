@@ -1,18 +1,26 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dao.CommentDao;
 import com.monsterhunters.pa165.dao.LocationDao;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.service.CommentService;
 import com.monsterhunters.pa165.service.LocationService;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.InjectMocks;
 import static org.mockito.Matchers.any;
 import org.mockito.Mock;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +30,7 @@ import org.testng.Assert;
 import static org.testng.Assert.*;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -34,6 +43,12 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
     @Mock
     private LocationDao locationDao;
 
+    @Mock
+    private CommentDao commentDao;
+
+    @Autowired
+    private MappingService mappingService;
+
     @Autowired
     private LocationFacade locationFacade;
 
@@ -42,32 +57,12 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
     private LocationService locationService;
 
     @Autowired
-    private MappingService mappingService;
-
-    private Location mutne;
-    private LocationCreateDTO mutneCreateDTO;
-
-    private Location novot;
-    private Location mutneCopy;
-    private Location klin;
-    private Location breza;
-    private Location lomna;
+    @InjectMocks
+    private CommentService commentService;
 
     @BeforeClass
     public void setUp() throws ServiceException {
         MockitoAnnotations.initMocks(this);
-
-        mutne = new Location("Mutne", "Pekna dedinka v udoli.");
-        
-        mutneCreateDTO = new LocationCreateDTO();
-        mutneCreateDTO.setName(mutne.getName());
-        mutneCreateDTO.setDescription(mutne.getDescription());
-
-        mutneCopy = mutne;
-        novot = new Location("Novot", "Hned za kopcom blizko dulova, very nice");
-        klin = new Location("Klin", "Taka diera v lese.");
-        breza = new Location("Breza", "Kedysi tam rastli brezy.");
-
     }
 
     /**
@@ -75,10 +70,15 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testCreateLocation() {
+        Location klin = new Location("Klin", "Pekna dedinka v udoli.");
+        LocationCreateDTO klinCreateDTO = new LocationCreateDTO();
+        klinCreateDTO.setName(klin.getName());
+        klinCreateDTO.setDescription(klin.getDescription());
+
         when(locationDao.create(any(Location.class))).thenReturn(true);
-        when(locationDao.findById(any(Long.class))).thenReturn(mutne);
-        Long createdLocationId = locationFacade.createLocation(mutneCreateDTO);
-        assertEquals(null, createdLocationId);
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
+        Long createdLocationId = locationFacade.createLocation(klinCreateDTO);
+        assertEquals(createdLocationId, klin.getId());
     }
 
     /**
@@ -86,16 +86,19 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testGetAllLocations() {
+        Location mutne = new Location("Mutne", "Pekna dedinka v udoli.");
+        Location novot = new Location("Novot", "Hned za kopcom blizko dulova, very nice");
+        Location breza = new Location("Breza", "Kedysi tam rastli brezy.");
+
         List<Location> expectedResult = new ArrayList<>();
-        expectedResult.add(this.mutne);
-        expectedResult.add(this.novot);
-        expectedResult.add(this.klin);
-        expectedResult.add(this.breza);
+        expectedResult.add(mutne);
+        expectedResult.add(novot);
+        expectedResult.add(breza);
         when(locationDao.findAll()).thenReturn(expectedResult);
         List<LocationDTO> foundLocations = locationFacade.getAllLocations();
-        Assert.assertEquals(expectedResult.size(), foundLocations.size());
+        Assert.assertEquals(foundLocations.size(), expectedResult.size());
         for (int i = 0; i < expectedResult.size(); i++) {
-            Assert.assertEquals(mappingService.mapTo(expectedResult.get(i), LocationDTO.class), foundLocations.get(i));
+            Assert.assertEquals(foundLocations.get(i), mappingService.mapTo(expectedResult.get(i), LocationDTO.class));
         }
     }
 
@@ -104,9 +107,22 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testGetLocationById() {
-        when(locationDao.findById(any(Long.class))).thenReturn(mutneCopy);
+        Location klin = new Location("Klin", "Pekna dedinka v udoli.");
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
         LocationDTO result = locationFacade.getLocationById(1l);
-        assertEquals(mappingService.mapTo(mutneCopy, LocationDTO.class), result);
+        assertEquals(mappingService.mapTo(klin, LocationDTO.class), result);
+    }
+
+    /**
+     * Test of addComment method, of class LocationFacadeImpl.
+     */
+    @Test
+    public void testDeleteLocation() {
+        Location klin = new Location("Klin", "Pekna dedinka v udoli.");
+        when(locationDao.delete(any(Location.class))).thenReturn(true);
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
+        boolean expectedResult = locationFacade.deleteLocation(1l);
+        assertEquals(true, expectedResult);
     }
 
     /**
@@ -114,8 +130,25 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testAddComment() {
+        User userOne;
+        userOne = new User("User1", "user1@user.com", "myPasswordHash", true);
+        Comment comment = new Comment();
+        comment.setContent("This is comment one");
+        comment.setUser(userOne);
+        comment.setId(1l);
 
-        // TODO review the generated test code and remove the default call to fail.
+        Location klin = new Location("Klin", "Pekna dedinka v udoli.");
+        LocationCreateDTO klinCreateDTO = new LocationCreateDTO();
+        klinCreateDTO.setName(klin.getName());
+        klinCreateDTO.setDescription(klin.getDescription());
+
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
+        locationFacade.createLocation(klinCreateDTO);
+
+        assertEquals(0, klin.getComments().size());
+        locationFacade.addComment(klin.getId(), comment.getId());
+        assertEquals(klin.getComments().size(), 1);
     }
 
     /**
@@ -123,8 +156,25 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testRemoveComment() {
+        Comment comment = new Comment();
+        comment.setId(2L);
+        comment.setContent("This is another");
+        comment.setUser(new User("NickName", "mail@user.com", "passHash", false));
+        Location klin = new Location("Klin", "Pekna dedinka v udoli.");
+        LocationCreateDTO klinCreateDTO = new LocationCreateDTO();
+        klinCreateDTO.setName(klin.getName());
+        klinCreateDTO.setDescription(klin.getDescription());
 
-        // TODO review the generated test code and remove the default call to fail.
+        when(locationDao.create(any(Location.class))).thenReturn(true);
+        when(locationDao.findById(any(Long.class))).thenReturn(klin);
+        locationFacade.createLocation(klinCreateDTO);
+
+        locationFacade.addComment(klin.getId(), comment.getId());
+        Set<Comment> commentList = klin.getComments();
+        assertEquals(commentList.size(), 1);
+        locationFacade.removeComment(klin.getId(), comment.getId());
+        Set<Comment> commentList2 = klin.getComments();
+        assertEquals(commentList2.size(), 0);
     }
 
 }
