@@ -1,7 +1,13 @@
 package com.monsterhunters.pa165.service;
 
+import com.monsterhunters.pa165.dao.MonsterDao;
 import com.monsterhunters.pa165.dao.WeaponDao;
+import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.Monster;
+import com.monsterhunters.pa165.entity.User;
 import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.InjectMocks;
@@ -24,6 +30,8 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by babcang
@@ -36,6 +44,9 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
 
     @Mock
     private WeaponDao weaponDao;
+
+    @Mock
+    private MonsterDao monsterDao;
 
     @Autowired
     @InjectMocks
@@ -126,6 +137,16 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void shouldntFindByNonExistentId() {
+        Weapon foundWeapon;
+        when(weaponDao.findById(id1)).thenReturn(expectedWeapons.get(0));
+        foundWeapon = weaponService.findById(1111L);
+
+        verify(weaponDao).findById(1111L);
+        assertEquals(foundWeapon, null);
+    }
+
+    @Test
     public void shouldFindWeaponByName() {
         Weapon foundWeapon;
         when(weaponDao.findByName("P90")).thenReturn(expectedWeapons.get(1));
@@ -145,6 +166,107 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
         verify(weaponDao).findAll();
     }
 
+    @Test
+    public void shouldAddEffectiveAgainst() {
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        weaponService.addEffectiveAgainst(weapon, MonsterType.DRAGON);
+        assertTrue(weapon.getEffectiveAgainst().contains(MonsterType.DRAGON));
+    }
+
+    @Test(expectedExceptions = {HuntersServiceException.class})
+    public void shoulndtAddTypeThatIsAlreadyInList() throws Exception {
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        weapon.addEffectiveAgainst(MonsterType.DRAGON);
+        weaponService.addEffectiveAgainst(weapon, MonsterType.DRAGON);
+        assertTrue(weapon.getEffectiveAgainst().contains(MonsterType.DRAGON));
+    }
+
+    @Test
+    public void shouldRemoveEffectiveAgainst(){
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        weapon.addEffectiveAgainst(MonsterType.GROUND);
+        weaponService.removeEffectiveAgainst(weapon, MonsterType.GROUND);
+        assertFalse(weapon.getEffectiveAgainst().contains(MonsterType.GROUND));
+    }
+
+    @Test
+    public void shouldntRemoveNotContainingEffectiveAgainst() throws Exception{
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        weapon.addEffectiveAgainst(MonsterType.GROUND);
+        weaponService.removeEffectiveAgainst(weapon, MonsterType.DRAGON);
+        assertEquals(weapon.getEffectiveAgainst().size(), 1);
+    }
+
+    @Test
+    public void shouldAddComment() {
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        Comment comment = new Comment();
+        comment.setContent("This is my comment");
+
+        weaponService.addComment(weapon, comment);
+        assertTrue(weapon.getComments().contains(comment));
+        assertEquals(weapon.getComments().size(), 1);
+    }
+
+    @Test
+    public void shouldRemoveComment() {
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        Comment comment = new Comment();
+        comment.setContent("This is my comment");
+        weapon.addComment(comment);
+
+        weaponService.removeComment(weapon, comment);
+        assertFalse(weapon.getComments().contains(comment));
+        assertEquals(weapon.getComments().size(), 0);
+    }
+
+    @Test(expectedExceptions = {HuntersServiceException.class})
+    public void shouldntRemoveCommentNotBelongingToWeapon(){
+        Weapon weapon = createWeapon("Kalach", 60, 30);
+        Comment comment = new Comment();
+        comment.setUser(new User("Nickname","mail@mail.com","password",false));
+        comment.setContent("This is my comment");
+        weapon.addComment(comment);
+
+        Weapon weapon2 = createWeapon("AWP", 99, 10);
+        Comment comment2 = new Comment();
+        comment2.setUser(new User("Nickname","mail@mail.com","password",false));
+        comment2.setContent("This is my second comment");
+        weapon2.addComment(comment2);
+
+        weaponService.removeComment(weapon, comment2);
+        assertTrue(weapon.getComments().contains(comment));
+        assertTrue(weapon2.getComments().contains(comment2));
+        assertEquals(weapon.getComments().size(), 1);
+        assertEquals(weapon2.getComments().size(), 1);
+    }
+
+    @Test
+    public void shouldFindKillableMonsters() {
+        Weapon weapon = createWeapon("Ultra Smasher", 50, 5);
+        weapon.addEffectiveAgainst(MonsterType.GROUND);
+        weapon.addEffectiveAgainst(MonsterType.ROCK);
+
+        List<Monster> monsters = new ArrayList<>();
+        Monster monster1 = createMonster("Orc", 200, MonsterType.DRAGON);
+        Monster monster2 = createMonster("Kavabonga", 250, MonsterType.GROUND);
+        Monster monster3 = createMonster("Pika", 300, MonsterType.ROCK);
+        Monster monster4 = createMonster("Multi", 160, MonsterType.GROUND);
+        monster4.addType(MonsterType.FIRE);
+        monsters.add(monster1);
+        monsters.add(monster2);
+        monsters.add(monster3);
+        monsters.add(monster4);
+
+        when(monsterDao.findAll()).thenReturn(monsters);
+
+        List<Monster> killableMonsters = weaponService.findKillableMonsters(weapon);
+        assertEquals(killableMonsters.size(), 2);
+        assertTrue(killableMonsters.contains(monster2));
+        assertTrue(killableMonsters.contains(monster4));
+        verify(monsterDao).findAll();
+    }
+
 
     //Simple weapon init with parameters
     private Weapon createWeapon(String name, int damage, int ammo) {
@@ -153,6 +275,15 @@ public class WeaponServiceTest extends AbstractTestNGSpringContextTests {
         weapon.setDamage(damage);
         weapon.setAmmo(ammo);
         return weapon;
+    }
+
+    //Simple monster init with parameters
+    private Monster createMonster(String name, int power, MonsterType mType) {
+        Monster monster = new Monster();
+        monster.setName(name);
+        monster.setPower(power);
+        monster.addType(mType);
+        return monster;
     }
 
 }
