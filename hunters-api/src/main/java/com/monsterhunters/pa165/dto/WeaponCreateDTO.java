@@ -3,7 +3,6 @@ package com.monsterhunters.pa165.dto;
 
 import com.monsterhunters.pa165.enums.MonsterType;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,11 +27,9 @@ public class WeaponCreateDTO {
     private int ammo;
 
     @Min(0)
-    @Max(100)
     private int damage;
 
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
-
 
     public String getName() {
         return name;
@@ -77,19 +74,24 @@ public class WeaponCreateDTO {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
 
         WeaponCreateDTO other = (WeaponCreateDTO) obj;
         if (name == null) {
-            if (other.getName() != null)
+            if (other.getName() != null) {
                 return false;
-        } else if (!name.equals(other.getName()))
+            }
+        } else if (!name.equals(other.getName())) {
             return false;
+        }
         return true;
     }
 
