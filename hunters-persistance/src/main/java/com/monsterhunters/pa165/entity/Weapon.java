@@ -32,7 +32,7 @@ public class Weapon {
     @Column
     private int damage;
 
-    @ElementCollection
+    @ElementCollection(targetClass = MonsterType.class)
     @Enumerated(EnumType.STRING)
     private Set<MonsterType> effectiveAgainst = new HashSet<>();
 

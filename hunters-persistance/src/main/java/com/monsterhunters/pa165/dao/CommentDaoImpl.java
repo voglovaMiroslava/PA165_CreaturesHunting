@@ -50,6 +50,7 @@ public class CommentDaoImpl implements CommentDao {
             throw new IllegalArgumentException(Comment.class.getName());
         }
         em.remove(em.contains(c) ? c : em.merge(c));
+        em.flush();
     }
 
     @Override
