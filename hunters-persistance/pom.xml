@@ -10,13 +10,14 @@
 
     <artifactId>hunters-persistance</artifactId>
     <packaging>jar</packaging>
-    <version>${project.parent.version}</version>
+    <version>1.0</version>
     <name>hunters-persistance</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <hibernate.debug>true</hibernate.debug>
     </properties>
 
     <dependencies>
@@ -92,4 +93,25 @@
             <artifactId>derby</artifactId>
         </dependency>
     </dependencies>
+
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>hib-no-debug</id>
+            <properties>
+                <hibernate.debug>false</hibernate.debug>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
