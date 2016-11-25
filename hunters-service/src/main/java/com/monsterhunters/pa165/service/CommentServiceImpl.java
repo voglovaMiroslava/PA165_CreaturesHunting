@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Comment c) throws HuntersServiceException {
         if (c == null) {
-            throw new IllegalArgumentException("Weapon is null");
+            throw new IllegalArgumentException("Comment is null");
         }
         try {
             commentDao.delete(c);
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             return commentDao.findByUser(user);
         } catch (Throwable e) {
-            throw new HuntersServiceException("Cannot cooment of User: " + user.getNickname(), e);
+            throw new HuntersServiceException("Cannot get comment of User: " + user.getNickname(), e);
         }
     }
 }
