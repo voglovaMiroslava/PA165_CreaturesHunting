@@ -8,6 +8,7 @@ import com.monsterhunters.pa165.service.CommentService;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Babcan G
  */
 
+@Service
 public class CommentFacadeImpl implements CommentFacade {
 
     @Autowired
@@ -31,6 +33,7 @@ public class CommentFacadeImpl implements CommentFacade {
     @Override
     public Long createComment(CommentCreateDTO c) {
         Comment mappedComment = mappingService.mapTo(c, Comment.class);
+        mappedComment.setUser(userService.findById(c.getUserId()));
         Comment newComment = commentService.createComment(mappedComment);
         return newComment.getId();
     }
