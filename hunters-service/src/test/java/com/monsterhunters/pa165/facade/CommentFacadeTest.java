@@ -1,41 +1,26 @@
 package com.monsterhunters.pa165.facade;
 
-import com.monsterhunters.pa165.dao.CommentDao;
+
 import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.exceptions.HuntersServiceException;
-import com.monsterhunters.pa165.service.CommentService;
-import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.transaction.annotation.Transactional;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Created by babcang
  *
  * @author Babcan G
  */
-@Transactional
+
 @ContextConfiguration(classes = MappingConfiguration.class)
 public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextTests {
 
@@ -45,43 +30,34 @@ public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextT
     @Autowired
     private CommentFacade commentFacade;
 
-    private Long id1 = 1L;
-    private UserCreateDTO userCreateDTO;
-    private Comment comment1;
-    private Comment comment2;
-    private CommentDTO commentDTO1;
-    private CommentDTO commentDTO2;
-    private List<Comment> comments;
-    private List<CommentDTO> DTOcomments;
+    private UserDTO userDTO;
+    private CommentDTO comment1;
+    private CommentDTO comment2;
 
-    @BeforeClass
+    @BeforeMethod
     private void setup() {
-        userCreateDTO = new UserCreateDTO();
+        UserCreateDTO userCreateDTO = new UserCreateDTO();
         userCreateDTO.setEmail("mail@mail.com");
         userCreateDTO.setNickname("nickname");
         userCreateDTO.setPlainPassword("password");
-        userFacade.registerUser(userCreateDTO);
+        userDTO = userFacade.registerUser(userCreateDTO);
+        assertTrue(userFacade.getAllUsers().contains(userDTO));
     }
 
-    @AfterMethod
-    private void delete() {
-        List<CommentDTO> commentsDTO = commentFacade.getAllComments();
-        for (CommentDTO comment : commentsDTO) {
-            commentFacade.deleteComment(comment.getId());
-        }
-    }
 
     @Test
     public void shouldCreateComment() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", id1);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
+        comment1 = commentFacade.getCommentById(id);
 
-        assertEquals(commentFacade.getCommentById(id).getId(), id);
+        assertEquals(commentFacade.getCommentById(comment1.getId()).getContent(),
+                "This is comment");
     }
 
     @Test
     public void shouldDeleteComment() throws Exception {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", id1);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
         commentFacade.deleteComment(id);
 
@@ -90,32 +66,34 @@ public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextT
 
     @Test
     public void shouldGetCommentById() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", id1);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
-        CommentDTO commentDTO = commentFacade.getAllComments().get(0);
+        comment1 = commentFacade.getAllComments().get(0);
 
-        assertEquals(commentFacade.getCommentById(id), commentDTO);
+        assertEquals(commentFacade.getCommentById(id), comment1);
         assertNull(commentFacade.getCommentById(2L));
     }
 
     @Test
     public void shouldGetAllComment() {
-        CommentCreateDTO commentCreateDTO1 = createDTO("This is comment", id1);
+        CommentCreateDTO commentCreateDTO1 = createDTO("This is comment", userDTO.getId());
         Long idOne = commentFacade.createComment(commentCreateDTO1);
-        CommentCreateDTO commentCreateDTO2 = createDTO("This is second comment", id1);
+        comment1 = commentFacade.getCommentById(idOne);
+        CommentCreateDTO commentCreateDTO2 = createDTO("This is second comment", userDTO.getId());
         Long idTwo = commentFacade.createComment(commentCreateDTO2);
+        comment2 = commentFacade.getCommentById(idTwo);
 
         assertEquals(commentFacade.getAllComments().size(), 2);
     }
 
     @Test
     public void shouldGetCommentByUserNickname() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", id1);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
-        String nikcname = userCreateDTO.getNickname();
-        CommentDTO commentDTO = commentFacade.getCommentById(id);
+        String nickname = userDTO.getNickname();
+        comment1 = commentFacade.getCommentById(id);
 
-        assertTrue(commentFacade.getCommentsByUserNickname(nikcname).contains(commentDTO));
+        assertTrue(commentFacade.getCommentsByUserNickname(nickname).contains(comment1));
         assertEquals(commentFacade.getCommentsByUserNickname("Rintintin").size(), 0);
     }
 
