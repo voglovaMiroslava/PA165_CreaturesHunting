@@ -100,6 +100,10 @@ public class Monster {
         return Collections.unmodifiableSet(types);
     }
 
+    public void setTypes(Set<MonsterType> types) {
+        this.types = types;
+    }
+
     public void addType(MonsterType type) {
         if (type == null) {
             return;

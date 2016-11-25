@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.service.config;
 
 import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.MonsterCreateDTO;
 import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
@@ -24,6 +25,7 @@ public class EntityDTOMapping extends BeanMappingBuilder {
     protected void configure() {
         mapping(Location.class, LocationDTO.class);
         mapping(Monster.class, MonsterDTO.class);
+        mapping(Monster.class, MonsterCreateDTO.class);
         mapping(Weapon.class, WeaponDTO.class);
         mapping(User.class, UserDTO.class);
         mapping(Comment.class, CommentDTO.class);

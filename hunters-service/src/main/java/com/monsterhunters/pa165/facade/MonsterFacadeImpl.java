@@ -34,7 +34,7 @@ public class MonsterFacadeImpl implements MonsterFacade {
     @Override
     public Long createMonster(MonsterCreateDTO m) {
         Monster monster = mappingService.mapTo(m, Monster.class);
-        monsterService.createMonster(monster);
+        monster = monsterService.createMonster(monster);
         return monster.getId();
     }
 
