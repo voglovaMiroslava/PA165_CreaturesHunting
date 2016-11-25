@@ -87,7 +87,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
         Assert.assertEquals(userDao.findById(1L).getNickname(), "myNickname");
         Assert.assertEquals(userDao.findById(2L).getNickname(), "myNickname2");
-        Assert.assertNull(userDao.findById(10L));
+        Assert.assertNull(userDao.findById(-1L));
     }
 
     @Test
