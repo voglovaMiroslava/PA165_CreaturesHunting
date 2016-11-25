@@ -1,18 +1,12 @@
 package com.monsterhunters.pa165.facade;
 
-import com.monsterhunters.pa165.dao.MonsterDao;
-import com.monsterhunters.pa165.dao.MonsterDaoImpl;
 import com.monsterhunters.pa165.dto.*;
-import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
-import com.monsterhunters.pa165.service.MonsterService;
-import com.monsterhunters.pa165.service.MonsterServiceImpl;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
@@ -134,6 +128,7 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         CommentDTO commentDTO = commentFacade.getCommentsByUserNickname("Rosaldo").get(0);
         Long commentId = commentDTO.getId();
         weaponFacade.addComment(id1, commentId);
+        commentFacade.getCommentById(commentId);
         Set<CommentDTO> commentDTOS = weaponFacade.getWeaponById(id1).getComments();
         assertTrue(commentDTOS.contains(commentDTO));
     }
@@ -174,24 +169,23 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         assertEquals(weaponFacade.getWeaponById(id).getEffectiveAgainst().size(), 1);
     }
 
-//    @Test
-//    public void shouldGetKillableMonsters(){
-//        WeaponCreateDTO createDTO1 = createDTO("AK47", 30, 80);
-//        Set<MonsterType> monsterTypes = new HashSet<>();
-//        monsterTypes.add(MonsterType.DRAGON);
-//        monsterTypes.add(MonsterType.FIRE);
-//        createDTO1.setEffectiveAgainst(monsterTypes);
-//        Long id = weaponFacade.createWeapon(createDTO1);
-//
-//        MonsterCreateDTO monster = new MonsterCreateDTO();
-//        monster.setName("Drako");
-//        monster.setTypes(monsterTypes);
-//        monster.setPower(100);
-//        monsterFacade.createMonster(monster);
-//
-//        List<MonsterDTO> killableMonsters = weaponFacade.getKillableMonsters(id);
-//        assertEquals(killableMonsters.size(),1);
-//    }
+    @Test
+    public void shouldGetKillableMonsters(){
+        WeaponCreateDTO createDTO1 = createDTO("AK47", 30, 80);
+        Set<MonsterType> monsterTypes = new HashSet<>();
+        monsterTypes.add(MonsterType.DRAGON);
+        monsterTypes.add(MonsterType.FIRE);
+        createDTO1.setEffectiveAgainst(monsterTypes);
+        Long id = weaponFacade.createWeapon(createDTO1);
+        MonsterCreateDTO monster = new MonsterCreateDTO();
+        monster.setName("Drako");
+        monster.setTypes(monsterTypes);
+        monster.setPower(100);
+        monsterFacade.createMonster(monster);
+
+        List<MonsterDTO> killableMonsters = weaponFacade.getKillableMonsters(id);
+        assertEquals(killableMonsters.size(),1);
+    }
 
     private WeaponCreateDTO createDTO(String name, int ammo, int damage) {
         WeaponCreateDTO weaponCreateDTO = new WeaponCreateDTO();
