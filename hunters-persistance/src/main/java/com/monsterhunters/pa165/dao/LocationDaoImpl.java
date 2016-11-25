@@ -50,8 +50,9 @@ public class LocationDaoImpl implements LocationDao {
         //em.flush();
         return true;
     }
-
-    private List<Monster> getMonstersWithLocation(Location l) {
+    
+    @Override
+    public List<Monster> getMonstersWithLocation(Location l) {
         try {
             return em.createQuery("Select m from Monster m where m.location = :location", Monster.class)
                     .setParameter("location", l)

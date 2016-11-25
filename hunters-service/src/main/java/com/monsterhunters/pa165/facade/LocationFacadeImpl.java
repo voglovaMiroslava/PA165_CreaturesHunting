@@ -3,6 +3,8 @@ package com.monsterhunters.pa165.facade;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.service.CommentService;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.LocationService;
@@ -67,6 +69,12 @@ public class LocationFacadeImpl implements LocationFacade {
         locationService.removeComment(locationService.findById(locationId),
                 commentService.findById(commentId));
         commentService.deleteComment(commentService.findById(commentId));
+    }
+    
+    @Override
+    public WeaponDTO getBestWeapon(Location l) {
+        Weapon w = locationService.getBestWeapon(l);
+        return mappingService.mapTo(w, WeaponDTO.class);
     }
 
 }

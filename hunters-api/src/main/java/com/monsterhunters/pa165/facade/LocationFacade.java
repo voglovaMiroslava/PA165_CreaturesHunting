@@ -2,6 +2,8 @@ package com.monsterhunters.pa165.facade;
 
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.entity.Location;
 import java.util.List;
 
 /**
@@ -57,4 +59,12 @@ public interface LocationFacade {
      * @param commentId
      */
     void removeComment(Long locationId, Long commentId);
+    
+     /**
+     * Return best WeaponDTO for given location
+     *
+     * @param l location
+     * @return WeaponDTO
+     */
+    WeaponDTO getBestWeapon(Location l);
 }
