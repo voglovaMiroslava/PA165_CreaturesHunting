@@ -12,13 +12,12 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Created by babcang
@@ -35,38 +34,32 @@ public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextT
     @Autowired
     private CommentFacade commentFacade;
 
-    private static Long userId;
-    private static UserDTO userDTO;
+    private UserDTO userDTO;
+    private CommentDTO comment1;
+    private CommentDTO comment2;
 
-    @BeforeClass
+    @BeforeMethod
     private void setup() {
         UserCreateDTO userCreateDTO = new UserCreateDTO();
         userCreateDTO.setEmail("mail@mail.com");
         userCreateDTO.setNickname("nickname");
         userCreateDTO.setPlainPassword("password");
         userDTO = userFacade.registerUser(userCreateDTO);
-        userId = userDTO.getId();
+        assertTrue(userFacade.getAllUsers().contains(userDTO));
     }
 
-    @AfterMethod
-    private void delete() {
-        List<CommentDTO> commentsDTO = commentFacade.getAllComments();
-        for (CommentDTO comment : commentsDTO) {
-            commentFacade.deleteComment(comment.getId());
-        }
-    }
 
     @Test
     public void shouldCreateComment() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userId);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
-
-        assertEquals(commentFacade.getCommentById(id).getId(), id);
+        comment1 = commentFacade.getCommentById(id);
+        assertEquals(comment1.getId(), id);
     }
 
     @Test
     public void shouldDeleteComment() throws Exception {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userId);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
         commentFacade.deleteComment(id);
 
@@ -75,32 +68,34 @@ public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextT
 
     @Test
     public void shouldGetCommentById() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userId);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
-        CommentDTO commentDTO = commentFacade.getAllComments().get(0);
+        comment1 = commentFacade.getAllComments().get(0);
 
-        assertEquals(commentFacade.getCommentById(id), commentDTO);
+        assertEquals(commentFacade.getCommentById(id), comment1);
         assertNull(commentFacade.getCommentById(2L));
     }
 
     @Test
     public void shouldGetAllComment() {
-        CommentCreateDTO commentCreateDTO1 = createDTO("This is comment", userId);
+        CommentCreateDTO commentCreateDTO1 = createDTO("This is comment", userDTO.getId());
         Long idOne = commentFacade.createComment(commentCreateDTO1);
-        CommentCreateDTO commentCreateDTO2 = createDTO("This is second comment", userId);
+        comment1 = commentFacade.getCommentById(idOne);
+        CommentCreateDTO commentCreateDTO2 = createDTO("This is second comment", userDTO.getId());
         Long idTwo = commentFacade.createComment(commentCreateDTO2);
+        comment2 = commentFacade.getCommentById(idTwo);
 
         assertEquals(commentFacade.getAllComments().size(), 2);
     }
 
     @Test
     public void shouldGetCommentByUserNickname() {
-        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userId);
+        CommentCreateDTO commentCreateDTO = createDTO("This is comment", userDTO.getId());
         Long id = commentFacade.createComment(commentCreateDTO);
         String nickname = userDTO.getNickname();
-        CommentDTO commentDTO = commentFacade.getCommentById(id);
+        comment1 = commentFacade.getCommentById(id);
 
-        assertTrue(commentFacade.getCommentsByUserNickname(nickname).contains(commentDTO));
+        assertTrue(commentFacade.getCommentsByUserNickname(nickname).contains(comment1));
         assertEquals(commentFacade.getCommentsByUserNickname("Rintintin").size(), 0);
     }
 
