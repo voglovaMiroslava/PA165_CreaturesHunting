@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.dto;
 
 import com.monsterhunters.pa165.enums.MonsterType;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,6 +28,10 @@ public class MonsterDTO {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -68,7 +73,7 @@ public class MonsterDTO {
     }
 
     public Set<MonsterType> getTypes() {
-        return types;
+        return Collections.unmodifiableSet(types);
     }
 
     public void setTypes(Set<MonsterType> types) {
