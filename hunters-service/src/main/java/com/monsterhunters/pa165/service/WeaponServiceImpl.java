@@ -119,7 +119,12 @@ public class WeaponServiceImpl implements WeaponService {
     @Override
     public void removeEffectiveAgainst(Weapon w, MonsterType m) throws HuntersServiceException {
         try {
-            w.removeEffectiveAgainst(m);
+            if (w.getEffectiveAgainst().contains(m)) {
+                w.removeEffectiveAgainst(m);
+            } else {
+                throw new HuntersServiceException("Cannot remove monster type " + m +
+                        " from weapon " + w + ". It doesn't belong to weapon.");
+            }
         } catch (Throwable e) {
             throw new HuntersServiceException("Cannot remove monster type " + m +
                     " from weapon " + w, e);
