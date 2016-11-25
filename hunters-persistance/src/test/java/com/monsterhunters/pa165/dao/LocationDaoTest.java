@@ -215,6 +215,15 @@ public class LocationDaoTest extends AbstractTestNGSpringContextTests {
         assertTrue(locations.contains(location2));
         assertTrue(locations.contains(location));
     }
+    
+    @Test
+    public void shouldGetMonstersWithLocation() {
+        Location location = createLocation("Location3", "This is Location3");
+        locationDao.create(location);
+        List<Monster> monsters = locationDao.getMonstersWithLocation(location);
+        assertEquals(monsters.size(), 0);
+        assertEquals(locationDao.getMonstersWithLocation(location1).size(), 1);
+    }
 
     /**
      * This method creates new instance of Location

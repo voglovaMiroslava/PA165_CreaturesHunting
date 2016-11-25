@@ -2,11 +2,22 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.LocationDao;
 import com.monsterhunters.pa165.dao.LocationDaoImpl;
+import com.monsterhunters.pa165.dao.WeaponDao;
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Monster;
+import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,6 +36,9 @@ public class LocationServiceImpl implements LocationService {
 
     @Autowired
     private LocationDao locationDao;
+
+    @Autowired
+    private WeaponDao weaponDao;
 
     @Override
     public Location createLocation(Location location) throws HuntersServiceException {
@@ -93,10 +107,48 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public void removeComment(Location location, Comment comment) {
-        //location.removeComment(comment);
         if (!location.removeComment(comment)) {
             throw new HuntersServiceException("Cannot remove comment from location.");
         }
     }
 
+    @Override
+    public Weapon getBestWeapon(Location location) {
+        List<Monster> monsterList = locationDao.getMonstersWithLocation(location);
+        List<Weapon> weaponList = weaponDao.findAll();
+        
+        if (monsterList.size() <= 0 || weaponList.size() <= 0)
+            return null;
+        
+        Map<Weapon, Integer> weaponMap = new HashMap<>();
+
+        for (Weapon w : weaponList) {
+            Set<MonsterType> setWithTypes = w.getEffectiveAgainst();
+            Integer kills = 0;
+
+            for (Monster m : monsterList) {
+                Set<MonsterType> mTypes = m.getTypes();
+                Set<MonsterType> common = new HashSet<MonsterType>(mTypes);
+                common.retainAll(setWithTypes);
+                kills += common.size();
+            }
+            weaponMap.put(w, kills);
+        }
+        List<Weapon> bestWeapons = new ArrayList<Weapon>();
+        
+        int maxValueInMap = (Collections.max(weaponMap.values()));  
+        for (Entry<Weapon, Integer> entry : weaponMap.entrySet()) {
+            if (entry.getValue() == maxValueInMap) {
+                bestWeapons.add(entry.getKey());                   
+            }
+        }
+        Weapon best = bestWeapons.get(0);
+        
+        for (Weapon w :bestWeapons) {
+            if (w.getDamage() > best.getDamage())
+                best = w;
+        }
+        
+        return best;
+    }
 }

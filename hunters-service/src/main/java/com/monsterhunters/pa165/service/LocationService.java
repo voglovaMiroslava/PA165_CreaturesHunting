@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -84,4 +85,12 @@ public interface LocationService {
      * @throws HuntersServiceException when an error occures
      */
     void removeComment(Location location, Comment comment) throws HuntersServiceException;
+    
+     /**
+     * Return best weapon for given location
+     *
+     * @param location is location object
+     * @return Weapon best weapon
+     */
+    Weapon getBestWeapon(Location location);
 }

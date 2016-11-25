@@ -6,9 +6,14 @@
 package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.dao.LocationDao;
+import com.monsterhunters.pa165.dao.MonsterDao;
+import com.monsterhunters.pa165.dao.WeaponDao;
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.User;
+import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import java.util.ArrayList;
@@ -38,6 +43,12 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
 
     @Mock
     private LocationDao locationDao;
+
+    @Mock
+    private WeaponDao weaponDao;
+
+    @Mock
+    private MonsterDao monsterDao;
 
     @Autowired
     @InjectMocks
@@ -215,6 +226,60 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
     public void testRemoveNonExistingComment() {
         Location tapesovo = new Location("Tapesovo", "Hned za kopcom blizko dulova, very nice");
         locationService.removeComment(tapesovo, comment);
+    }
+
+    /**
+     * Test of getBestWeapon method, of class LocationServiceImpl.
+     */
+    @Test
+    public void testGetBestWeapon() {
+        Location tapesovo = new Location("Tapesovo", "Hned za kopcom blizko dulova, very nice");
+        
+        Weapon weapon1 = createWeapon("Lite Smasher", 5, 5);
+        weapon1.addEffectiveAgainst(MonsterType.ROCK);       
+        Weapon weapon2 = createWeapon("Ultra Smasher", 50, 5);
+        weapon2.addEffectiveAgainst(MonsterType.GROUND);
+        weapon2.addEffectiveAgainst(MonsterType.ROCK);
+        
+        List<Weapon> weapons = new ArrayList<>();
+        weapons.add(weapon1);
+        weapons.add(weapon2);
+        
+        Monster monster1 = createMonster("Orc", 200, MonsterType.DRAGON);
+        Monster monster2 = createMonster("Kavabonga", 250, MonsterType.GROUND);
+        Monster monster3 = createMonster("Pika", 300, MonsterType.ROCK);
+   
+        monster1.setLocation(tapesovo);
+        monster2.setLocation(tapesovo);
+        monster3.setLocation(tapesovo);
+        
+        List<Monster> monsters = new ArrayList<>();
+        monsters.add(monster1);
+        monsters.add(monster2);
+        monsters.add(monster3);
+        
+        when(weaponDao.findAll()).thenReturn(weapons);
+        when(locationDao.getMonstersWithLocation(any(Location.class))).thenReturn(monsters);
+        
+        assertEquals(locationService.getBestWeapon(tapesovo), weapon2);
+    }
+
+    //Simple weapon init with parameters
+    private Weapon createWeapon(String name, int damage, int ammo) {
+        Weapon weapon = new Weapon();
+        weapon.setName(name);
+        weapon.setDamage(damage);
+        weapon.setAmmo(ammo);
+        return weapon;
+    }
+
+    //Simple monster init with parameters
+    private Monster createMonster(String name, int power, MonsterType mType) {
+        Monster monster = new Monster();
+        monster.setName(name);
+        monster.setPower(power);
+        monster.addType(mType);
+        return monster;
     }
 
 }

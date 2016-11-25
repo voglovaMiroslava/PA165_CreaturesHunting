@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.dao;
 
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Monster;
 //import com.monsterhunters.pa165.enums.MonsterType;
 import java.util.List;
 
@@ -49,12 +50,19 @@ public interface LocationDao {
      * @return true if delete succes
      */
     public boolean delete(Location location);
-    
+
     /**
      * Update location
      *
      * @param location the instance to update
      */
     public Location update(Location location);
+
+    /**
+     * Return all monsters in location l
+     *
+     * @param l location
+     */
+    public List<Monster> getMonstersWithLocation(Location l);
 
 }
