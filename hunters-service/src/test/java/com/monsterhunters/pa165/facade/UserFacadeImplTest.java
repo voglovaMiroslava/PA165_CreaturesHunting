@@ -192,6 +192,7 @@ public class UserFacadeImplTest extends AbstractTransactionalTestNGSpringContext
         Assert.assertFalse(userFacade.authenticateUser(newUserAuthenticateDTO));
         userFacade.changePassword(userChangePassDTO);
         Assert.assertTrue(userFacade.authenticateUser(newUserAuthenticateDTO));
+        Assert.assertFalse(userFacade.authenticateUser(userAuthenticateDTO));
     }
 
 }
