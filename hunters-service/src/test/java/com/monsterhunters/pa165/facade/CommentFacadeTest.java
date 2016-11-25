@@ -1,27 +1,16 @@
 package com.monsterhunters.pa165.facade;
 
-import com.monsterhunters.pa165.dao.CommentDao;
+
 import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
-import com.monsterhunters.pa165.dto.UserDTO;
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.exceptions.HuntersServiceException;
-import com.monsterhunters.pa165.service.CommentService;
-import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.transaction.annotation.Transactional;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -35,7 +24,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author Babcan G
  */
-@Transactional
+
 @ContextConfiguration(classes = MappingConfiguration.class)
 public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextTests {
 
@@ -47,12 +36,6 @@ public class CommentFacadeTest extends AbstractTransactionalTestNGSpringContextT
 
     private Long id1 = 1L;
     private UserCreateDTO userCreateDTO;
-    private Comment comment1;
-    private Comment comment2;
-    private CommentDTO commentDTO1;
-    private CommentDTO commentDTO2;
-    private List<Comment> comments;
-    private List<CommentDTO> DTOcomments;
 
     @BeforeClass
     private void setup() {
