@@ -41,6 +41,7 @@ public class WeaponFacadeImpl implements WeaponFacade {
     @Override
     public Long createWeapon(WeaponCreateDTO weaponCreateDTO) {
         Weapon mappedWeapon = mappingService.mapTo(weaponCreateDTO, Weapon.class);
+        mappedWeapon.setEffectiveAgainst(weaponCreateDTO.getEffectiveAgainst());
         Weapon newWeapon = weaponService.createWeapon(mappedWeapon);
         return newWeapon.getId();
     }
@@ -48,6 +49,7 @@ public class WeaponFacadeImpl implements WeaponFacade {
     @Override
     public Long updateWeapon(WeaponDTO weaponDTO) {
         Weapon mappedWeapon = mappingService.mapTo(weaponDTO, Weapon.class);
+        mappedWeapon.setEffectiveAgainst(weaponDTO.getEffectiveAgainst());
         Weapon updatedWeapon = weaponService.updateWeapon(mappedWeapon);
         return updatedWeapon.getId();
     }

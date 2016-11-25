@@ -126,7 +126,7 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
 
         List<Monster> foundMonsters = monsterDao.findAll();
 
-        List<Monster> expectedResult = new ArrayList();
+        List<Monster> expectedResult = new ArrayList<>();
         expectedResult.add(dragon);
         expectedResult.add(troll);
 
