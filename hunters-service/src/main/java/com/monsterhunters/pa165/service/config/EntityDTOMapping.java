@@ -26,8 +26,7 @@ public class EntityDTOMapping extends BeanMappingBuilder {
                 .fields(field("effectiveAgainst").accessible(true), field("effectiveAgainst").accessible(true))
                 .fields(field("comments").accessible(true), field("comments").accessible(true));
         mapping(Weapon.class, WeaponCreateDTO.class, TypeMappingOptions.mapNull(false))
-                .fields(field("effectiveAgainst").accessible(true), field("effectiveAgainst").accessible(true))
-                .fields(field("comments").accessible(true), field("comments").accessible(true));
+                .fields(field("effectiveAgainst").accessible(true), field("effectiveAgainst").accessible(true));
         mapping(User.class, UserDTO.class, TypeMappingOptions.mapNull(false));
         mapping(Comment.class, CommentDTO.class, TypeMappingOptions.mapNull(false));
 
