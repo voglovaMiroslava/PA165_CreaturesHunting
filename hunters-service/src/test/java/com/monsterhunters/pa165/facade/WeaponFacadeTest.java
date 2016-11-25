@@ -42,6 +42,7 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     WeaponFacade weaponFacade;
 
     private UserCreateDTO userCreateDTO;
+    private Long commentId;
 
     @BeforeClass
     private void createUserAndComment() {
@@ -54,7 +55,7 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         CommentCreateDTO commentCreateDTO = new CommentCreateDTO();
         commentCreateDTO.setContent("This is it");
         commentCreateDTO.setUserId(userFacade.getUserByNickname("Rosaldo").getId());
-        commentFacade.createComment(commentCreateDTO);
+        commentId = commentFacade.createComment(commentCreateDTO);
     }
 
     @AfterMethod
@@ -125,25 +126,26 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     public void shouldAddComment() {
         WeaponCreateDTO createDTO1 = createDTO("Pistol", 20, 60);
         Long id1 = weaponFacade.createWeapon(createDTO1);
-        CommentDTO commentDTO = commentFacade.getCommentsByUserNickname("Rosaldo").get(0);
-        Long commentId = commentDTO.getId();
+        CommentDTO commentDTO = commentFacade.getCommentById(commentId);
         weaponFacade.addComment(id1, commentId);
-        commentFacade.getCommentById(commentId);
         Set<CommentDTO> commentDTOS = weaponFacade.getWeaponById(id1).getComments();
         assertTrue(commentDTOS.contains(commentDTO));
     }
 
     @Test
     public void shouldRemoveComment() {
-        WeaponCreateDTO createDTO = createDTO("AK47", 30, 80);
-        Long id = weaponFacade.createWeapon(createDTO);
-        CommentDTO commentDTO = commentFacade.getCommentsByUserNickname("Rosaldo").get(0);
-        Long commentId = commentDTO.getId();
-        weaponFacade.addComment(id, commentId);
-        assertTrue(weaponFacade.getWeaponById(id).getComments().contains(commentDTO));
-        weaponFacade.removeComment(id, commentId);
+        WeaponCreateDTO createDTO1 = createDTO("AWP", 10, 90);
+        Long id1 = weaponFacade.createWeapon(createDTO1);
+        CommentDTO commentDTO = commentFacade.getCommentById(commentId);
+        weaponFacade.addComment(id1, commentId);
+        Set<CommentDTO> commentDTOS = weaponFacade.getWeaponById(id1).getComments();
+        assertTrue(commentDTOS.contains(commentDTO));
+        assertEquals(commentDTOS.size(),1);
+        weaponFacade.removeComment(id1, commentId);
+        commentDTOS = weaponFacade.getWeaponById(id1).getComments();
+        assertEquals(commentDTOS.size(),0);
+        assertFalse(commentDTOS.contains(commentDTO));
 
-        assertFalse(weaponFacade.getWeaponById(id).getComments().contains(commentDTO));
     }
 
     @Test
