@@ -1,6 +1,5 @@
 package com.monsterhunters.pa165.facade;
 
-
 import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
@@ -8,8 +7,6 @@ import com.monsterhunters.pa165.service.config.MappingConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
