@@ -84,9 +84,10 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         User user2 = new User("myNickname2", "MyEmail2@asdf.com", "myPasswordHash2", true);
         userDao.create(user);
         userDao.create(user2);
-
-        Assert.assertEquals(userDao.findById(1L).getNickname(), "myNickname");
-        Assert.assertEquals(userDao.findById(2L).getNickname(), "myNickname2");
+        List<User> users = userDao.findAll();
+        for (User userEntry : users) {
+            Assert.assertEquals(userDao.findById(userEntry.getId()).getEmail(), userEntry.getEmail());
+        }
         Assert.assertNull(userDao.findById(-1L));
     }
 
