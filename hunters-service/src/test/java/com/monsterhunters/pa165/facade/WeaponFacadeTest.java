@@ -1,35 +1,30 @@
 package com.monsterhunters.pa165.facade;
 
-import com.monsterhunters.pa165.dto.WeaponCreateDTO;
-import com.monsterhunters.pa165.dto.WeaponDTO;
-import com.monsterhunters.pa165.entity.Comment;
-import com.monsterhunters.pa165.entity.User;
-import com.monsterhunters.pa165.entity.Weapon;
+import com.monsterhunters.pa165.dao.MonsterDao;
+import com.monsterhunters.pa165.dao.MonsterDaoImpl;
+import com.monsterhunters.pa165.dto.*;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
-import com.monsterhunters.pa165.service.CommentService;
-import com.monsterhunters.pa165.service.MappingService;
-import com.monsterhunters.pa165.service.WeaponService;
+import com.monsterhunters.pa165.service.MonsterService;
+import com.monsterhunters.pa165.service.MonsterServiceImpl;
 import com.monsterhunters.pa165.service.config.MappingConfiguration;
-import org.hibernate.service.spi.ServiceException;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by babcang
@@ -37,197 +32,172 @@ import static org.testng.Assert.assertEquals;
  * @author Babcan G
  */
 
-@ContextConfiguration(classes = MappingConfiguration.class)
-public class WeaponFacadeTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(classes = {MappingConfiguration.class})
+public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTests {
 
-    @Mock
-    private WeaponService weaponService;
+    @Autowired
+    MonsterFacade monsterFacade;
 
-    @Mock
-    private CommentService commentService;
+    @Autowired
+    CommentFacade commentFacade;
 
-    @Mock
-    private MappingService mappingService;
+    @Autowired
+    UserFacade userFacade;
 
-    @InjectMocks
-    private WeaponFacade weaponFacade = new WeaponFacadeImpl();
+    @Autowired
+    WeaponFacade weaponFacade;
 
-    private Weapon weaponOne;
-    private Weapon weaponTwo;
-    private WeaponDTO weaponDTOone;
-    private WeaponDTO weaponDTOtwo;
-    private List<Weapon> weapons = new ArrayList<>();
-    private List<WeaponDTO> dtoWeapons = new ArrayList<>();
-    private Long id1 = 1L;
-    private Long id2 = 2L;
-    private Comment comment;
+    private UserCreateDTO userCreateDTO;
 
+    @BeforeClass
+    private void createUserAndComment() {
+        userCreateDTO = new UserCreateDTO();
+        userCreateDTO.setEmail("mail@mail.com");
+        userCreateDTO.setNickname("Rosaldo");
+        userCreateDTO.setPlainPassword("password");
+        userFacade.registerUser(userCreateDTO);
 
-    @BeforeMethod
-    private void prepareWeapons() {
-        weaponOne = createWeapon("TestWeapon", 24, 80);
-        weaponOne.setId(id1);
-        weaponTwo = createWeapon("TestWeaponTwo", 10, 95);
-        weaponTwo.setId(id2);
-        weaponDTOone = weaponToDTO(weaponOne);
-        weaponDTOtwo = weaponToDTO(weaponTwo);
-        weapons.add(weaponOne);
-        weapons.add(weaponTwo);
-        dtoWeapons.add(weaponDTOone);
-        dtoWeapons.add(weaponDTOtwo);
-
+        CommentCreateDTO commentCreateDTO = new CommentCreateDTO();
+        commentCreateDTO.setContent("This is it");
+        commentCreateDTO.setUserId(userFacade.getUserByNickname("Rosaldo").getId());
+        commentFacade.createComment(commentCreateDTO);
     }
 
     @AfterMethod
-    private void clearList() {
-        weapons.clear();
-        dtoWeapons.clear();
+    private void delete() {
+        List<WeaponDTO> weaponDTOS = weaponFacade.getAllWeapons();
+        for (WeaponDTO weapon : weaponDTOS) {
+            weaponFacade.deleteWeapon(weapon.getId());
+        }
     }
 
-    @BeforeClass
-    private void setup() throws ServiceException {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
-    public void shouldGetWeaponById() {
-        WeaponDTO weaponDTOtest = weaponDTOtwo;
-        when(weaponService.findById(id2)).thenReturn(weaponTwo);
-        when(mappingService.mapTo(weaponTwo, WeaponDTO.class)).thenReturn(weaponDTOtwo);
+    public void shouldCreateWeapon() {
+        WeaponCreateDTO weaponCreateDTO = createDTO("TestCreate", 12, 50);
 
-        assertEquals(weaponFacade.getWeaponById(id2), weaponDTOtest);
+        Set<MonsterType> monsterTypes = new HashSet<>();
+        monsterTypes.add(MonsterType.DRAGON);
+        monsterTypes.add(MonsterType.GROUND);
+        weaponCreateDTO.setEffectiveAgainst(monsterTypes);
+        Long id = weaponFacade.createWeapon(weaponCreateDTO);
 
-        verify(weaponService).findById(id2);
-        verify(mappingService).mapTo(weaponTwo, WeaponDTO.class);
+        WeaponDTO weaponDTO = weaponFacade.getWeaponByName("TestCreate");
+        assertEquals(weaponDTO.getId(), id);
+        assertEquals(weaponDTO.getEffectiveAgainst().size(), 2);
+        assertTrue(weaponDTO.getEffectiveAgainst().contains(MonsterType.DRAGON));
     }
 
     @Test
     public void shouldGetWeaponByName() {
-        when(weaponService.findByName("TestWeapon")).thenReturn(weaponOne);
-        when(mappingService.mapTo(weaponOne, WeaponDTO.class)).thenReturn(weaponDTOone);
+        WeaponCreateDTO createDTO = createDTO("Shotgun", 5, 70);
+        Long id = weaponFacade.createWeapon(createDTO);
 
-        assertEquals(weaponFacade.getWeaponByName("TestWeapon"), weaponDTOone);
+        assertEquals(weaponFacade.getWeaponByName("Shotgun").getName(), "Shotgun");
+    }
 
-        verify(weaponService).findByName("TestWeapon");
-        verify(mappingService).mapTo(weaponOne, WeaponDTO.class);
+    @Test
+    public void shouldGetWeaponById() {
+        WeaponCreateDTO createDTO = createDTO("Gun", 20, 60);
+        Long id = weaponFacade.createWeapon(createDTO);
+
+        assertEquals(weaponFacade.getWeaponById(id), weaponFacade.getWeaponByName("Gun"));
     }
 
     @Test
     public void shouldGetAllWeapons() {
-        when(weaponService.findAll()).thenReturn(weapons);
-        when(mappingService.mapTo(weapons, WeaponDTO.class)).thenReturn(dtoWeapons);
+        WeaponCreateDTO createDTO1 = createDTO("Gun", 20, 60);
+        Long id1 = weaponFacade.createWeapon(createDTO1);
+        WeaponCreateDTO createDTO2 = createDTO("Gun2", 10, 90);
+        Long id2 = weaponFacade.createWeapon(createDTO2);
 
-        assertEquals(weaponFacade.getAllWeapons(), dtoWeapons);
-
-        verify(weaponService).findAll();
-        verify(mappingService).mapTo(weapons, WeaponDTO.class);
-    }
-
-    @Test
-    public void shouldCreateWeapon() {
-        WeaponCreateDTO wCreateDTO = new WeaponCreateDTO();
-        wCreateDTO.setName(weaponDTOtwo.getName());
-        wCreateDTO.setAmmo(weaponDTOtwo.getAmmo());
-        wCreateDTO.setDamage(weaponDTOtwo.getDamage());
-
-        when(mappingService.mapTo(wCreateDTO, Weapon.class)).thenReturn(weaponTwo);
-        when(weaponService.createWeapon(weaponTwo)).thenReturn(weaponTwo);
-
-        assertEquals(weaponFacade.createWeapon(wCreateDTO), weaponTwo.getId());
-
-        verify(mappingService).mapTo(wCreateDTO, Weapon.class);
-        verify(weaponService).createWeapon(weaponTwo);
+        assertEquals(weaponFacade.getAllWeapons().size(), 2);
     }
 
     @Test
     public void shouldUpdateWeapon() {
-        when(mappingService.mapTo(weaponDTOtwo, Weapon.class)).thenReturn(weaponTwo);
-        when(weaponService.updateWeapon(weaponTwo)).thenReturn(weaponTwo);
+        WeaponCreateDTO createDTO = createDTO("Gun", 20, 60);
+        Long id = weaponFacade.createWeapon(createDTO);
+        WeaponDTO weaponDTO = weaponFacade.getWeaponById(id);
+        weaponDTO.setName("Shotgun");
+        weaponDTO.setAmmo(10);
+        weaponFacade.updateWeapon(weaponDTO);
 
-        weaponFacade.updateWeapon(weaponDTOtwo);
-        verify(mappingService).mapTo(weaponDTOtwo, Weapon.class);
-        verify(weaponService).updateWeapon(weaponTwo);
-    }
-
-    @Test
-    public void shouldDeleteWeapon() {
-        when(weaponService.findById(id1)).thenReturn(weaponOne);
-        doNothing().when(weaponService).deleteWeapon(any(Weapon.class));
-
-        weaponFacade.deleteWeapon(weaponOne.getId());
-        verify(weaponService, atLeastOnce()).findById(weaponOne.getId());
-        verify(weaponService).deleteWeapon(weaponOne);
+        assertEquals(weaponFacade.getWeaponById(id).getName(), "Shotgun");
+        assertEquals(weaponFacade.getWeaponById(id).getAmmo(), 10);
     }
 
     @Test
     public void shouldAddComment() {
-        comment = new Comment();
-        comment.setId(10L);
-        comment.setContent("This is comment for super weapon");
-        comment.setUser(new User("NickName", "mail@user.com", "passHash", false));
-
-        when(weaponService.findById(weaponOne.getId())).thenReturn(weaponOne);
-        when(commentService.findById(comment.getId())).thenReturn(comment);
-        doNothing().when(weaponService).addComment(weaponOne, comment);
-
-        weaponFacade.addComment(weaponOne.getId(), comment.getId());
-
-        verify(weaponService).addComment(weaponOne, comment);
+        WeaponCreateDTO createDTO1 = createDTO("Pistol", 20, 60);
+        Long id1 = weaponFacade.createWeapon(createDTO1);
+        CommentDTO commentDTO = commentFacade.getCommentsByUserNickname("Rosaldo").get(0);
+        Long commentId = commentDTO.getId();
+        weaponFacade.addComment(id1, commentId);
+        Set<CommentDTO> commentDTOS = weaponFacade.getWeaponById(id1).getComments();
+        assertTrue(commentDTOS.contains(commentDTO));
     }
 
     @Test
     public void shouldRemoveComment() {
-        comment = new Comment();
-        comment.setId(11L);
-        comment.setContent("This is another");
-        comment.setUser(new User("NickName", "mail@user.com", "passHash", false));
-        weaponOne.addComment(comment);
+        WeaponCreateDTO createDTO = createDTO("AK47", 30, 80);
+        Long id = weaponFacade.createWeapon(createDTO);
+        CommentDTO commentDTO = commentFacade.getCommentsByUserNickname("Rosaldo").get(0);
+        Long commentId = commentDTO.getId();
+        weaponFacade.addComment(id, commentId);
+        assertTrue(weaponFacade.getWeaponById(id).getComments().contains(commentDTO));
+        weaponFacade.removeComment(id, commentId);
 
-        when(weaponService.findById(weaponOne.getId())).thenReturn(weaponOne);
-        when(commentService.findById(comment.getId())).thenReturn(comment);
-        doNothing().when(weaponService).removeComment(weaponOne, comment);
-
-        weaponFacade.removeComment(weaponOne.getId(), comment.getId());
-
-        verify(weaponService).removeComment(weaponOne, comment);
-        verify(commentService, atLeastOnce()).findById(comment.getId());
+        assertFalse(weaponFacade.getWeaponById(id).getComments().contains(commentDTO));
     }
 
     @Test
     public void shouldAddEffectiveAgainst() {
-        when(weaponService.findById(weaponOne.getId())).thenReturn(weaponOne);
-        doNothing().when(weaponService).addEffectiveAgainst(weaponOne, MonsterType.DRAGON);
+        WeaponCreateDTO createDTO1 = createDTO("AK47", 30, 80);
+        Long id = weaponFacade.createWeapon(createDTO1);
+        weaponFacade.addEffectiveAgainst(id, MonsterType.DRAGON);
 
-        weaponFacade.addEffectiveAgainst(weaponOne.getId(), MonsterType.DRAGON);
-
-        verify(weaponService).addEffectiveAgainst(weaponOne, MonsterType.DRAGON);
+        assertTrue(weaponFacade.getWeaponById(id).getEffectiveAgainst().contains(MonsterType.DRAGON));
     }
 
     @Test
     public void shouldRemoveEffectiveAgainst() {
-        when(weaponService.findById(weaponOne.getId())).thenReturn(weaponOne);
-        doNothing().when(weaponService).removeEffectiveAgainst(weaponOne, MonsterType.DRAGON);
+        WeaponCreateDTO createDTO1 = createDTO("AK47", 30, 80);
+        Set<MonsterType> monsterTypes = new HashSet<>();
+        monsterTypes.add(MonsterType.DRAGON);
+        monsterTypes.add(MonsterType.GROUND);
+        createDTO1.setEffectiveAgainst(monsterTypes);
+        Long id = weaponFacade.createWeapon(createDTO1);
+        weaponFacade.removeEffectiveAgainst(id, MonsterType.DRAGON);
 
-        weaponFacade.removeEffectiveAgainst(weaponOne.getId(), MonsterType.DRAGON);
-
-        verify(weaponService).removeEffectiveAgainst(weaponOne, MonsterType.DRAGON);
+        assertFalse(weaponFacade.getWeaponById(id).getEffectiveAgainst().contains(MonsterType.DRAGON));
+        assertEquals(weaponFacade.getWeaponById(id).getEffectiveAgainst().size(), 1);
     }
 
-    private WeaponDTO weaponToDTO(Weapon weapon) {
-        WeaponDTO dto = new WeaponDTO();
-        dto.setName(weapon.getName());
-        dto.setAmmo(weapon.getAmmo());
-        dto.setDamage(weapon.getDamage());
-        dto.setId(weapon.getId());
-        return dto;
-    }
+//    @Test
+//    public void shouldGetKillableMonsters(){
+//        WeaponCreateDTO createDTO1 = createDTO("AK47", 30, 80);
+//        Set<MonsterType> monsterTypes = new HashSet<>();
+//        monsterTypes.add(MonsterType.DRAGON);
+//        monsterTypes.add(MonsterType.FIRE);
+//        createDTO1.setEffectiveAgainst(monsterTypes);
+//        Long id = weaponFacade.createWeapon(createDTO1);
+//
+//        MonsterCreateDTO monster = new MonsterCreateDTO();
+//        monster.setName("Drako");
+//        monster.setTypes(monsterTypes);
+//        monster.setPower(100);
+//        monsterFacade.createMonster(monster);
+//
+//        List<MonsterDTO> killableMonsters = weaponFacade.getKillableMonsters(id);
+//        assertEquals(killableMonsters.size(),1);
+//    }
 
-    private Weapon createWeapon(String name, int ammo, int damage) {
-        Weapon weapon = new Weapon();
-        weapon.setName(name);
-        weapon.setAmmo(ammo);
-        weapon.setDamage(damage);
-        return weapon;
+    private WeaponCreateDTO createDTO(String name, int ammo, int damage) {
+        WeaponCreateDTO weaponCreateDTO = new WeaponCreateDTO();
+        weaponCreateDTO.setName(name);
+        weaponCreateDTO.setAmmo(ammo);
+        weaponCreateDTO.setDamage(damage);
+        return weaponCreateDTO;
     }
-
 }
