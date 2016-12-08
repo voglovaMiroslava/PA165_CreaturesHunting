@@ -72,6 +72,9 @@
         <module>hunters-persistance</module>
         <module>hunters-service</module>
         <module>hunters-api</module>
+        <module>hunters-mvc</module>
+        <module>hunters-rest</module>
+        <module>hunters-sample-data</module>
     </modules>
 
     <dependencies>
