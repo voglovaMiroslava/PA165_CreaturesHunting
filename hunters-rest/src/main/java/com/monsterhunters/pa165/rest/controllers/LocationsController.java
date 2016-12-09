@@ -67,7 +67,7 @@ public class LocationsController {
     /**
      * Delete location by id DELETE http://localhost:8080/pa165/rest/locations/1
      *
-     * @param id of location
+     * @param id is ID of location
      * @throws Exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -86,7 +86,7 @@ public class LocationsController {
      * application/json" --data '{"name":"test","description":"testing
      * description"}'
      *
-     * @param location
+     * @param location new Location
      * @return LocationDTO
      * @throws Exception
      */
@@ -106,7 +106,7 @@ public class LocationsController {
 
     /**
      *
-     * @param id
+     * @param id is ID of location
      * @param comment
      * @return LocationDTO
      * @throws Exception
@@ -125,7 +125,7 @@ public class LocationsController {
 
     /**
      *
-     * @param id
+     * @param id is ID of location
      * @param commentId
      * @return LocationDTO
      * @throws Exception
@@ -143,7 +143,7 @@ public class LocationsController {
 
     /**
      *
-     * @param id
+     * @param id is ID of location
      * @return WeaponDTO
      * @throws Exception
      */
@@ -158,7 +158,7 @@ public class LocationsController {
 
     /**
      *
-     * @param id
+     * @param id is ID of location
      * @return list of CommentDTO
      * @throws Exception
      */
@@ -173,7 +173,7 @@ public class LocationsController {
 
     /**
      *
-     * @param id
+     * @param id is ID of location
      * @return list of MonsterDTO
      * @throws Exception
      */

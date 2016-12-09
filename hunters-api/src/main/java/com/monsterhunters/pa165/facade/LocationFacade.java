@@ -39,11 +39,20 @@ public interface LocationFacade {
     Long createLocation(LocationCreateDTO locationCreateDTO);
 
     /**
+     * Update LocationDTO object
+     *
+     * @param locationDTO
+     * @return locationDTO id
+     */
+    Long updateLocation(LocationDTO locationDTO);
+
+    /**
      * Remove LocationDTO object
      *
      * @param id
      * @return true if deletion succes
      */
+
     boolean deleteLocation(Long id);
 
     /**
@@ -83,4 +92,5 @@ public interface LocationFacade {
      * @return list of MonsterDTO objects
      */
     List<MonsterDTO> getMonsters(Long locationId);
+
 }

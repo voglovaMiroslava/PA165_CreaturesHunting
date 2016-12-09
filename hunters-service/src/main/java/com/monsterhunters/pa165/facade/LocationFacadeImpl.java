@@ -58,6 +58,13 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     @Override
+    public Long updateLocation(LocationDTO locationDTO) {
+        Location location = mappingService.mapTo(locationDTO, Location.class);
+        Location updatedLocation = locationService.updateLocation(location);
+        return updatedLocation.getId();
+    }
+
+    @Override
     public boolean deleteLocation(Long id) {
         return locationService.deleteLocation(locationService.findById(id));
     }
