@@ -5,5 +5,6 @@ package com.monsterhunters.pa165.rest.exceptions;
  *
  * @author Babcan G
  */
-public class ResourceNotModifiedException {
+
+public class ResourceNotModifiedException extends RuntimeException  {
 }

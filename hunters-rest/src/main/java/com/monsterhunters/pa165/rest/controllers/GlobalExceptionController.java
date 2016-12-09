@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.rest.controllers;
 
 import com.monsterhunters.pa165.rest.exceptions.ResourceAlreadyExistingException;
 import com.monsterhunters.pa165.rest.exceptions.ResourceNotFoundException;
+import com.monsterhunters.pa165.rest.exceptions.ResourceNotModifiedException;
 import com.monsterhunters.pa165.rest.tools.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,6 +35,15 @@ public class GlobalExceptionController {
     ApiError handleException(ResourceNotFoundException ex) {
         ApiError apiError = new ApiError();
         apiError.setErrors(Arrays.asList("The requested resource was not found"));
+        return apiError;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_MODIFIED)
+    @ResponseBody
+    ApiError handleException(ResourceNotModifiedException ex) {
+        ApiError apiError = new ApiError();
+        apiError.setErrors(Arrays.asList("The requested resource was not modified"));
         return apiError;
     }
 
