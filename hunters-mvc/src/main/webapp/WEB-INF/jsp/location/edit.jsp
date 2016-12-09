@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div>
-                <form:label path="ammo" cssClass="control-label">Description</form:label>
+                <form:label path="description" cssClass="control-label">Description</form:label>
                 <div>
                     <form:input path="description" cssClass="form-control" value="${locationUpdate.description}"/>
                     <form:errors path="description" cssClass="help-block"/>

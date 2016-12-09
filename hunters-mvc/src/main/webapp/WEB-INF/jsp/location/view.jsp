@@ -8,8 +8,8 @@
 <fmt:message var="title" key="location.view.title"><fmt:param value="${location.name}"/></fmt:message>
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
-        <button><my:a href="/location/list">List of Locations</my:a></button>
-        <button><my:a href="/location/edit/${location.id}">Edit Location</my:a></button>
+        <p><my:a href="/location/list">List of Locations</my:a></p>
+        <p><my:a href="/location/edit/${location.id}">Edit Location</my:a></p>
         <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
             <button type="submit">Delete</button>
         </form>
@@ -57,6 +57,8 @@
                 </c:forEach>
             </tbody>
         </table>
+        
+        <p><my:a href="/location/list">Back</my:a></p>
 
 
     </jsp:attribute>

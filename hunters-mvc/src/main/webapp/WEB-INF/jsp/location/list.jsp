@@ -7,40 +7,36 @@
 
 <fmt:message var="title" key="location.list.title"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
+    <jsp:attribute name="body">
 
-     <button><my:a href="/location/new" >
-        <span aria-hidden="true"></span>
-        New location
-    </my:a></button>
+        <p><a class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/location/new" role="button">New Location</a></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${locations}" var="location">
+                    <tr>
+                        <td>${location.id}</td>
+                        <td><c:out value="${location.name}"/></td>
+                        <td><c:out value="${location.description}"/></td>
+                        <td>
+                            <p><a class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/location/view/${location.id}" role="button">View</a></p>
+                        </td>
+                        <td>
+                            <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
+                                <button type="submit" >Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        <p><a class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/" role="button">Back</a></p>
 
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${locations}" var="location">
-            <tr>
-                <td>${location.id}</td>
-                <td><c:out value="${location.name}"/></td>
-                <td><c:out value="${location.description}"/></td>
-                <td>
-                    <button> <my:a href="/location/view/${location.id}" >View</my:a> </button>
-                </td>
-                <td>
-                    <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                        <button type="submit" >Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
-
-</jsp:attribute>
+    </jsp:attribute>
 </my:pagetemplate>
