@@ -1,5 +1,6 @@
 package com.monsterhunters.pa165.dao;
 
+import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 //import com.monsterhunters.pa165.enums.MonsterType;
@@ -64,5 +65,5 @@ public interface LocationDao {
      * @param l location
      */
     public List<Monster> getMonstersWithLocation(Location l);
-
+    
 }

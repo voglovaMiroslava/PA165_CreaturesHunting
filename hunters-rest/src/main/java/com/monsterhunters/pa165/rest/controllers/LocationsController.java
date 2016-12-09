@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import com.monsterhunters.pa165.rest.exceptions.ResourceAlreadyExistingException;
@@ -29,14 +30,14 @@ import java.util.List;
 @RestController
 @RequestMapping(ApiUris.ROOT_URI_LOCATIONS)
 public class LocationsController {
+
     final static Logger logger = LoggerFactory.getLogger(LocationsController.class);
 
     @Autowired
     private LocationFacade locationFacade;
 
     /**
-     * Get list of all Locations GET
-     * http://localhost:8080/rest/locations
+     * Get list of all Locations GET http://localhost:8080/pa165/rest/locations
      *
      * @return list of LocationDTO
      * @throws JsonProcessingException
@@ -48,8 +49,7 @@ public class LocationsController {
     }
 
     /**
-     * Get location by id GET
-     * http://localhost:8080/rest/locations/1
+     * Get location by id GET http://localhost:8080/pa165/rest/locations/1
      *
      * @param id is ID of location
      * @return LocationDTO
@@ -65,8 +65,7 @@ public class LocationsController {
     }
 
     /**
-     * Delete location by id DELETE
-     * http://localhost:8080/rest/locations/1
+     * Delete location by id DELETE http://localhost:8080/pa165/rest/locations/1
      *
      * @param id of location
      * @throws Exception
@@ -82,16 +81,16 @@ public class LocationsController {
     }
 
     /**
-     * Create new location by POST
-     * curl -X POST http://localhost:8080/rest/locations/create
-     * -i -H "Content-Type: application/json" --data
-     * '{"name":"test","description":"testing description"}'
+     * Create new location by POST curl -X POST
+     * http://localhost:8080/pa165/rest/locations/ -i -H "Content-Type:
+     * application/json" --data '{"name":"test","description":"testing
+     * description"}'
      *
      * @param location
      * @return LocationDTO
      * @throws Exception
      */
-    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public final LocationDTO createLocation(@RequestBody LocationCreateDTO location) throws Exception {
 
@@ -112,7 +111,7 @@ public class LocationsController {
      * @return LocationDTO
      * @throws Exception
      */
-    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public final LocationDTO addComment(@PathVariable("id") long id, @RequestBody CommentDTO comment) throws Exception {
         logger.debug("rest addComment({)", id);
@@ -131,8 +130,8 @@ public class LocationsController {
      * @return LocationDTO
      * @throws Exception
      */
-    @RequestMapping(value = "/{id}/comments/{cId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final LocationDTO removeComment(@PathVariable(value="id") long id, @PathVariable(value="cId") long commentId) throws Exception {
+    @RequestMapping(value = "/{id}/comments/{cId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final LocationDTO removeComment(@PathVariable(value = "id") long id, @PathVariable(value = "cId") long commentId) throws Exception {
         logger.debug("rest removeComment({)", id);
         try {
             locationFacade.removeComment(id, commentId);
@@ -150,10 +149,41 @@ public class LocationsController {
      */
     @RequestMapping(value = "/{id}/bestWeapon", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final WeaponDTO getBestWeapon(@PathVariable("id") long id) throws Exception {
-        try {           
+        try {
             return locationFacade.getBestWeapon(id);
         } catch (Exception ex) {
             throw new ResourceNotFoundException();
         }
     }
+
+    /**
+     *
+     * @param id
+     * @return list of CommentDTO
+     * @throws Exception
+     */
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<CommentDTO> getComments(@PathVariable("id") long id) throws Exception {
+        try {
+            return locationFacade.getComments(id);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return list of MonsterDTO
+     * @throws Exception
+     */
+    @RequestMapping(value = "/{id}/monsters", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MonsterDTO> getMonsters(@PathVariable("id") long id) throws Exception {
+        try {
+            return locationFacade.getMonsters(id);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
 }

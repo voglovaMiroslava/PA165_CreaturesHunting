@@ -81,7 +81,6 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         Location dulov = location("Dulov", "Place where insects rotate around a big hole.");
         brno.addComment(brnoComment);
         novot.addComment(novotComment);
-        novot.addComment(dulovCommnet);
         dulov.addComment(dulovCommnet);
 
     }
