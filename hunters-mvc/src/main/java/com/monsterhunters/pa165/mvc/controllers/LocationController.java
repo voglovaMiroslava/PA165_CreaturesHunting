@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.mvc.controllers;
 
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -33,8 +35,10 @@ public class LocationController {
     @Autowired
     private LocationFacade locationFacade;
 
-    /** Load page with list of all locations.
-     *  Also display  buttons to add, delete or view specific location
+    /**
+     * Load page with list of all locations. Also display buttons to add, delete
+     * or view specific location
+     *
      * @param model data to display
      * @return JSP page name
      */
@@ -54,7 +58,12 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+//        UserDTO user = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+//        if (user.isAdmin() == false) {
+//            return "home/404";
+//        }
+
         LocationDTO location = locationFacade.getLocationById(id);
         locationFacade.deleteLocation(id);
         log.debug("delete({})", id);
@@ -73,8 +82,8 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("locationUpdate") LocationDTO formBean,@PathVariable long id, BindingResult bindingResult,
-                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+    public String create(@Valid @ModelAttribute("locationUpdate") LocationDTO formBean, @PathVariable long id, BindingResult bindingResult,
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         log.debug("update(locationUpdate={})", formBean);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
@@ -104,7 +113,7 @@ public class LocationController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("locationCreate") LocationCreateDTO formBean, BindingResult bindingResult,
-                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         log.debug("create(locationCreate={})", formBean);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
