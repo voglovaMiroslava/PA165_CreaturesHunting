@@ -113,7 +113,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Weapon getBestWeapon(Location location) {
+    public Weapon getBestWeapon(Long locationId) {
+        Location location = locationDao.findById(locationId);
         List<Monster> monsterList = locationDao.getMonstersWithLocation(location);
         List<Weapon> weaponList = weaponDao.findAll();
         

@@ -66,5 +66,5 @@ public interface LocationFacade {
      * @param l location
      * @return WeaponDTO
      */
-    WeaponDTO getBestWeapon(Location l);
+    WeaponDTO getBestWeapon(Long locationId);
 }

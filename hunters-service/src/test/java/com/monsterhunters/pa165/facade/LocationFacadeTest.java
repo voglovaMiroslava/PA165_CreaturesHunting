@@ -209,7 +209,7 @@ public class LocationFacadeTest extends AbstractTestNGSpringContextTests {
         when(weaponDao.findAll()).thenReturn(weapons);
         when(locationDao.getMonstersWithLocation(any(Location.class))).thenReturn(monsters);
 
-        assertEquals(locationFacade.getBestWeapon(tapesovo), mappingService.mapTo(weapon2, WeaponDTO.class));
+        assertEquals(locationFacade.getBestWeapon(tapesovo.getId()), mappingService.mapTo(weapon2, WeaponDTO.class));
     }
 
     private Comment createComment() {

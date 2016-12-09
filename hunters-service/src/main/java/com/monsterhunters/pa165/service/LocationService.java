@@ -92,5 +92,5 @@ public interface LocationService {
      * @param location is location object
      * @return Weapon best weapon
      */
-    Weapon getBestWeapon(Location location);
+    Weapon getBestWeapon(Long locationId);
 }

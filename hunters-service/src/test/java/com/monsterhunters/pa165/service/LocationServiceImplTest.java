@@ -261,7 +261,7 @@ public class LocationServiceImplTest extends AbstractTransactionalTestNGSpringCo
         when(weaponDao.findAll()).thenReturn(weapons);
         when(locationDao.getMonstersWithLocation(any(Location.class))).thenReturn(monsters);
         
-        assertEquals(locationService.getBestWeapon(tapesovo), weapon2);
+        assertEquals(locationService.getBestWeapon(tapesovo.getId()), weapon2);
     }
 
     //Simple weapon init with parameters
