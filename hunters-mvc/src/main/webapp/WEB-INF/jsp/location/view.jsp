@@ -11,6 +11,20 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    <div class="box-header">
+                        <h2 class="box-title">Location List</h2>
+
+                        <div class="box-tools">
+                            <div style="display: inline-block;" class="input-group input-group-sm right" style="width: 48px;">
+<!--                                <a href="${pageContext.request.contextPath}/location/list">
+                                    <button type="button" class="btn btn-info btn-flat" title='Go back'><span class="glyphicon glyphicon-backward"></span> Back </button>
+                                </a>-->
+                                <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/">
+                                    <button type="button" class="btn btn-info btn-flat" title='Add new comment'>New Comment</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-hover">
                         <caption>Details</caption>
                         <thead>
@@ -61,14 +75,13 @@
                         </tbody>
                     </table>
 
-                    <br>
-
                     <table class="table table-hover">
                         <caption>Comments</caption>
                         <thead>
                             <tr>
                                 <th>User</th>
                                 <th>Content</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,17 +91,8 @@
                                     <td><c:out value="${comment.content}"/></td>
                                     <td class="actions">
                                         <div class="center">
-                                            <a href="#" title='Add comment' class="createItem">
-                                                <form method="post" action="${pageContext.request.contextPath}/comment/new/">
-                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-plus-sign"></button>
-                                                </form>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="actions">
-                                        <div class="center">
                                             <a href="#" title='Remove comment' class="removeItem">
-                                                <form method="post" action="${pageContext.request.contextPath}/comment/delete/${comment.id}">
+                                                <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
                                                     <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
                                                 </form>
                                             </a>
@@ -98,13 +102,9 @@
                             </c:forEach>
                         </tbody>
                     </table>
-
-                    <p><my:a href="/location/list">Back</my:a></p>
-                        <!--</div>-->
-                        <!-- /.box -->
-                    </div>
                 </div>
-            </section><!-- /.content -->
+                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>
+        </section>
 
     </jsp:attribute>
 </my:pagetemplate>

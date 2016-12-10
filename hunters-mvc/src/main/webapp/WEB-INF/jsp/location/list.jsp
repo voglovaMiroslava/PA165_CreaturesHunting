@@ -10,7 +10,7 @@
     <jsp:attribute name="body">
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content wow fadeInDown animated">
             <div class="row">
                 <div class="col-xs-12">
                     <div style="border-top:0"class="box">
@@ -72,6 +72,7 @@
                     <!-- /.box -->
                 </div>
             </div>
+            <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>
         </section><!-- /.content -->
 
     </jsp:attribute>

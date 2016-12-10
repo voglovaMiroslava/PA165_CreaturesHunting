@@ -1,9 +1,11 @@
 package com.monsterhunters.pa165.mvc.controllers;
 
+import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,9 @@ public class LocationController {
 
     @Autowired
     private LocationFacade locationFacade;
+
+    @Autowired
+    private CommentFacade commentFacade;
 
     /**
      * Load page with list of all locations. Also display buttons to add, delete
@@ -69,6 +74,13 @@ public class LocationController {
         log.debug("delete({})", id);
         redirectAttributes.addFlashAttribute("alert_success", "Location \"" + location.getName() + "\" was deleted.");
         return "redirect:" + uriBuilder.path("/location/list").toUriString();
+    }
+
+    @RequestMapping(value = "/{locationId}/comment/delete/{commentId}", method = RequestMethod.POST)
+    public String deleteComment(@PathVariable long locationId, @PathVariable long commentId, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+        locationFacade.removeComment(locationId, commentId);
+        return "redirect:" + uriBuilder.path("/location/view/"+ locationId).toUriString();
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -111,6 +123,39 @@ public class LocationController {
         return "location/new";
     }
 
+    @RequestMapping(value = "/${locationId}/comment/new", method = RequestMethod.GET)
+    public String newComment(@PathVariable long locationId, Model model) {
+        log.debug("new()");
+        model.addAttribute("commentCreate", new CommentCreateDTO());
+        model.addAttribute("locationId", locationId);
+//        return "location/{locationId}/comment/new";
+        return "/404";
+    }
+
+    @RequestMapping(value = "/comment/create", method = RequestMethod.POST)
+    public String createComment(@Valid @ModelAttribute("commentCreate") CommentCreateDTO formBean, @Valid @ModelAttribute("locationId") Long lId, BindingResult bindingResult,
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+        log.debug("create(commentCreate={})", formBean);
+        //in case of validation error forward back to the the form
+        if (bindingResult.hasErrors()) {
+            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                log.trace("ObjectError: {}", ge);
+            }
+            for (FieldError fe : bindingResult.getFieldErrors()) {
+                model.addAttribute(fe.getField() + "_error", true);
+                log.trace("FieldError: {}", fe);
+            }
+//            model.addAttribute("monsterTypes", MonsterType.values());
+            return "/location/comment/new";
+        }
+        //create product
+        Long cId = commentFacade.createComment(formBean);
+        locationFacade.addComment(lId, cId);
+        //report success
+        redirectAttributes.addFlashAttribute("alert_success", "Comment " + cId + " was created");
+        return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(cId).encode().toUriString();
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("locationCreate") LocationCreateDTO formBean, BindingResult bindingResult,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
@@ -124,7 +169,7 @@ public class LocationController {
                 model.addAttribute(fe.getField() + "_error", true);
                 log.trace("FieldError: {}", fe);
             }
-            model.addAttribute("monsterTypes", MonsterType.values());
+//            model.addAttribute("monsterTypes", MonsterType.values());
             return "location/new";
         }
         //create product
