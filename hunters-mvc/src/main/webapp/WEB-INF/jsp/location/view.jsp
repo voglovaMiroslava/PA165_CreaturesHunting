@@ -50,8 +50,8 @@
                                 <td class="actions">
                                     <div class="center">
                                         <a href="#" title='Remove location' class="removeItem">
-                                            <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                            <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
+                                                <button style="border:0" class="glyphicon glyphicon-trash"></button>
                                             </form>
                                         </a>
                                     </div>

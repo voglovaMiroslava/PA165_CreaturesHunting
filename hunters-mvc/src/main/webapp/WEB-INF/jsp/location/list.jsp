@@ -37,6 +37,8 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Description</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                         <c:if test="${authenticatedUser.isAdmin==true}"><th><fmt:message key="example.actions"/></th></c:if>
                                         </tr>
                                     <c:forEach items="${locations}" var="location">
@@ -47,14 +49,15 @@
 
                                             <td class="actions">
                                                 <div class="center">
-                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'><button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
+                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'>
+                                                        <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
                                                 </div>
                                             </td>
                                             <td class="actions">
                                                 <div class="center">
                                                     <a href="#" title='Remove location' class="removeItem">
                                                         <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                            <button style="border:0" class="glyphicon glyphicon-trash"></button>
+                                                            <button style="display:inline; border:0" class="glyphicon glyphicon-trash"></button>
                                                         </form>
                                                     </a>
                                                 </div>
