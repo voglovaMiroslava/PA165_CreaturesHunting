@@ -6,17 +6,22 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <fmt:message var="title" key="location.view.title"><fmt:param value="${location.name}"/></fmt:message>
-<my:pagetemplate title="${title}">
+<my:pagetemplate title="Location: ${location.name}">
     <jsp:attribute name="body">
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
                     <table class="table table-hover">
+                        <caption>Details</caption>
                         <thead>
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Best Weapon</th>
+                                <th>Monsters</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,7 +31,20 @@
                                 <td><c:out value="${location.description}"/></td>
                                 <td class="actions">
                                     <div class="center">
-                                        <a href="${pageContext.request.contextPath}/location/edit/${location.id}" title='Edit location'><button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
+                                        <a href="${pageContext.request.contextPath}/weapon/view/${bestWeapon.id}" title='View best Weapon'>
+                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-align-center"></button></a>
+                                    </div>
+                                </td>
+                                <td class="actions">
+                                    <div class="center">
+                                        <a href="${pageContext.request.contextPath}/monster/" title='Monsters in location'>
+                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-piggy-bank"></button></a>
+                                    </div>
+                                </td>
+                                <td class="actions">
+                                    <div class="center">
+                                        <a href="${pageContext.request.contextPath}/location/edit/${location.id}" title='Edit location'>
+                                            <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
                                     </div>
                                 </td>
                                 <td class="actions">
@@ -60,9 +78,20 @@
                                     <td><c:out value="${comment.content}"/></td>
                                     <td class="actions">
                                         <div class="center">
-                                            <form method="post" action="${pageContext.request.contextPath}/comment/delete/${comment.id}">
-                                                <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
-                                            </form>
+                                            <a href="#" title='Add comment' class="createItem">
+                                                <form method="post" action="${pageContext.request.contextPath}/comment/new/">
+                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-plus-sign"></button>
+                                                </form>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <div class="center">
+                                            <a href="#" title='Remove comment' class="removeItem">
+                                                <form method="post" action="${pageContext.request.contextPath}/comment/delete/${comment.id}">
+                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                                </form>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
