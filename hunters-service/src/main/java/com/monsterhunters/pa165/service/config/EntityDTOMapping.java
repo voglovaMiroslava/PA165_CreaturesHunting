@@ -17,7 +17,8 @@ public class EntityDTOMapping extends BeanMappingBuilder {
     @Override
     protected void configure() {
 
-        mapping(Location.class, LocationDTO.class, TypeMappingOptions.mapNull(false));
+        mapping(Location.class, LocationDTO.class, TypeMappingOptions.mapNull(false))
+                .fields(field("comments").accessible(true), field("comments").accessible(true));
         mapping(Monster.class, MonsterDTO.class, TypeMappingOptions.mapNull(false))
                 .fields(field("types").accessible(true), field("types").accessible(true));
         mapping(Monster.class, MonsterCreateDTO.class, TypeMappingOptions.mapNull(false))

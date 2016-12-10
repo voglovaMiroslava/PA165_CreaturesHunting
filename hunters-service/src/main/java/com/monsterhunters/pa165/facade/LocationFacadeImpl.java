@@ -1,9 +1,13 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.entity.Comment;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.service.CommentService;
 import com.monsterhunters.pa165.service.MappingService;
@@ -54,6 +58,13 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     @Override
+    public Long updateLocation(LocationDTO locationDTO) {
+        Location location = mappingService.mapTo(locationDTO, Location.class);
+        Location updatedLocation = locationService.updateLocation(location);
+        return updatedLocation.getId();
+    }
+
+    @Override
     public boolean deleteLocation(Long id) {
         return locationService.deleteLocation(locationService.findById(id));
     }
@@ -70,11 +81,22 @@ public class LocationFacadeImpl implements LocationFacade {
                 commentService.findById(commentId));
         commentService.deleteComment(commentService.findById(commentId));
     }
-    
+
     @Override
-    public WeaponDTO getBestWeapon(Location l) {
-        Weapon w = locationService.getBestWeapon(l);
+    public WeaponDTO getBestWeapon(Long locationId) {
+        Weapon w = locationService.getBestWeapon(locationId);
         return mappingService.mapTo(w, WeaponDTO.class);
     }
 
+    @Override
+    public List<CommentDTO> getComments(Long locationId) {
+        List<Comment> list = locationService.getComments(locationId);
+        return mappingService.mapTo(list, CommentDTO.class);
+    }
+
+    @Override
+    public List<MonsterDTO> getMonsters(Long locationId) {
+        List<Monster> list = locationService.getMonsters(locationId);
+        return mappingService.mapTo(list, MonsterDTO.class);
+    }
 }

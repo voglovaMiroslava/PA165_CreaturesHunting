@@ -1,7 +1,9 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
+import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.entity.Location;
 import java.util.List;
@@ -37,11 +39,20 @@ public interface LocationFacade {
     Long createLocation(LocationCreateDTO locationCreateDTO);
 
     /**
+     * Update LocationDTO object
+     *
+     * @param locationDTO
+     * @return locationDTO id
+     */
+    Long updateLocation(LocationDTO locationDTO);
+
+    /**
      * Remove LocationDTO object
      *
      * @param id
      * @return true if deletion succes
      */
+
     boolean deleteLocation(Long id);
 
     /**
@@ -59,12 +70,27 @@ public interface LocationFacade {
      * @param commentId
      */
     void removeComment(Long locationId, Long commentId);
-    
-     /**
+
+    /**
      * Return best WeaponDTO for given location
      *
      * @param l location
      * @return WeaponDTO
      */
-    WeaponDTO getBestWeapon(Location l);
+    WeaponDTO getBestWeapon(Long locationId);
+
+    /**
+     * Returns list of all comments to location with given ID
+     *
+     * @return list of CommentDTO objects
+     */
+    List<CommentDTO> getComments(Long locationId);
+
+    /**
+     * Returns list of all monsters to location with given ID
+     *
+     * @return list of MonsterDTO objects
+     */
+    List<MonsterDTO> getMonsters(Long locationId);
+
 }

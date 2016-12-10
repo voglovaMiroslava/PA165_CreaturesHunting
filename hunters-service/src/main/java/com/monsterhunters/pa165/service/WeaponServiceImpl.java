@@ -67,7 +67,6 @@ public class WeaponServiceImpl implements WeaponService {
             weaponDao.update(w);
         } catch (Throwable e) {
             throw new HuntersServiceException("Weapon " + w.getName() + " cannot be updated", e);
-
         }
         return w;
     }
@@ -84,6 +83,11 @@ public class WeaponServiceImpl implements WeaponService {
             throw new HuntersServiceException("Cannot add comment " + c +
                     " to weapon " + w, e);
         }
+        try {
+            weaponDao.update(w);
+        } catch (Throwable e) {
+            throw new HuntersServiceException("Weapon " + w.getName() + " cannot be updated", e);
+        }
     }
 
     @Override
@@ -99,6 +103,11 @@ public class WeaponServiceImpl implements WeaponService {
             throw new HuntersServiceException("Cannot remove comment " + c +
                     " from weapon " + w, e);
         }
+        try {
+            weaponDao.update(w);
+        } catch (Throwable e) {
+            throw new HuntersServiceException("Weapon " + w.getName() + " cannot be updated", e);
+        }
     }
 
     @Override
@@ -113,7 +122,11 @@ public class WeaponServiceImpl implements WeaponService {
             throw new HuntersServiceException("Cannot add monster type " + m +
                     " to weapon " + w, e);
         }
-
+        try {
+            weaponDao.update(w);
+        } catch (Throwable e) {
+            throw new HuntersServiceException("Weapon " + w.getName() + " cannot be updated", e);
+        }
     }
 
     @Override
@@ -128,6 +141,11 @@ public class WeaponServiceImpl implements WeaponService {
         } catch (Throwable e) {
             throw new HuntersServiceException("Cannot remove monster type " + m +
                     " from weapon " + w, e);
+        }
+        try {
+            weaponDao.update(w);
+        } catch (Throwable e) {
+            throw new HuntersServiceException("Weapon " + w.getName() + " cannot be updated", e);
         }
     }
 

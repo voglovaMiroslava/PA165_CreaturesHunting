@@ -2,6 +2,7 @@ package com.monsterhunters.pa165.service;
 
 import com.monsterhunters.pa165.entity.Comment;
 import com.monsterhunters.pa165.entity.Location;
+import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.entity.Weapon;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import java.util.List;
@@ -85,12 +86,28 @@ public interface LocationService {
      * @throws HuntersServiceException when an error occures
      */
     void removeComment(Location location, Comment comment) throws HuntersServiceException;
-    
-     /**
+
+    /**
      * Return best weapon for given location
      *
-     * @param location is location object
+     * @param locationId is locations id
      * @return Weapon best weapon
      */
-    Weapon getBestWeapon(Location location);
+    Weapon getBestWeapon(Long locationId);
+
+    /**
+     * Return list of comments to Location with given ID
+     *
+     * @param locationId is location id
+     * @return List of all comments
+     */
+    List<Comment> getComments(Long locationId);
+    
+     /**
+     * Return list of monsters to Location with given ID
+     *
+     * @param locationId is location id
+     * @return List of monsters
+     */
+    List<Monster> getMonsters(Long locationId) throws HuntersServiceException;
 }

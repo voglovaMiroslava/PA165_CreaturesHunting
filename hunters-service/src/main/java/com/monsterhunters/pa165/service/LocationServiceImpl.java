@@ -71,6 +71,12 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location findById(Long id) throws HuntersServiceException {
         try {
+//            Location l = locationDao.findById(id);
+//            List<Comment> comments = getComments(id);
+//            for (Comment c : comments) {
+//                  l.addComment(c);    
+//            }
+//            return l;
             return locationDao.findById(id);
         } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot find location with " + id + " id.", ex);
@@ -80,6 +86,14 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<Location> findAll() throws HuntersServiceException {
         try {
+//            List<Location> list = locationDao.findAll();
+//            for (Location x : list) {
+//                List<Comment> comments = getComments(x.getId());
+//                for (Comment c : comments) {
+//                    x.addComment(c);
+//                }
+//            }
+//            return list;
             return locationDao.findAll();
         } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot find list of all locations.", ex);
@@ -113,13 +127,15 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Weapon getBestWeapon(Location location) {
+    public Weapon getBestWeapon(Long locationId) {
+        Location location = locationDao.findById(locationId);
         List<Monster> monsterList = locationDao.getMonstersWithLocation(location);
         List<Weapon> weaponList = weaponDao.findAll();
-        
-        if (monsterList.size() <= 0 || weaponList.size() <= 0)
+
+        if (monsterList.size() <= 0 || weaponList.size() <= 0) {
             return null;
-        
+        }
+
         Map<Weapon, Integer> weaponMap = new HashMap<>();
 
         for (Weapon w : weaponList) {
@@ -135,20 +151,41 @@ public class LocationServiceImpl implements LocationService {
             weaponMap.put(w, kills);
         }
         List<Weapon> bestWeapons = new ArrayList<Weapon>();
-        
-        int maxValueInMap = (Collections.max(weaponMap.values()));  
+
+        int maxValueInMap = (Collections.max(weaponMap.values()));
         for (Entry<Weapon, Integer> entry : weaponMap.entrySet()) {
             if (entry.getValue() == maxValueInMap) {
-                bestWeapons.add(entry.getKey());                   
+                bestWeapons.add(entry.getKey());
             }
         }
         Weapon best = bestWeapons.get(0);
-        
-        for (Weapon w :bestWeapons) {
-            if (w.getDamage() > best.getDamage())
+
+        for (Weapon w : bestWeapons) {
+            if (w.getDamage() > best.getDamage()) {
                 best = w;
+            }
         }
-        
+
         return best;
+    }
+
+    @Override
+    public List<Comment> getComments(Long locationId) throws HuntersServiceException {
+        try {
+            List<Comment> list = new ArrayList<Comment>(locationDao.findById(locationId).getComments());
+            return list;
+        } catch (Throwable ex) {
+            throw new HuntersServiceException("Cannot find list of all comments.", ex);
+        }
+    }
+
+    @Override
+    public List<Monster> getMonsters(Long locationId) throws HuntersServiceException {
+        try {
+            Location location = locationDao.findById(locationId);
+            return locationDao.getMonstersWithLocation(location);
+        } catch (Throwable ex) {
+            throw new HuntersServiceException("Cannot find list of all monsters.", ex);
+        }
     }
 }
