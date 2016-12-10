@@ -32,13 +32,13 @@
                                 <td class="actions">
                                     <div class="center">
                                         <a href="${pageContext.request.contextPath}/weapon/view/${bestWeapon.id}" title='View best Weapon'>
-                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-align-center"></button></a>
+                                            <button style="display:inline; border:0;" class="fa fa-shield"></button></a>
                                     </div>
                                 </td>
                                 <td class="actions">
                                     <div class="center">
                                         <a href="${pageContext.request.contextPath}/monster/" title='Monsters in location'>
-                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-piggy-bank"></button></a>
+                                            <button style="display:inline; border:0;" class="fa fa-optin-monster"></button></a>
                                     </div>
                                 </td>
                                 <td class="actions">

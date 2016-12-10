@@ -24,6 +24,14 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/skins/skin-blue.min.css">
 
+
+        <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet"> 
+         <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">--> 
+        <link href="${pageContext.request.contextPath}/static/dist/css/main.css" rel="stylesheet">
+        <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css" rel="stylesheet">
+         <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">--> 
+
+
         <style>
             body {         
                 padding: 20px;
@@ -73,7 +81,7 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav navbar-left">
                         <li>
                             <a href="${pageContext.request.contextPath}/location/list">Location</a>
                         </li>
@@ -95,7 +103,7 @@
                         <li >
                             <a href="#">Log in</a>
                         </li>
-                                                <li >
+                        <li >
                             <a href="#">Log out</a>
                         </li>
                     </ul>
