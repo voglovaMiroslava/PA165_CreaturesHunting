@@ -47,6 +47,10 @@
                                             <td class="actions">
                                                 <div class="center">
                                                     <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'><button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
+                                                </div>
+                                            </td>
+                                            <td class="actions">
+                                                <div class="center">
                                                     <a href="#" title='Remove location' class="removeItem">
                                                         <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
                                                             <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
