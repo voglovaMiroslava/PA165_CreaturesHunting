@@ -89,6 +89,15 @@
                         <li>
                             <a href="#">Contact</a>
                         </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li >
+                            <a href="#">Log in</a>
+                        </li>
+                                                <li >
+                            <a href="#">Log out</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -105,18 +114,18 @@
 
         <!-- page body -->
         <jsp:invoke fragment="body"/>
-        
-<!--               Main Footer 
-      <footer class="footer">
 
-         To the right 
-        <div class="pull-left hidden-xs">
-          <a href="https://www.fi.muni.cz" target="_blank"><fmt:message key="menu.fi"/></a>
-        </div>
-         Default to the left 
-        <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>.</strong> <fmt:message key="menu.rights"/>
-      
-      </footer>-->
+        <!--               Main Footer 
+              <footer class="footer">
+        
+                 To the right 
+                <div class="pull-left hidden-xs">
+                  <a href="https://www.fi.muni.cz" target="_blank"><fmt:message key="menu.fi"/></a>
+                </div>
+                 Default to the left 
+                <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>.</strong> <fmt:message key="menu.rights"/>
+              
+              </footer>-->
 
         <!-- REQUIRED JS SCRIPTS -->
 

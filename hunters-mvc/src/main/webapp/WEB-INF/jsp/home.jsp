@@ -17,13 +17,5 @@
                   role="button">Locations</a></p>
         </div>
 
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-2 col-lg-1">
-                <p><button class="btn btn-default">Responsive Button</button></p>
-            </div>
-
-        </div>
-
     </jsp:attribute>
 </my:pagetemplate>
