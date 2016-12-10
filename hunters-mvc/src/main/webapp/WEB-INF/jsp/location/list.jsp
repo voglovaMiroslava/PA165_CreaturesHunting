@@ -46,7 +46,7 @@
                                             <td><c:out value="${location.description}"/></td>
                                             <td class="actions">
                                                 <div class="center">
-                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'><button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
+                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'><button style="display:inline; border:0;float: left" class="glyphicon glyphicon-eye-open"></button></a>
                                                 </div>
                                             </td>
                                             <td class="actions">

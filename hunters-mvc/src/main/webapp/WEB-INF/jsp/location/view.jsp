@@ -58,10 +58,12 @@
                                 <tr>
                                     <td><c:out value="${comment.user.nickname}"/></td>
                                     <td><c:out value="${comment.content}"/></td>
-                                    <td>
-                                        <form method="post" action="${pageContext.request.contextPath}/comment/delete/${comment.id}">
-                                            <button type="submit">Delete</button>
-                                        </form>
+                                    <td class="actions">
+                                        <div class="center">
+                                            <form method="post" action="${pageContext.request.contextPath}/comment/delete/${comment.id}">
+                                                <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
