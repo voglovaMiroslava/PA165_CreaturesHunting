@@ -9,8 +9,11 @@
     <jsp:attribute name="body">
 
         <form:form method="post" action="${pageContext.request.contextPath}/weapon/create"
-                   modelAttribute="weaponCreate"  cssClass="form-horizontal">
-
+                   modelAttribute="weaponCreate" cssClass="form-horizontal">
+            <div class="row">
+                <button style="float:right; margin: 10px" class="glyphicon glyphicon-floppy-disk btn"
+                        type="submit"></button>
+            </div>
             <div>
                 <form:label path="name" cssClass="control-label">Name</form:label>
                 <div>
@@ -42,17 +45,20 @@
             <div>
                 <form:label path="effectiveAgainst" cssClass="control-label">Effective against</form:label>
                 <div>
-                    <%--<c:forEach items="${monsterTypes}" var="type">--%>
-                        <%--<form:checkbox path="effectiveAgainst" value="type" />--%>
-                        <%--&lt;%&ndash;<form:select multiple="true" path="effectiveAgainst" items="${monsterTypes}" />&ndash;%&gt;--%>
-                        <%--<form:errors path="effectiveAgainst" cssClass="help-block"/>--%>
-                    <%--</c:forEach>--%>
-                        <form:errors path="effectiveAgainst" cssClass="help-block"/>
-                        <form:checkboxes path="effectiveAgainst" items="${monsterTypes}" />
-                        <form:errors path="effectiveAgainst" cssClass="help-block"/>
+                    <table class="table table-bordered" style="width: 180px">
+                        <c:forEach items="${monsterTypes}" var="type">
+                            <tr>
+                                <td>${type}</td>
+                                <td class="input-group-addon"><form:checkbox path="effectiveAgainst" name="${type}"
+                                                                             value="${type}"/></td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <form:errors path="effectiveAgainst" cssClass="help-block"/>
                 </div>
+
             </div>
-            <button type="submit">Create weapon</button>
+
         </form:form>
     </jsp:attribute>
 </my:pagetemplate>

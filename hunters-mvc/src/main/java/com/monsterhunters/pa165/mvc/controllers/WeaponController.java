@@ -1,8 +1,11 @@
 package com.monsterhunters.pa165.mvc.controllers;
 
+import com.monsterhunters.pa165.dto.CommentCreateDTO;
+import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.WeaponCreateDTO;
 import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.WeaponFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +36,9 @@ public class WeaponController {
     @Autowired
     private WeaponFacade weaponFacade;
 
+    @Autowired
+    private CommentFacade commentFacade;
+
     /** Load page with list of all weapons.
      *  Also display  buttons to add, delete or view specific weapon
      * @param model data to display
@@ -49,12 +55,13 @@ public class WeaponController {
     public String view(@PathVariable long id, Model model) {
         log.debug("view({})", id);
         model.addAttribute("weapon", weaponFacade.getWeaponById(id));
-//        model.addAllAttributes("comments", weaponFacade.getWeaponById(id).getComments());
+        model.addAttribute("killable", weaponFacade.getKillableMonsters(id));
         return "weapon/view";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
+                         RedirectAttributes redirectAttributes) {
         WeaponDTO weapon = weaponFacade.getWeaponById(id);
         weaponFacade.deleteWeapon(id);
         log.debug("delete({})", id);
@@ -66,17 +73,17 @@ public class WeaponController {
     public String editWeapon(@PathVariable long id, Model model) {
         log.debug("editWeapon()");
         WeaponDTO weapon = weaponFacade.getWeaponById(id);
-        log.debug("weaponDTO with id after weaponFacede.getWeaponById(id)", weapon.getId());
+        log.debug("weaponDTO with id after weaponFacede.getWeaponById({})", weapon.getId());
         log.debug(weapon.getId().toString());
         model.addAttribute("weaponUpdate", weapon);
-        model.addAttribute("monsterTypes", MonsterType.values());
         return "weapon/edit";
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("weaponUpdate") WeaponDTO formBean,@PathVariable long id, BindingResult bindingResult,
+    public String create(@Valid @ModelAttribute("weaponUpdate") WeaponDTO formBean, @PathVariable long id, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         log.debug("update(weaponUpdate={})", formBean);
+        log.debug("update(weaponUpdateID={})", id);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
@@ -88,20 +95,26 @@ public class WeaponController {
             }
             return "weapon/edit";
         }
-        //create product
+        formBean.setComments(weaponFacade.getWeaponById(id).getComments());
         id = weaponFacade.updateWeapon(formBean);
         log.debug("id of updated weapon", id);
         //report success
-        redirectAttributes.addFlashAttribute("alert_success", "Weapon " + id + " was updated");
+        redirectAttributes.addFlashAttribute("alert_success", "Weapon " + formBean.getName() + " was updated");
         return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newWeapon(Model model) {
-        log.debug("new()");
+        log.debug("newWeapon()");
         model.addAttribute("weaponCreate", new WeaponCreateDTO());
-        model.addAttribute("monsterTypes", MonsterType.values());
+//        model.addAttribute("monsterTypes", MonsterType.values());
         return "weapon/new";
+    }
+
+    @ModelAttribute("monsterTypes")
+    public MonsterType[] monsterTypes() {
+        log.debug("monsterTypes()");
+        return MonsterType.values();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -117,13 +130,61 @@ public class WeaponController {
                 model.addAttribute(fe.getField() + "_error", true);
                 log.trace("FieldError: {}", fe);
             }
-            model.addAttribute("monsterTypes", MonsterType.values());
             return "weapon/new";
         }
-        //create product
         Long id = weaponFacade.createWeapon(formBean);
         //report success
-        redirectAttributes.addFlashAttribute("alert_success", "Weapon " + id + " was created");
+        redirectAttributes.addFlashAttribute("alert_success", "Weapon " + formBean.getName() + " was created");
+        return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
+    }
+
+    @RequestMapping(value = "/{id}/comment/new", method = RequestMethod.GET)
+    public String newComment(@PathVariable long id, Model model){
+        log.debug("newComment()");
+        model.addAttribute("commentCreate", new CommentCreateDTO());
+        model.addAttribute("weaponId",id);
+        //TODO change to get user id from loged user
+        model.addAttribute("userId",1L);
+        return "/weapon/comment/new";
+    }
+
+    @RequestMapping(value = "/{id}/comment/create", method = RequestMethod.POST)
+    public String createComment(@PathVariable long id, @Valid @ModelAttribute("commentCreate") CommentCreateDTO formBean, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+        log.debug("create(commentCreate={})", formBean);
+
+        //in case of validation error forward back to the the form
+        if (bindingResult.hasErrors()) {
+            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                log.trace("ObjectError: {}", ge);
+            }
+            for (FieldError fe : bindingResult.getFieldErrors()) {
+                model.addAttribute(fe.getField() + "_error", true);
+                log.trace("FieldError: {}", fe);
+            }
+            model.addAttribute("weaponId",id);
+            //TODO also change automatic user id from authenticated user
+            model.addAttribute("userId",1L);
+            return "/weapon/comment/new";
+        }
+
+        log.debug("create(commentCreate with user={})", formBean);
+        Long commentId = commentFacade.createComment(formBean);
+        weaponFacade.addComment(id, commentId);
+        //report success
+        //redirectAttributes.addFlashAttribute("alert_success", "Comment was created and assigned to weapon");
+        return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
+    }
+
+    @RequestMapping(value = "/{id}/comment/delete/{cId}", method = RequestMethod.POST)
+    public String deleteComment(@PathVariable long id,
+                                @PathVariable long cId, Model model,
+                                RedirectAttributes redirectAttributes,
+                                UriComponentsBuilder uriBuilder){
+        CommentDTO comment = commentFacade.getCommentById(cId);
+        weaponFacade.removeComment(id, cId);
+        log.debug("deleteComment({})", cId);
+        redirectAttributes.addFlashAttribute("alert_success", "Comment \"" + comment.getId() + "\" was deleted.");
         return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
     }
 

@@ -10,9 +10,12 @@
 
         <form:form method="post" action="${pageContext.request.contextPath}/weapon/update/${weaponUpdate.id}"
                    modelAttribute="weaponUpdate" cssClass="form-horizontal">
-
+            <%--<form:hidden path="comments"/>--%>
+             <div class="row">
+                <button style="float:right; margin: 10px" class="glyphicon glyphicon-floppy-disk btn" type="submit"></button>
+             </div>
             <div>
-                <form:label path="name" cssClass="control-label">Name</form:label>
+                <form:label path="name" cssClass="control-label" >Name</form:label>
                 <div>
                     <form:input path="name" cssClass="form-control" value="${weaponUpdate.name}"/>
                     <form:errors path="name" cssClass="help-block"/>
@@ -42,23 +45,17 @@
             <div>
                 <form:label path="effectiveAgainst" cssClass="control-label">Effective against</form:label>
                 <div>
-                    <form:checkboxes path="effectiveAgainst" items="${monsterTypes}" />
-                    <form:errors path="effectiveAgainst" cssClass="help-block"/>
-                        <%--<c:forEach items="${monsterTypes}" var="type">--%>
-                          <%--<form:checkbox path="effectiveAgainst" name="${type}" value="${type}" />--%>
-                        <%--</c:forEach>--%>
-                    <%--<form:checkboxes path="effectiveAgainst" items="${monsterTypes}" >--%>
-                    <%--<c:if test="${item} = ${weaponUpdate.effectiveAgainst}"></c:if>--%>
-                    <%--<c:forEach items="${weaponUpdate.effectiveAgainst}" var="type">--%>
-                        <%--<form:checkbox path="effectiveAgainst" value="${type}" />--%>
-	                <%--</c:forEach>--%>
-                    <%--<form:errors path="effectiveAgainst" cssClass="help-block"/>--%>
-                    <%--<c:forEach items="${weaponUpdate.effectiveAgainst}" var="current">--%>
-                        <%--[<c:out value="${current}"/>]--%>
-	                <%--</c:forEach>--%>
+                    <table class="table table-bordered" style="width: 180px">
+                        <c:forEach items="${monsterTypes}" var="type">
+                            <tr>
+                                <td>${type}</td>
+                                <td class="input-group-addon"> <form:checkbox path="effectiveAgainst" name="${type}" value="${type}"/> </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
                 </div>
             </div>
-            <button type="submit">Update weapon</button>
+
         </form:form>
     </jsp:attribute>
 </my:pagetemplate>
