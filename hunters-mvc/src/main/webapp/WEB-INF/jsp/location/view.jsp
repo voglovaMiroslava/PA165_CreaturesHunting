@@ -103,7 +103,11 @@
                         </tbody>
                     </table>
                 </div>
-                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>
+                <!--                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
+                <center>
+                    <a href="${pageContext.request.contextPath}/location/list" title='Go to list of locations'>
+                        <button style="display:inline; border:0;" class="glyphicon glyphicon-backward"> Back to Locations</button></a>
+                </center>
         </section>
 
     </jsp:attribute>

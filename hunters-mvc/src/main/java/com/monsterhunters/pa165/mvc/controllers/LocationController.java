@@ -94,7 +94,7 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("locationUpdate") LocationDTO formBean, @PathVariable long id, BindingResult bindingResult,
+    public String create(@PathVariable long id, @Valid @ModelAttribute("locationUpdate") LocationDTO formBean, BindingResult bindingResult,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         log.debug("update(locationUpdate={})", formBean);
         //in case of validation error forward back to the the form
@@ -123,17 +123,18 @@ public class LocationController {
         return "location/new";
     }
 
-    @RequestMapping(value = "/${locationId}/comment/new", method = RequestMethod.GET)
-    public String newComment(@PathVariable long locationId, Model model) {
-        log.debug("new()");
+    @RequestMapping(value = "/{id}/comment/new", method = RequestMethod.GET)
+    public String newComment(@PathVariable long id, Model model){
+        log.debug("newComment()");
         model.addAttribute("commentCreate", new CommentCreateDTO());
-        model.addAttribute("locationId", locationId);
-//        return "location/{locationId}/comment/new";
-        return "/404";
+        model.addAttribute("locationId",id);
+        //TODO change to get user id from loged user
+        model.addAttribute("userId",1L);
+        return "/location/comment/new";
     }
-
-    @RequestMapping(value = "/comment/create", method = RequestMethod.POST)
-    public String createComment(@Valid @ModelAttribute("commentCreate") CommentCreateDTO formBean, @Valid @ModelAttribute("locationId") Long lId, BindingResult bindingResult,
+    
+    @RequestMapping(value = "/{id}/comment/create", method = RequestMethod.POST)
+    public String createComment(@PathVariable long id, @Valid @ModelAttribute("commentCreate") CommentCreateDTO formBean, BindingResult bindingResult,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         log.debug("create(commentCreate={})", formBean);
         //in case of validation error forward back to the the form
@@ -145,15 +146,17 @@ public class LocationController {
                 model.addAttribute(fe.getField() + "_error", true);
                 log.trace("FieldError: {}", fe);
             }
-//            model.addAttribute("monsterTypes", MonsterType.values());
+            model.addAttribute("locationId", id);
+            //TODO also change automatic user id from authenticated user
+            model.addAttribute("userId",1L);
             return "/location/comment/new";
         }
         //create product
         Long cId = commentFacade.createComment(formBean);
-        locationFacade.addComment(lId, cId);
+        locationFacade.addComment(id, cId);
         //report success
         redirectAttributes.addFlashAttribute("alert_success", "Comment " + cId + " was created");
-        return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(cId).encode().toUriString();
+        return "redirect:" + uriBuilder.path("/location/view/"+ id).buildAndExpand(cId).encode().toUriString();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

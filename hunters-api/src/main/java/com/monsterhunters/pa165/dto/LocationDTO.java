@@ -3,6 +3,8 @@ package com.monsterhunters.pa165.dto;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -11,8 +13,15 @@ import java.util.Set;
 public class LocationDTO {
 
     private Long id;
+    
+    @NotNull
+    @Size(min = 3, max = 15)
     private String name;
+    
+    @NotNull
+    @Size(min = 3, max = 50)
     private String description;
+    
     private Set<CommentDTO> comments = new HashSet<>();
 
     public LocationDTO() {
@@ -54,11 +63,10 @@ public class LocationDTO {
     public void addComment(CommentDTO comment) {
         this.comments.add(comment);
     }
-    
+
     public void setComments(Set<CommentDTO> comments) {
         this.comments = comments;
     }
-    
 
     @Override
     public int hashCode() {

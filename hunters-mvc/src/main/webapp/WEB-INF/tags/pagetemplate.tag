@@ -33,7 +33,9 @@
 
 
         <style>
-            body {         
+            body {    
+                /*background-image: url("${pageContext.request.contextPath}/static/dist/img/66617.jpg");*/
+                /*background-color: #CECB26;*/
                 padding: 20px;
                 padding-top: 70px;
                 /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
@@ -123,59 +125,57 @@
         <!-- page body -->
         <jsp:invoke fragment="body"/>
 
-        <!--               Main Footer 
-              <footer class="footer">
-        
-                 To the right 
-                <div class="pull-left hidden-xs">
-                  <a href="https://www.fi.muni.cz" target="_blank"><fmt:message key="menu.fi"/></a>
-                </div>
-                 Default to the left 
-                <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>.</strong> <fmt:message key="menu.rights"/>
-              
-              </footer>-->
+        <!--   Footer --> 
+<!--    <center>
+        <footer class="footer bottom">
+            <div class="pull-right hidden-xs">
+                <a href="https://www.fi.muni.cz" target="_blank"><fmt:message key="menu.fi"/></a>
+            </div>
+            <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>.</strong> <fmt:message key="menu.rights"/>
 
-        <!-- REQUIRED JS SCRIPTS -->
+        </footer>
+    </center>-->
+    <!--REQUIRED JS SCRIPTS -->
 
-        <!-- Bootstrap 3.3.5 -->
-        <script src="${pageContext.request.contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="${pageContext.request.contextPath}/static/dist/js/app.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="${pageContext.request.contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="${pageContext.request.contextPath}/static/dist/js/app.min.js"></script>
 
-        <script>
+    <script>
 
-            function bindRemoveItem() {
-                if ($(".removeItem").length > 0) {
-                    $("body").delegate(".removeItem", "click", function () {
-                        if (confirm("Do you want to delete this item?"))
-                            $(this).find("form").submit();
+        function bindRemoveItem() {
+            if ($(".removeItem").length > 0) {
+                $("body").delegate(".removeItem", "click", function () {
+                    if (confirm("Do you want to delete this item?"))
+                        $(this).find("form").submit();
 
-                        return false;
-                    });
-                }
-
-                if ($(".rentItem").length > 0) {
-                    $("body").delegate(".rentItem", "click", function () {
-                        if (confirm("Do you want to rent this item?"))
-                            $(this).find("form").submit();
-
-                        return false;
-                    });
-                }
+                    return false;
+                });
             }
 
-            $(document).ready(function () {
-                setActiveMenu();
+            if ($(".rentItem").length > 0) {
+                $("body").delegate(".rentItem", "click", function () {
+                    if (confirm("Do you want to rent this item?"))
+                        $(this).find("form").submit();
 
-                if ($(".callout").length > 0) {
-                    setTimeout(function () {
-                        $(".callout").fadeOut(400);
-                    }, 5000);
-                }
+                    return false;
+                });
+            }
+        }
 
-                bindRemoveItem();
-            });
-        </script>
-    </body>
+        $(document).ready(function () {
+            setActiveMenu();
+
+            if ($(".callout").length > 0) {
+                setTimeout(function () {
+                    $(".callout").fadeOut(400);
+                }, 5000);
+            }
+
+            bindRemoveItem();
+        });
+    </script>
+</body>
 </html>
 

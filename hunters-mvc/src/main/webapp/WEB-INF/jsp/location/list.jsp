@@ -72,7 +72,7 @@
                     <!-- /.box -->
                 </div>
             </div>
-            <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>
+            <!--<form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
         </section><!-- /.content -->
 
     </jsp:attribute>

@@ -5,26 +5,25 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<my:pagetemplate title="New location">
+<my:pagetemplate title="New Comment">
     <jsp:attribute name="body">
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="box box-primary">
-                        <!--                        <div class="box-header with-border">
-                                                    <h3 class="box-title">Create new location</h3>
-                                                </div>-->
-                        <!-- /.box-header -->
-                        <!-- form start -->
-                        <form:form method="post" action="${pageContext.request.contextPath}/location/comment/create" modelAttribute="commentCreate">
+                        <form:form method="post" action="${pageContext.request.contextPath}/location/${locationId}/comment/create"
+                                   modelAttribute="commentCreate">
                             <div class="form-group">
                                 <form:label path="content" cssClass="control-label">Content</form:label>
+
                                     <div>
                                     <form:input path="content" cssClass="form-control"/>
                                     <form:errors path="content" cssClass="help-block"/>
                                 </div>
+                                <input type="hidden" id="userId" name="userId" value="${userId}">
                             </div>
+
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary" >Create Comment</button>
                             </div>
@@ -32,6 +31,6 @@
                     </div>
                 </div>
             </div>
-        </section><!-- /.content -->
+        </section>
     </jsp:attribute>
 </my:pagetemplate>
