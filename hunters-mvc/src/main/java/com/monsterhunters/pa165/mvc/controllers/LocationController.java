@@ -4,6 +4,7 @@ import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
+import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.facade.CommentFacade;
@@ -59,8 +60,18 @@ public class LocationController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
         log.debug("view({})", id);
+//        WeaponDTO bestWeapon = locationFacade.getBestWeapon(id);
+//        if (bestWeapon != null) {
+//            model.addAttribute("bestWeapon", bestWeapon);
+//            model.addAttribute("hasBestWeapon", true);
+//        }
+//        else {
+//            model.addAttribute("hasBestWeapon", false);
+//        }
         model.addAttribute("location", locationFacade.getLocationById(id));
-//        model.addAllAttributes("comments", locationFacade.getLocationById(id).getComments());
+        model.addAttribute("monsters",locationFacade.getMonsters(id));
+        model.addAttribute("comments",locationFacade.getComments(id));
+
         return "location/view";
     }
 
