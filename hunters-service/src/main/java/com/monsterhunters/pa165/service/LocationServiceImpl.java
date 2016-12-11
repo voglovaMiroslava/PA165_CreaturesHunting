@@ -100,7 +100,7 @@ public class LocationServiceImpl implements LocationService {
     public void addComment(Location location, Comment comment) throws HuntersServiceException {
         if (location.getComments().contains(comment)) {
             throw new HuntersServiceException("Same comment already exists for this location."
-                    + " Weapon ID:" + location.getId() + " Comment ID:" + comment.getId());
+                    + " Location ID:" + location.getId() + " Comment ID:" + comment.getId());
         }
         location.addComment(comment);
     }

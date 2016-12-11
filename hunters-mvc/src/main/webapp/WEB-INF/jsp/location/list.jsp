@@ -37,7 +37,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Description</th>
-                                        <th>Edit</th>
+                                        <th>Detail</th>
                                         <th>Delete</th>
                                         <c:if test="${authenticatedUser.isAdmin==true}"><th><fmt:message key="example.actions"/></th></c:if>
                                         </tr>
