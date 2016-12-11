@@ -71,12 +71,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location findById(Long id) throws HuntersServiceException {
         try {
-//            Location l = locationDao.findById(id);
-//            List<Comment> comments = getComments(id);
-//            for (Comment c : comments) {
-//                  l.addComment(c);    
-//            }
-//            return l;
             return locationDao.findById(id);
         } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot find location with " + id + " id.", ex);
@@ -86,14 +80,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<Location> findAll() throws HuntersServiceException {
         try {
-//            List<Location> list = locationDao.findAll();
-//            for (Location x : list) {
-//                List<Comment> comments = getComments(x.getId());
-//                for (Comment c : comments) {
-//                    x.addComment(c);
-//                }
-//            }
-//            return list;
             return locationDao.findAll();
         } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot find list of all locations.", ex);
@@ -114,7 +100,7 @@ public class LocationServiceImpl implements LocationService {
     public void addComment(Location location, Comment comment) throws HuntersServiceException {
         if (location.getComments().contains(comment)) {
             throw new HuntersServiceException("Same comment already exists for this location."
-                    + " Weapon ID:" + location.getId() + " Comment ID:" + comment.getId());
+                    + " Location ID:" + location.getId() + " Comment ID:" + comment.getId());
         }
         location.addComment(comment);
     }

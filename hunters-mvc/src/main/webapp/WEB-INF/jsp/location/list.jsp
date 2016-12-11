@@ -10,10 +10,10 @@
     <jsp:attribute name="body">
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content wow fadeInDown animated">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="box">
+                    <div style="border-top:0"class="box">
                         <div class="box-header">
                             <h2 class="box-title">Location List</h2>
 
@@ -37,6 +37,8 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Description</th>
+                                        <th>Detail</th>
+                                        <th>Delete</th>
                                         <c:if test="${authenticatedUser.isAdmin==true}"><th><fmt:message key="example.actions"/></th></c:if>
                                         </tr>
                                     <c:forEach items="${locations}" var="location">
@@ -44,16 +46,18 @@
                                             <td>${location.id}</td>
                                             <td><c:out value="${location.name}"/></td>
                                             <td><c:out value="${location.description}"/></td>
+
                                             <td class="actions">
                                                 <div class="center">
-                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'><button style="display:inline; border:0;float: left" class="glyphicon glyphicon-eye-open"></button></a>
+                                                    <a href="${pageContext.request.contextPath}/location/view/${location.id}" title='View details'>
+                                                        <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
                                                 </div>
                                             </td>
                                             <td class="actions">
                                                 <div class="center">
                                                     <a href="#" title='Remove location' class="removeItem">
-                                                        <form method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                            <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                                        <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
+                                                            <button style="display:inline; border:0" class="glyphicon glyphicon-trash"></button>
                                                         </form>
                                                     </a>
                                                 </div>
@@ -68,6 +72,7 @@
                     <!-- /.box -->
                 </div>
             </div>
+            <!--<form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
         </section><!-- /.content -->
 
     </jsp:attribute>

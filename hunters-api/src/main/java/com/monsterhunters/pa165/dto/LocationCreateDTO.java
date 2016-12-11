@@ -10,10 +10,11 @@ import javax.validation.constraints.Size;
 public class LocationCreateDTO {
 
     @NotNull
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 15)
     private String name;
 
     @NotNull
+    @Size(min = 3, max = 50)
     private String description;
 
     public String getName() {

@@ -5,17 +5,65 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+
 <my:pagetemplate>
     <jsp:attribute name="body">
 
-        <div >
-            <h1>Welcome to Creatures Hunting page</h1>
+        <header>
+            <center>
+                <div class="col-lg-12 wow fadeInDown animated">
+                    <h1 style="font-size: 45px; padding-top: 70px;">Welcome to Creatures Hunting page</h1>
+                </div>
+            </center>
+        </header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center fadeInDown animated">
+                    <h2><span class="glyphicon glyphicon-random"></span></h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="text-center our-services">
+                <div class="row">
+                    <div class="col-sm-4 wow fadeInDown animated" data-wow-duration="1000ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 300ms; animation-name: fadeInDown;">
+                        <div class="service-icon">
+                            <a href="${pageContext.request.contextPath}/location/list">
+                                <i style="color: white" class="glyphicon glyphicon-map-marker"></i>
+                            </a>
+                        </div>
+                        <div class="service-info">
+                            <h3>Location</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 wow fadeInDown animated" data-wow-duration="1000ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 300ms; animation-name: fadeInDown;">
+                        <div class="service-icon">
+                            <a href="${pageContext.request.contextPath}/monster/list">
+                                <i style="color: white" class="fa fa-optin-monster" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="service-info">
+                            <h3>Monster</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 wow fadeInDown animated" data-wow-duration="1000ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 300ms; animation-name: fadeInDown;">
+                        <div class="service-icon">
+                            <a href="${pageContext.request.contextPath}/weapon/list">
+                                <i style="color: white" class="fa fa-shield"></i>
+                            </a>
+                        </div>
+                        <div class="service-info">
+                            <h3>Weapon</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+                        </div>
+                    </div>
 
-            <p><a class="btn btn-lg btn-success" href="${pageContext.request.contextPath}/weapon/list"
-                  role="button">Weapons</a></p>
-            <p><a class="btn btn-lg btn-success" href="${pageContext.request.contextPath}/location/list"
-                  role="button">Locations</a></p>
+                </div> 
+            </div>
         </div>
 
-    </jsp:attribute>
+    </div>
+
+</jsp:attribute>
 </my:pagetemplate>
