@@ -33,7 +33,9 @@
                                     <th>Id</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Best Weapon</th>
+                                        <c:if test="${hasBestWeapon == true}">
+                                        <th>Best Weapon</th>
+                                        </c:if>
                                     <th>Monsters</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -44,12 +46,16 @@
                                     <td>${location.id}</td>
                                     <td><c:out value="${location.name}"/></td>
                                     <td><c:out value="${location.description}"/></td>
-                                    <td class="actions">
-                                        <div class="center">
-                                            <a href="${pageContext.request.contextPath}/weapon/view/${bestWeapon.id}" title='View best Weapon'>
-                                                <button style="display:inline; border:0;" class="fa fa-shield"></button></a>
-                                        </div>
-                                    </td>
+                                    <c:if test="${hasBestWeapon == true}">
+                                        <td class="actions">
+                                            <div class="center">
+
+                                                <a href="${pageContext.request.contextPath}/weapon/view/${bestWeapon.id}" title='View best Weapon'>
+                                                    <button style="display:inline; border:0;" class="fa fa-shield"></button></a>
+
+                                            </div>
+                                        </td>
+                                    </c:if>
                                     <td class="actions">
                                         <div class="center">
                                             <a href="${pageContext.request.contextPath}/monster/" title='Monsters in location'>
@@ -75,34 +81,72 @@
 
                             </tbody>
                         </table>
-
-                        <table class="table table-hover">
-                            <caption>Comments</caption>
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Content</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${location.comments}" var="comment">
+                                                    <c:choose>
+                        <c:when test="${monsters.size() > 0}"> 
+                            <table class="table table-hover">
+                                <caption>Monsters</caption>
+                                <thead>
                                     <tr>
-                                        <td><c:out value="${comment.user.nickname}"/></td>
-                                        <td><c:out value="${comment.content}"/></td>
-                                        <td class="actions">
-                                            <div class="center">
-                                                <a href="#" title='Remove comment' class="removeItem">
-                                                    <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
-                                                        <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
-                                                    </form>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Detail</th>
                                     </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${monsters}" var="monster">
+                                        <tr>
+                                            <td><c:out value="${monster.id}"/></td>
+                                            <td><c:out value="${monster.name}"/></td>
+                                            <td class="actions">
+                                            <td class="actions">
+                                                <div class="center">
+                                                    <a href="${pageContext.request.contextPath}/monster/view/${monster.id}" title='View details'>
+                                                        <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when> 
+                        <c:otherwise>
+                            <h3>There are no monsters!</h3>
+                        </c:otherwise>
+                            </c:choose>
+                            <c:choose>
+                        <c:when test="${comments.size() > 0}">                        
+                            <table class="table table-hover">
+                                <caption>Comments</caption>
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Content</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${comments}" var="comment">
+                                        <tr>
+                                            <td><c:out value="${comment.user.nickname}"/></td>
+                                            <td><c:out value="${comment.content}"/></td>
+                                            <td class="actions">
+                                                <div class="center">
+                                                    <a href="#" title='Remove comment' class="removeItem">
+                                                        <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
+                                                            <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                                        </form>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when> 
+                                                    <c:otherwise>
+                            <h3>There are no comments!</h3>
+                        </c:otherwise>
+                             </c:choose>
                     </div>
                 </div>
                 <!--                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
