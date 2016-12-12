@@ -21,7 +21,7 @@
                                     <form:input path="content" cssClass="form-control"/>
                                     <form:errors path="content" cssClass="help-block"/>
                                 </div>
-                                <input type="hidden" id="userId" name="userId" value="${userId}">
+                                <input type="hidden" id="userId" name="userId" value="${authenticatedUser.getId()}">
                             </div>
 
                             <div class="box-footer">
