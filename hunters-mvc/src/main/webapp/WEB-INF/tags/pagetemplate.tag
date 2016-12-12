@@ -99,9 +99,9 @@
                         <li>
                             <a href="#">Contact</a>
                         </li>
-
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        <c:set var ="authenticatedUser" value="${pageContext.request.getSession().getAttribute('authenticatedUser')}"/>
                         <c:choose>
                             <c:when test="${not empty authenticatedUser}">
                                 <li >
