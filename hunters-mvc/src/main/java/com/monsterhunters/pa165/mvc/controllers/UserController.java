@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -27,7 +28,7 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
-    final static Logger log = LoggerFactory.getLogger(UserController.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserFacade userFacade;
@@ -39,14 +40,14 @@ public class UserController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        log.debug("list of users");
+        LOGGER.debug("list of users");
         model.addAttribute("users", userFacade.getAllUsers());
         return "user/list";
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
-        log.debug("view({})", id);
+        LOGGER.debug("view({})", id);
         model.addAttribute("user", userFacade.getUserById(id));
         return "user/view";
     }
@@ -59,17 +60,18 @@ public class UserController {
 
     @RequestMapping(value = "/tryLogin", method = RequestMethod.POST)
     public String tryLogin(Model model,
-                       @Valid @ModelAttribute("userAuthenticate") UserAuthenticateDTO formBean,
-                       BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes,
-                       UriComponentsBuilder uriBuilder) {
+                           @Valid @ModelAttribute("userAuthenticate") UserAuthenticateDTO formBean,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes,
+                           UriComponentsBuilder uriBuilder,
+                           HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
             }
             for (FieldError fe : bindingResult.getFieldErrors()) {
                 model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
+                LOGGER.trace("FieldError: {}", fe);
             }
             return "user/login";
         }
@@ -79,28 +81,30 @@ public class UserController {
                 bindingResult.rejectValue("password", "error.wrongNicknameOrPassword", "Authentication failed. Please type correct nickname/password");
                 return "user/login";
             }
-
-            // TODO: fill session
-
-            return "home";
+            redirectAttributes.addFlashAttribute("alert_success", "You have been logged in as " + formBean.getNickname() + ".");
+            request.getSession().setAttribute("authenticatedUser", userFacade.getUserByNickname(formBean.getNickname()));
+            LOGGER.debug("User logged in: " + formBean.getNickname());
+            return "redirect:/";
         } catch (UserDoesNotExistsException e) {
-            log.trace("Login failed. Caused: ", e);
+            LOGGER.trace("Login failed. Caused: ", e);
             bindingResult.rejectValue("nickname", "error.nicknameDoesNotExists", "Please type correct nickname.");
             return "user/login";
         }
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(Model model) {
-        model.addAttribute("userAuthenticate", new UserAuthenticateDTO());
-        return "user/login";
+    public String logout(Model model, HttpServletRequest request) {
+        LOGGER.debug("logout");
+        request.getSession().removeAttribute("authenticatedUser");
+        model.addAttribute("alert_success", "You have been logged out.");
+        return "home";
     }
 
 
 
     /*@RequestMapping(value = "/changePassword/{id}", method = RequestMethod.GET)
     public String changePassword(@PathVariable long id, Model model) {
-        log.debug("changePassowrd({})", id);
+        LOGGER.debug("changePassowrd({})", id);
         return "user/changePassword";
     }
 
@@ -112,21 +116,21 @@ public class UserController {
                                  RedirectAttributes redirectAttributes,
                                  UriComponentsBuilder uriBuilder)
     {
-        log.debug("update(userChangePassword={})", formBean);
+        LOGGER.debug("update(userChangePassword={})", formBean);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
             }
             for (FieldError fe : bindingResult.getFieldErrors()) {
                 model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
+                LOGGER.trace("FieldError: {}", fe);
             }
             return "user/changePassword";
         }
         //create product
         id = userFacade.changePassword(formBean);
-        log.debug("id of updated user", id);
+        LOGGER.debug("id of updated user", id);
         //report success
         redirectAttributes.addFlashAttribute("alert_success", "User " + id + " was updated");
         return "redirect:" + uriBuilder.path("/user/view/{id}").buildAndExpand(id).encode().toUriString();
@@ -135,10 +139,10 @@ public class UserController {
 
 //    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 //    public String editUser(@PathVariable long id, Model model) {
-//        log.debug("editUser()");
+//        LOGGER.debug("editUser()");
 //        UserDTO user = userFacade.getUserById(id);
-//        log.debug("userDTO with id after userFacede.getUserById(id)", user.getId());
-//        log.debug(user.getId().toString());
+//        LOGGER.debug("userDTO with id after userFacede.getUserById(id)", user.getId());
+//        LOGGER.debug(user.getId().toString());
 //        model.addAttribute("userUpdate", user);
 //        return "user/edit";
 //    }
@@ -146,21 +150,21 @@ public class UserController {
 //    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 //    public String create(@Valid @ModelAttribute("userUpdate") UserDTO formBean, @PathVariable long id, BindingResult bindingResult,
 //                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-//        log.debug("update(userUpdate={})", formBean);
+//        LOGGER.debug("update(userUpdate={})", formBean);
 //        //in case of validation error forward back to the the form
 //        if (bindingResult.hasErrors()) {
 //            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-//                log.trace("ObjectError: {}", ge);
+//                LOGGER.trace("ObjectError: {}", ge);
 //            }
 //            for (FieldError fe : bindingResult.getFieldErrors()) {
 //                model.addAttribute(fe.getField() + "_error", true);
-//                log.trace("FieldError: {}", fe);
+//                LOGGER.trace("FieldError: {}", fe);
 //            }
 //            return "user/edit";
 //        }
 //        //create product
 //        id = userFacade.updateUser(formBean);
-//        log.debug("id of updated user", id);
+//        LOGGER.debug("id of updated user", id);
 //        //report success
 //        redirectAttributes.addFlashAttribute("alert_success", "User " + id + " was updated");
 //        return "redirect:" + uriBuilder.path("/user/view/{id}").buildAndExpand(id).encode().toUriString();
@@ -168,7 +172,7 @@ public class UserController {
 
 //    @RequestMapping(value = "/new", method = RequestMethod.GET)
 //    public String newUser(Model model) {
-//        log.debug("new()");
+//        LOGGER.debug("new()");
 //        model.addAttribute("userCreate", new UserCreateDTO());
 //        model.addAttribute("monsterTypes", MonsterType.values());
 //        return "user/new";
@@ -177,15 +181,15 @@ public class UserController {
 //    @RequestMapping(value = "/create", method = RequestMethod.POST)
 //    public String create(@Valid @ModelAttribute("userCreate") UserCreateDTO formBean, BindingResult bindingResult,
 //                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-//        log.debug("create(userCreate={})", formBean);
+//        LOGGER.debug("create(userCreate={})", formBean);
 //        //in case of validation error forward back to the the form
 //        if (bindingResult.hasErrors()) {
 //            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-//                log.trace("ObjectError: {}", ge);
+//                LOGGER.trace("ObjectError: {}", ge);
 //            }
 //            for (FieldError fe : bindingResult.getFieldErrors()) {
 //                model.addAttribute(fe.getField() + "_error", true);
-//                log.trace("FieldError: {}", fe);
+//                LOGGER.trace("FieldError: {}", fe);
 //            }
 //            model.addAttribute("monsterTypes", MonsterType.values());
 //            return "user/new";

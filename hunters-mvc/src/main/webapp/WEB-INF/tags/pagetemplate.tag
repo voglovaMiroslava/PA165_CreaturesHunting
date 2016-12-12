@@ -102,12 +102,22 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li >
-                            <a href="${pageContext.request.contextPath}/user/login">Login</a>
-                        </li>
-                        <li >
-                            <a href="#">Log out</a>
-                        </li>
+                        <c:choose>
+                            <c:when test="${not empty authenticatedUser}">
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.nickname}">${authenticatedUser.nickname}</a>
+                                </li>
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/login">Login</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
