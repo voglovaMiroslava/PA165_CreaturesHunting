@@ -7,12 +7,12 @@
 
 <my:pagetemplate>
     <jsp:attribute name="body">
-    
-    <section class="content-header">
+
+    <!--section class="content-header">
           <h1>
             <fmt:message key="example.notFoundPage"/>
           </h1>
-        </section>
+        </section-->
 
         <!-- Main content -->
         <section class="content">

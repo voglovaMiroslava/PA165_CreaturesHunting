@@ -25,15 +25,15 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/skins/skin-blue.min.css">
 
 
-        <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet"> 
-         <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">--> 
+        <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet">
+         <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">-->
         <link href="${pageContext.request.contextPath}/static/dist/css/main.css" rel="stylesheet">
         <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css" rel="stylesheet">
-         <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">--> 
+         <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">-->
 
 
         <style>
-            body {    
+            body {
                 /*background-image: url("${pageContext.request.contextPath}/static/dist/img/66617.jpg");*/
                 /*background-color: #CECB26;*/
                 padding: 20px;
@@ -99,15 +99,25 @@
                         <li>
                             <a href="#">Contact</a>
                         </li>
-
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li >
-                            <a href="#">Log in</a>
-                        </li>
-                        <li >
-                            <a href="#">Log out</a>
-                        </li>
+                        <c:set var ="authenticatedUser" value="${pageContext.request.getSession().getAttribute('authenticatedUser')}"/>
+                        <c:choose>
+                            <c:when test="${not empty authenticatedUser}">
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.id}">${authenticatedUser.nickname}</a>
+                                </li>
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li >
+                                    <a href="${pageContext.request.contextPath}/user/login">Login</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -125,7 +135,7 @@
         <!-- page body -->
         <jsp:invoke fragment="body"/>
 
-        <!--   Footer --> 
+        <!--   Footer -->
 <!--    <center>
         <footer class="footer bottom">
             <div class="pull-right hidden-xs">
