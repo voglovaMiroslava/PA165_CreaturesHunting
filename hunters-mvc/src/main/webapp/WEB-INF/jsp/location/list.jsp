@@ -8,7 +8,7 @@
 <%--<fmt:message var="title" key="location.list.title"/>--%>
 <my:pagetemplate title="List of locations">
     <jsp:attribute name="body">
-
+        <%--<c:set var ="authenticatedUser" value="${pageContext.request.getSession().getAttribute('authenticatedUser')}"/>--%>
         <!-- Main content -->
         <section class="content wow fadeInDown animated">
             <div class="row">
@@ -16,31 +16,34 @@
                     <div style="border-top:0"class="box">
                         <div class="box-header">
                             <h2 class="box-title">Location List</h2>
-
-                            <div class="box-tools">
-                                <div class="input-group input-group-sm right" style="width: 48px;">
-                                    <a href="${pageContext.request.contextPath}/location/new/">
-                                        <button type="button" class="btn btn-info btn-flat" title='Add new location'><span class="glyphicon glyphicon-plus"></span></button>
-                                    </a>
+                            <c:if test="${authenticatedUser.isAdmin()==true}">
+                                <div class="box-tools">
+                                    <div class="input-group input-group-sm right" style="width: 48px;">
+                                        <a href="${pageContext.request.contextPath}/location/new/">
+                                            <button type="button" class="btn btn-info btn-flat" title='Add new location'><span class="glyphicon glyphicon-plus"></span></button>
+                                        </a>
+                                    </div>
+                                    <!--                                <div class="input-group input-group-sm right" style="width: 48px;">
+                                                                        <a href="${pageContext.request.contextPath}/">
+                                                                            <button type="button" class="btn btn-info btn-flat" title='Go back'><span class="glyphicon glyphicon-backward"></span></button>
+                                                                        </a>
+                                                                    </div>-->
                                 </div>
-                                <!--                                <div class="input-group input-group-sm right" style="width: 48px;">
-                                                                    <a href="${pageContext.request.contextPath}/">
-                                                                        <button type="button" class="btn btn-info btn-flat" title='Go back'><span class="glyphicon glyphicon-backward"></span></button>
-                                                                    </a>
-                                                                </div>-->
-                            </div>
+                            </c:if>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body table-responsive no-padding">
+
                             <table class="table table-hover">
                                 <tbody><tr>
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>Detail</th>
-                                        <th>Delete</th>
-                                        <c:if test="${authenticatedUser.isAdmin==true}"><th><fmt:message key="example.actions"/></th></c:if>
-                                        </tr>
+                                        <c:if test="${authenticatedUser.isAdmin()==true}">
+                                            <th>Delete</th> 
+                                         </c:if>
+                                    </tr>
                                     <c:forEach items="${locations}" var="location">
                                         <tr>
                                             <td>${location.id}</td>
@@ -53,16 +56,17 @@
                                                         <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
                                                 </div>
                                             </td>
-                                            <td class="actions">
-                                                <div class="center">
-                                                    <a href="#" title='Remove location' class="removeItem">
-                                                        <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                            <button style="display:inline; border:0" class="glyphicon glyphicon-trash"></button>
-                                                        </form>
-                                                    </a>
-                                                </div>
-                                            </td>
-
+                                            <c:if test="${authenticatedUser.isAdmin()==true}">
+                                                <td class="actions">
+                                                    <div class="center">
+                                                        <a href="#" title='Remove location' class="removeItem">
+                                                            <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
+                                                                <button style="display:inline; border:0" class="glyphicon glyphicon-trash"></button>
+                                                            </form>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </c:if>
                                         </tr>
                                     </c:forEach>
                                 </tbody></table>

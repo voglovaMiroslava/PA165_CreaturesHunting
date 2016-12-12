@@ -15,16 +15,16 @@
                         <div class="box-header">
                             <h2 class="box-title">Location List</h2>
 
-                            <div class="box-tools">
+<!--                            <div class="box-tools">
                                 <div style="display: inline-block;" class="input-group input-group-sm right" style="width: 48px;">
-    <!--                                <a href="${pageContext.request.contextPath}/location/list">
+                                    <a href="${pageContext.request.contextPath}/location/list">
                                         <button type="button" class="btn btn-info btn-flat" title='Go back'><span class="glyphicon glyphicon-backward"></span> Back </button>
-                                    </a>-->
+                                    </a>
                                     <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/">
                                         <button type="button" class="btn btn-info btn-flat" title='Add new comment'>New Comment</button>
                                     </a>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                         <table class="table table-hover">
                             <caption>Details</caption>
@@ -33,12 +33,18 @@
                                     <th>Id</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                        <c:if test="${hasBestWeapon == true}">
+                                    <c:if test="${hasBestWeapon == true}">
                                         <th>Best Weapon</th>
+
+                                    </c:if>
+                                    <c:if test="${not empty authenticatedUser}">
+                                        <th>Add Comment</th>
+                                    </c:if>
+                                    <!--<th>Monsters</th>-->
+                                    <c:if test="${authenticatedUser.isAdmin() == true}">
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                         </c:if>
-                                    <th>Monsters</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,97 +62,105 @@
                                             </div>
                                         </td>
                                     </c:if>
+                                    <c:if test="${not empty authenticatedUser}">
                                     <td class="actions">
                                         <div class="center">
-                                            <a href="${pageContext.request.contextPath}/monster/" title='Monsters in location'>
-                                                <button style="display:inline; border:0;" class="fa fa-optin-monster"></button></a>
+                                            <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/" title='Add comment'>
+                                                <button style="display:inline; border:0;" class="fa fa-pencil"></button></a>
                                         </div>
                                     </td>
-                                    <td class="actions">
-                                        <div class="center">
-                                            <a href="${pageContext.request.contextPath}/location/edit/${location.id}" title='Edit location'>
-                                                <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
-                                        </div>
-                                    </td>
-                                    <td class="actions">
-                                        <div class="center">
-                                            <a href="#" title='Remove location' class="removeItem">
-                                                <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                    <button style="border:0" class="glyphicon glyphicon-trash"></button>
-                                                </form>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    </c:if>
+                                    <c:if test="${authenticatedUser.isAdmin() == true}">
+                                        <td class="actions">
+                                            <div class="center">
+                                                <a href="${pageContext.request.contextPath}/location/edit/${location.id}" title='Edit location'>
+                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
+                                            </div>
+                                        </td>
+                                        <td class="actions">
+                                            <div class="center">
+                                                <a href="#" title='Remove location' class="removeItem">
+                                                    <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
+                                                        <button style="border:0" class="glyphicon glyphicon-trash"></button>
+                                                    </form>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </c:if>
                                 </tr>
 
                             </tbody>
                         </table>
-                                                    <c:choose>
-                        <c:when test="${monsters.size() > 0}"> 
-                            <table class="table table-hover">
-                                <caption>Monsters</caption>
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Detail</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${monsters}" var="monster">
+                        <c:choose>
+                            <c:when test="${monsters.size() > 0}"> 
+                                <table class="table table-hover">
+                                    <caption>Monsters</caption>
+                                    <thead>
                                         <tr>
-                                            <td><c:out value="${monster.id}"/></td>
-                                            <td><c:out value="${monster.name}"/></td>
-                                            <td class="actions">
-                                            <td class="actions">
-                                                <div class="center">
-                                                    <a href="${pageContext.request.contextPath}/monster/view/${monster.id}" title='View details'>
-                                                        <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
-                                                </div>
-                                            </td>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Detail</th>
                                         </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:when> 
-                        <c:otherwise>
-                            <h3>There are no monsters!</h3>
-                        </c:otherwise>
-                            </c:choose>
-                            <c:choose>
-                        <c:when test="${comments.size() > 0}">                        
-                            <table class="table table-hover">
-                                <caption>Comments</caption>
-                                <thead>
-                                    <tr>
-                                        <th>User</th>
-                                        <th>Content</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${comments}" var="comment">
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${monsters}" var="monster">
+                                            <tr>
+                                                <td><c:out value="${monster.id}"/></td>
+                                                <td><c:out value="${monster.name}"/></td>
+                                                <td class="actions">
+                                                <td class="actions">
+                                                    <div class="center">
+                                                        <a href="${pageContext.request.contextPath}/monster/view/${monster.id}" title='View details'>
+                                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when> 
+                            <c:otherwise>
+                                <h3>There are no monsters!</h3>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${comments.size() > 0}">                        
+                                <table class="table table-hover">
+                                    <caption>Comments</caption>
+                                    <thead>
                                         <tr>
-                                            <td><c:out value="${comment.user.nickname}"/></td>
-                                            <td><c:out value="${comment.content}"/></td>
-                                            <td class="actions">
-                                                <div class="center">
-                                                    <a href="#" title='Remove comment' class="removeItem">
-                                                        <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
-                                                            <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
-                                                        </form>
-                                                    </a>
-                                                </div>
-                                            </td>
+                                            <th>User</th>
+                                            <th>Content</th>
+                                                <c:if test="${authenticatedUser.isAdmin() == true}">
+                                                <th>Delete</th>
+                                                </c:if>
                                         </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:when> 
-                                                    <c:otherwise>
-                            <h3>There are no comments!</h3>
-                        </c:otherwise>
-                             </c:choose>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${comments}" var="comment">
+                                            <tr>
+                                                <td><c:out value="${comment.user.nickname}"/></td>
+                                                <td><c:out value="${comment.content}"/></td>
+                                                <c:if test="${authenticatedUser.isAdmin() == true}">
+                                                    <td class="actions">
+                                                        <div class="center">
+                                                            <a href="#" title='Remove comment' class="removeItem">
+                                                                <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
+                                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                                                </form>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </c:if>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when> 
+                            <c:otherwise>
+                                <h3>There are no comments!</h3>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
                 <!--                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
