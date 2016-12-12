@@ -14,17 +14,6 @@
                     <div style="border-top:0"class="box">
                         <div class="box-header">
                             <h2 class="box-title">Location List</h2>
-
-<!--                            <div class="box-tools">
-                                <div style="display: inline-block;" class="input-group input-group-sm right" style="width: 48px;">
-                                    <a href="${pageContext.request.contextPath}/location/list">
-                                        <button type="button" class="btn btn-info btn-flat" title='Go back'><span class="glyphicon glyphicon-backward"></span> Back </button>
-                                    </a>
-                                    <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/">
-                                        <button type="button" class="btn btn-info btn-flat" title='Add new comment'>New Comment</button>
-                                    </a>
-                                </div>
-                            </div>-->
                         </div>
                         <table class="table table-hover">
                             <caption>Details</caption>
@@ -35,16 +24,14 @@
                                     <th>Description</th>
                                     <c:if test="${hasBestWeapon == true}">
                                         <th>Best Weapon</th>
-
                                     </c:if>
                                     <c:if test="${not empty authenticatedUser}">
                                         <th>Add Comment</th>
                                     </c:if>
-                                    <!--<th>Monsters</th>-->
                                     <c:if test="${authenticatedUser.isAdmin() == true}">
                                         <th>Edit</th>
                                         <th>Delete</th>
-                                        </c:if>
+                                    </c:if>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,12 +50,12 @@
                                         </td>
                                     </c:if>
                                     <c:if test="${not empty authenticatedUser}">
-                                    <td class="actions">
-                                        <div class="center">
-                                            <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/" title='Add comment'>
-                                                <button style="display:inline; border:0;" class="fa fa-pencil"></button></a>
-                                        </div>
-                                    </td>
+                                        <td class="actions">
+                                            <div class="center">
+                                                <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/" title='Add comment'>
+                                                    <button style="display:inline; border:0;" class="fa fa-pencil"></button></a>
+                                            </div>
+                                        </td>
                                     </c:if>
                                     <c:if test="${authenticatedUser.isAdmin() == true}">
                                         <td class="actions">
