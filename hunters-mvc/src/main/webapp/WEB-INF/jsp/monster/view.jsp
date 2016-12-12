@@ -5,11 +5,10 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<fmt:message var="title" key="monster.view.title"><fmt:param value="${monster.name}"/></fmt:message>
-<my:pagetemplate title="${title}">
+<my:pagetemplate title="Monster: ${monster.name}">
 <jsp:attribute name="body">
     <button><my:a href="/monster/list">List of monsters</my:a></button>
-    <button><my:a href="/monsterwe/edit/${monster.id}">Edit monster</my:a></button>
+    <button><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
   <form method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
       <button type="submit">Delete</button>
   </form>
@@ -45,8 +44,6 @@
     </table>
 
     <br>
-
-    
 
 </jsp:attribute>
 </my:pagetemplate>

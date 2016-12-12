@@ -31,6 +31,7 @@ public class MonsterCreateDTO {
     @NotNull
     private Long locationId;
     
+    @NotNull
     private Set<MonsterType> types = new HashSet<>();
    
     public String getName() {
@@ -74,7 +75,7 @@ public class MonsterCreateDTO {
     }
 
     public Set<MonsterType> getTypes() {
-        return Collections.unmodifiableSet(types);
+        return types;
     }
 
     public void setTypes(Set<MonsterType> types) {

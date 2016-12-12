@@ -7,12 +7,11 @@
 
 <my:pagetemplate title="New monster">
     <jsp:attribute name="body">
-        <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-md-8">
                     <div class="box box-primary">
-                        <form:form method="post" action="${pageContext.request.contextPath}/monster/create" modelAttribute="monsterCreate">
+                        <form:form method="post" action="${pageContext.request.contextPath}/monster/create" modelAttribute="monsterToCreate">
                             <div class="form-group">
                                 <form:label path="name" cssClass="control-label">Name</form:label>
                                     <div>
