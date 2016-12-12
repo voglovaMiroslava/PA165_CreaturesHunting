@@ -15,21 +15,20 @@
 <my:pagetemplate>
     <jsp:attribute name="body">
 
-    <section class="content-header">
+    <!--section class="content-header">
         <h1>
             <fmt:message key="example.forbidden"/>
         </h1>
-    </section>
+    </section-->
 
         <!-- Main content -->
         <section class="content">
             <div class="error-page">
-                <h2 class="headline text-yellow"> 404</h2>
+                <h2 class="headline text-yellow"> 403</h2>
                 <div class="error-content">
                     <h3><i class="fa fa-warning text-yellow"></i> Forbidden</h3>
                     <p>
-                        We could not find the page you were looking for.
-                        Meanwhile, you may <a href="${pageContext.request.contextPath}/">return to dashboard</a>.
+                        Forbidden content. You may <a href="${pageContext.request.contextPath}/">return to dashboard</a>.
                     </p>
                 </div><!-- /.error-content -->
             </div><!-- /.error-page -->
