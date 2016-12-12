@@ -55,7 +55,11 @@ public class LocationController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         log.debug("list of locations");
+        try {
         model.addAttribute("locations", locationFacade.getAllLocations());
+        } catch (HuntersServiceException ex) {
+            return "/404";
+        }
         return "location/list";
     }
 
@@ -70,11 +74,14 @@ public class LocationController {
 //        else {
 //            model.addAttribute("hasBestWeapon", false);
 //        }
+        try {
         model.addAttribute("bestWeapon", locationFacade.getBestWeapon(id));
         model.addAttribute("location", locationFacade.getLocationById(id));
         model.addAttribute("monsters", locationFacade.getMonsters(id));
         model.addAttribute("comments", locationFacade.getComments(id));
-
+        } catch (HuntersServiceException ex) {
+            return "/404";
+        }
         return "location/view";
     }
 
