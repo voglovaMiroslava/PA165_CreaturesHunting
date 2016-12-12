@@ -85,7 +85,10 @@ public class LocationFacadeImpl implements LocationFacade {
     @Override
     public WeaponDTO getBestWeapon(Long locationId) {
         Weapon w = locationService.getBestWeapon(locationId);
-        return mappingService.mapTo(w, WeaponDTO.class);
+        if (w == null)
+            return null;
+        else
+            return mappingService.mapTo(w, WeaponDTO.class);
     }
 
     @Override
