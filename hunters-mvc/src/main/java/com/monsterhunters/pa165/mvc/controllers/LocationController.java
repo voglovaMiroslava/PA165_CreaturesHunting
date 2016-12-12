@@ -4,10 +4,12 @@ import com.monsterhunters.pa165.dto.CommentCreateDTO;
 import com.monsterhunters.pa165.dto.LocationCreateDTO;
 import com.monsterhunters.pa165.dto.LocationDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
+import com.monsterhunters.pa165.dto.WeaponDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.LocationFacade;
+import static com.monsterhunters.pa165.mvc.controllers.UserController.AUTHENTICATED_USER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import org.springframework.orm.jpa.JpaSystemException;
 public class LocationController {
 
     final static Logger log = LoggerFactory.getLogger(LocationController.class);
+//    public static final String AUTHENTICATED_USER = "authenticatedUser";
 
     @Autowired
     private LocationFacade locationFacade;
@@ -59,17 +62,27 @@ public class LocationController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
         log.debug("view({})", id);
+//        WeaponDTO bestWeapon = locationFacade.getBestWeapon(id);
+//        if (bestWeapon != null) {
+//            model.addAttribute("bestWeapon", bestWeapon);
+//            model.addAttribute("hasBestWeapon", true);
+//        }
+//        else {
+//            model.addAttribute("hasBestWeapon", false);
+//        }
         model.addAttribute("location", locationFacade.getLocationById(id));
-//        model.addAllAttributes("comments", locationFacade.getLocationById(id).getComments());
+        model.addAttribute("monsters", locationFacade.getMonsters(id));
+        model.addAttribute("comments", locationFacade.getComments(id));
+
         return "location/view";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-//        UserDTO user = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-//        if (user.isAdmin() == false) {
-//            return "home/404";
-//        }
+    public String delete(@PathVariable long id, Model model,
+            UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
 
         LocationDTO location = locationFacade.getLocationById(id);
         locationFacade.deleteLocation(id);
@@ -79,14 +92,21 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/{locationId}/comment/delete/{commentId}", method = RequestMethod.POST)
-    public String deleteComment(@PathVariable long locationId, @PathVariable long commentId, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String deleteComment(@PathVariable long locationId, @PathVariable long commentId, Model model,
+            UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
 
         locationFacade.removeComment(locationId, commentId);
         return "redirect:" + uriBuilder.path("/location/view/" + locationId).toUriString();
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editLocation(@PathVariable long id, Model model) {
+    public String editLocation(@PathVariable long id, Model model, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         log.debug("editLocation()");
         LocationDTO location = locationFacade.getLocationById(id);
         log.debug("locationDTO with id after locationFacede.getLocationById(id)", location.getId());
@@ -97,7 +117,7 @@ public class LocationController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String create(@PathVariable long id, @Valid @ModelAttribute("locationUpdate") LocationDTO formBean, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
         log.debug("update(locationUpdate={})", formBean);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
@@ -124,26 +144,33 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newLocation(Model model) {
+    public String newLocation(Model model, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         log.debug("new()");
         model.addAttribute("locationCreate", new LocationCreateDTO());
         return "location/new";
     }
 
     @RequestMapping(value = "/{id}/comment/new", method = RequestMethod.GET)
-    public String newComment(@PathVariable long id, Model model) {
+    public String newComment(@PathVariable long id, Model model, HttpServletRequest request) {
+        if (getUser(request) == null) {
+            return "/403";
+        }
         log.debug("newComment()");
         model.addAttribute("commentCreate", new CommentCreateDTO());
         model.addAttribute("locationId", id);
-        //TODO change to get user id from loged user
-        model.addAttribute("userId", 1L);
         return "/location/comment/new";
     }
 
     @RequestMapping(value = "/{id}/comment/create", method = RequestMethod.POST)
     public String createComment(@PathVariable long id, @Valid @ModelAttribute("commentCreate") CommentCreateDTO formBean, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
         log.debug("create(commentCreate={})", formBean);
+        if (getUser(request) == null) {
+            return "/403";
+        }
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
@@ -154,8 +181,6 @@ public class LocationController {
                 log.trace("FieldError: {}", fe);
             }
             model.addAttribute("locationId", id);
-            //TODO also change automatic user id from authenticated user
-            model.addAttribute("userId", 1L);
             return "/location/comment/new";
         }
         try {
@@ -168,15 +193,17 @@ public class LocationController {
         } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("content", "error.commentAlreadyExist", "Same comment already exists for this location.");
             model.addAttribute("locationId", id);
-            model.addAttribute("userId", 1L);
             return "/location/comment/new";
         }
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("locationCreate") LocationCreateDTO formBean, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
         log.debug("create(locationCreate={})", formBean);
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
@@ -198,6 +225,11 @@ public class LocationController {
             return "location/new";
         }
 
+    }
+
+    @ModelAttribute("authenticatedUser")
+    public UserDTO getUser(HttpServletRequest request) {
+        return (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
     }
 
 }
