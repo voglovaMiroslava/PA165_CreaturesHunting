@@ -53,14 +53,20 @@ public class UserController {
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model, HttpServletRequest request) {
-        UserDTO authenticatedUser = (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
-        if(authenticatedUser.getId().equals(id)) {
-            LOGGER.debug("view({})", id);
-            model.addAttribute("user", userFacade.getUserById(id));
+        if(request.getSession().getAttribute(AUTHENTICATED_USER) != null) {
+            UserDTO authenticatedUser = (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
+            if(authenticatedUser.getId().equals(id)) {
+                LOGGER.debug("view({})", id);
+                model.addAttribute("user", userFacade.getUserById(id));
 //            model.addAttribute("userComments", commentFacade.getCommentsByUserNickname(authenticatedUser.getNickname()));
-            return "user/view";
+                return "user/view";
+            } else {
+                return "403";
+            }
+        } else {
+            return "404";
         }
-        return "home";
+
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

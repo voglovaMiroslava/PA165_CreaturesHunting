@@ -6,6 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false" session="false" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <my:pagetemplate title="User">
 <jsp:attribute name="body">
 
@@ -22,11 +29,11 @@
             <tr>
                 <td><c:out value="${user.nickname}"/></td>
                 <td><c:out value="${user.email}"/></td>
-                <td><c:out value="${user.isAdmin}"/></td>
+                <td><c:out value="${user.admin}"/></td>
             </tr>
         </tbody>
     </table>
 
 </jsp:attribute>
 </my:pagetemplate>
-C
+
