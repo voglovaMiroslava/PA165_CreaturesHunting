@@ -5,12 +5,28 @@
   Time: 2:15 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<my:pagetemplate title="User">
+<jsp:attribute name="body">
+
+    <table class="table">
+        <caption>Users</caption>
+        <thead>
+        <tr>
+            <th>nickname</th>
+            <th>email</th>
+            <th>isAdmin</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><c:out value="${user.nickname}"/></td>
+                <td><c:out value="${user.email}"/></td>
+                <td><c:out value="${user.isAdmin}"/></td>
+            </tr>
+        </tbody>
+    </table>
+
+</jsp:attribute>
+</my:pagetemplate>
+C

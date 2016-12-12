@@ -1,7 +1,9 @@
 package com.monsterhunters.pa165.mvc.controllers;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
+import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +31,13 @@ import javax.validation.Valid;
 public class UserController {
 
     final static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    public static final String AUTHENTICATED_USER = "authenticatedUser";
 
     @Autowired
     private UserFacade userFacade;
+
+    @Autowired
+    private CommentFacade commentFacade;
 
     /** Load page with list of all users.
      *  Also display  buttons to add, delete or view specific user
@@ -46,10 +52,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable long id, Model model) {
-        LOGGER.debug("view({})", id);
-        model.addAttribute("user", userFacade.getUserById(id));
-        return "user/view";
+    public String view(@PathVariable long id, Model model, HttpServletRequest request) {
+        UserDTO authenticatedUser = (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
+        if(authenticatedUser.getId().equals(id)) {
+            LOGGER.debug("view({})", id);
+            model.addAttribute("user", userFacade.getUserById(id));
+//            model.addAttribute("userComments", commentFacade.getCommentsByUserNickname(authenticatedUser.getNickname()));
+            return "user/view";
+        }
+        return "home";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -82,7 +93,7 @@ public class UserController {
                 return "user/login";
             }
             redirectAttributes.addFlashAttribute("alert_success", "You have been logged in as " + formBean.getNickname() + ".");
-            request.getSession().setAttribute("authenticatedUser", userFacade.getUserByNickname(formBean.getNickname()));
+            request.getSession().setAttribute(AUTHENTICATED_USER, userFacade.getUserByNickname(formBean.getNickname()));
             LOGGER.debug("User logged in: " + formBean.getNickname());
             return "redirect:/";
         } catch (UserDoesNotExistsException e) {
@@ -95,7 +106,7 @@ public class UserController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(Model model, HttpServletRequest request) {
         LOGGER.debug("logout");
-        request.getSession().removeAttribute("authenticatedUser");
+        request.getSession().removeAttribute(AUTHENTICATED_USER);
         model.addAttribute("alert_success", "You have been logged out.");
         return "home";
     }

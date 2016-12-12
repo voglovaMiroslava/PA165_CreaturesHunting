@@ -105,7 +105,7 @@
                         <c:choose>
                             <c:when test="${not empty authenticatedUser}">
                                 <li >
-                                    <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.nickname}">${authenticatedUser.nickname}</a>
+                                    <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.id}">${authenticatedUser.nickname}</a>
                                 </li>
                                 <li >
                                     <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
