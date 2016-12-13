@@ -67,8 +67,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public boolean changePassword(UserChangePassDTO userChangePassDTO) {
-        if(authenticateUser(userChangePassDTO.getUserAuthenticateDTO())) {
-            userService.changePassword(userService.findByNickname(userChangePassDTO.getNickname()), userChangePassDTO.getNewPassword());
+        User user = userService.findByNickname(userChangePassDTO.getNickname());
+        if(userService.authenticate(user, userChangePassDTO.getOldPassword())) {
+            userService.changePassword(user, userChangePassDTO.getNewPassword());
             return true;
         } else {
             return false;

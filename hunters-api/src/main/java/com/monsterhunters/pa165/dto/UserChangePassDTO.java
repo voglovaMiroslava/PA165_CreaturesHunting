@@ -8,21 +8,14 @@ import javax.validation.constraints.Size;
  */
 public class UserChangePassDTO {
 
-    private UserAuthenticateDTO userAuthenticateDTO;
+    private String nickname;
+    private String oldPassword;
 
     @NotNull
     @Size(min = 7, max = 20)
     // just overkill for this app
     //@Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", message = "Please provide")
     private String newPassword;
-
-    public UserAuthenticateDTO getUserAuthenticateDTO() {
-        return userAuthenticateDTO;
-    }
-
-    public void setUserAuthenticateDTO(UserAuthenticateDTO userAuthenticateDTO) {
-        this.userAuthenticateDTO = userAuthenticateDTO;
-    }
 
     public String getNewPassword() {
         return newPassword;
@@ -33,19 +26,19 @@ public class UserChangePassDTO {
     }
 
     public String getNickname() {
-        return userAuthenticateDTO.getNickname();
+        return nickname;
     }
 
     public void setNickname(String nickname) {
-        this.userAuthenticateDTO.setNickname(nickname);
+        this.nickname = nickname;
     }
 
     public String getOldPassword() {
-        return userAuthenticateDTO.getPassword();
+        return oldPassword;
     }
 
     public void setOldPassword(String password) {
-        this.userAuthenticateDTO.setPassword(password);
+        this.oldPassword = password;
     }
 
 }

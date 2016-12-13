@@ -184,7 +184,8 @@ public class UserFacadeImplTest extends AbstractTransactionalTestNGSpringContext
         userAuthenticateDTO.setPassword(userCreateDTO.getPlainPassword());
         Assert.assertTrue(userFacade.authenticateUser(userAuthenticateDTO));
         UserChangePassDTO userChangePassDTO = new UserChangePassDTO();
-        userChangePassDTO.setUserAuthenticateDTO(userAuthenticateDTO);
+        userChangePassDTO.setNickname(userAuthenticateDTO.getNickname());
+        userChangePassDTO.setOldPassword(userAuthenticateDTO.getPassword());
         userChangePassDTO.setNewPassword("newPassword");
         UserAuthenticateDTO newUserAuthenticateDTO = new UserAuthenticateDTO();
         newUserAuthenticateDTO.setNickname(userCreateDTO.getNickname());
