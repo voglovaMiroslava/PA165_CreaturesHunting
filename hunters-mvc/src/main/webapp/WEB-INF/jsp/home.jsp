@@ -33,7 +33,7 @@
                         </div>
                         <div class="service-info">
                             <h3>Location</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+                            <p>Information on all the locations that were examined after the nuclear disaster. You can find users comments, monsters from the locations and the most effective weapon for each location.</p>
                         </div>
                     </div>
                     <div class="col-sm-4 wow fadeInDown animated" data-wow-duration="1000ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 300ms; animation-name: fadeInDown;">
