@@ -14,33 +14,29 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <my:pagetemplate title="User">
-<jsp:attribute name="body">
+    <jsp:attribute name="body">
 
-    <table class="table">
-        <caption>Users</caption>
-        <thead>
-        <tr>
-            <th>nickname</th>
-            <th>email</th>
-            <th>isAdmin</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><c:out value="${user.nickname}"/></td>
-                <td><c:out value="${user.email}"/></td>
-                <td><c:out value="${user.admin}"/></td>
-            </tr>
-        </tbody>
-    </table>
-    <button>
-        <my:a href="/user/changePassword" >
-            <span aria-hidden="true"></span>
-            Change Password
-        </my:a>
-    </button>
+        <table class="table">
+            <caption>Users</caption>
+            <thead>
+                <tr>
+                    <th>nickname</th>
+                    <th>email</th>
+                    <th>isAdmin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><c:out value="${user.nickname}"/></td>
+                    <td><c:out value="${user.email}"/></td>
+                    <td><c:out value="${user.admin}"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="${pageContext.request.contextPath}/user/changePassword" title='Save it'>
+            <button class="btn btn-info btn-flat">Change Password</button></a>
 
 
-</jsp:attribute>
+    </jsp:attribute>
 </my:pagetemplate>
 

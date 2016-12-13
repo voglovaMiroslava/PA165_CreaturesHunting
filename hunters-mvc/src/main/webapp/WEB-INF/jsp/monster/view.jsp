@@ -7,44 +7,96 @@
 
 <my:pagetemplate title="Monster: ${monster.name}">
     <jsp:attribute name="body">
-        <button><my:a href="/monster/list">List of monsters</my:a></button>
-        <c:if test="${authenticatedUser.admin}">
-            <button><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
-            <form method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
-                <button type="submit">Delete</button>
-            </form>
-        </c:if>
-
-        <table>
+        <div style="height: 50px;text-align: right;">
+            <c:if test="${authenticatedUser.admin}">
+                <button style="display: inline-block;"><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
+                <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
+                    <button style="color: #028fcc;"type="submit">Delete monster</button>
+                </form>
+            </c:if>
+        </div>
+        <table width="100%">
             <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>height</th>
-                    <th>weight</th>
-                    <th>power</th>
-                    <th>location</th>
-                    <th>types</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>${monster.id}</td>
-                    <td><c:out value="${monster.name}"/></td>
-                    <td><c:out value="${monster.height}"/></td>
-                    <td><c:out value="${monster.weight}"/></td>
-                    <td><c:out value="${monster.power}"/></td>
-                    <td><c:out value="${monster.location.name}"/></td>
-                    <td><c:forEach items="${monster.types}" var="type">
-                            <c:out value="${type} /"/>
+            <th width="70%" />
+            <th width="5%"/>
+            <th/>
+        </thead>
+        <tr>
+            <td>
+                <div class="monster-view-div">
+                    <span class="monster-view-attrib">Id</span>
+                    <span>${monster.id}</span>
+                </div>
+                <div class="monster-view-div">
+                    <span class="monster-view-attrib">Name</span>
+                    <span>
+                        <c:out value="${monster.name}"/>
+                    </span>
+                </div> 
+                <div class="monster-view-div">
+                    <span class="monster-view-attrib">Dangerousness</span>
+                    <span>
+                        <c:out value="${monster.power}"/>
+                    </span>
+                </div>
+                <div class="monster-view-div">
+                    <span class="monster-view-attrib">Height</span>
+                    <span>
+                        <c:out value="${monster.height}"/>
+                    </span>
+                </div>
+                <div class="monster-view-div">
+                    <span class="monster-view-attrib">Weight</span>
+                    <span>
+                        <c:out value="${monster.weight}"/>
+                    </span>
+                </div>
+                <div>
+                    <span class="monster-view-attrib">Location</span>
+                    <table class="table table-hover" style="margin-left: 10px;">
+                        <thead>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th  style="width: 50px;"/>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><c:out value="${monster.location.name}"/></td>
+                                <td><c:out value="${monster.location.description}"/></td>
+                                <td><my:a href="/location/view/${monster.location.id}" title="View location details">
+                                        <button class="monster-button">VIEW</button></my:a>
+<!--                                    <a href="${pageContext.request.contextPath}/location/view/${monster.location.id}" title='View location details'>
+                                        <button class="monster-button">VIEW</button></a>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </td>
+            <td/>
+            <td style="display: block;">
+                <table class="table table-hover">
+                    <thead class="monster-thead">
+                    <th>Monster Types</th>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${monster.types}" var="type">
+                            <tr>
+                                <td><c:out value="${type}"/></td>
+                            </tr>
                         </c:forEach>
-                    </td>
-                </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="margin-top: 40px; display: block;text-align: center;">
 
-            </tbody>
-        </table>
+        <my:a href="/monster/list">
+            <button style="color: #333333;">Go back to list of monsters</button>
+        </my:a>
 
-        <br>
-
-    </jsp:attribute>
+        </div>
+</jsp:attribute>
 </my:pagetemplate>
