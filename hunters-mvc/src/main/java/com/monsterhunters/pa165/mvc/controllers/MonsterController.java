@@ -3,10 +3,13 @@ package com.monsterhunters.pa165.mvc.controllers;
 import com.monsterhunters.pa165.dto.LocationDTO;
 import com.monsterhunters.pa165.dto.MonsterCreateDTO;
 import com.monsterhunters.pa165.dto.MonsterDTO;
+import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import com.monsterhunters.pa165.facade.MonsterFacade;
+import static com.monsterhunters.pa165.mvc.controllers.UserController.AUTHENTICATED_USER;
 import com.monsterhunters.pa165.mvc.editors.LocationEditor;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +47,11 @@ public class MonsterController {
         binder.registerCustomEditor(LocationDTO.class, new LocationEditor(locationFacade));
     }
 
+    @ModelAttribute("authenticatedUser")
+    public UserDTO getUser(HttpServletRequest request) {
+        return (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         LOG.debug("[mvc] getting list of all monsters");
@@ -59,7 +67,10 @@ public class MonsterController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newMonster(Model model) {
+    public String newMonster(Model model, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         LOG.debug("[mvc] getting form for new monster");
         model.addAttribute("monsterToCreate", new MonsterCreateDTO());
         prepateModelForMonsterForm(model);
@@ -67,7 +78,10 @@ public class MonsterController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String delete(@PathVariable long id, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable long id, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         LOG.debug("[mvc] deleting monster with id " + id);
         MonsterDTO monster = monsterFacade.findById(id);
         monsterFacade.deleteMonster(id);
@@ -76,8 +90,10 @@ public class MonsterController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("monsterToCreate") MonsterCreateDTO formMonster, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+    public String create(@Valid @ModelAttribute("monsterToCreate") MonsterCreateDTO formMonster, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         LOG.debug("[mvc] creating new monster", formMonster);
         if (bindingResult.hasErrors()) {
             prepateModelForMonsterForm(model);
@@ -90,7 +106,10 @@ public class MonsterController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editMonster(@PathVariable Long id, Model model) {
+    public String editMonster(@PathVariable Long id, Model model, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         LOG.debug("[mvc] getting form for editing monster");
         MonsterDTO monster = monsterFacade.findById(id);
         model.addAttribute("monsterToUpdate", monster);
@@ -100,7 +119,10 @@ public class MonsterController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String create(@PathVariable Long id, @Valid @ModelAttribute("monsterToUpdate") MonsterDTO formMonster, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
         LOG.debug("[mvc] updating monster with id " + id);
         if (bindingResult.hasErrors()) {
             prepateModelForMonsterForm(model);
