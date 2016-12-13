@@ -183,6 +183,7 @@ public class WeaponFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         monster.setName("Drako");
         monster.setTypes(monsterTypes);
         monster.setPower(100);
+        monster.setLocationId(5l);
         monsterFacade.createMonster(monster);
 
         List<MonsterDTO> killableMonsters = weaponFacade.getKillableMonsters(id);

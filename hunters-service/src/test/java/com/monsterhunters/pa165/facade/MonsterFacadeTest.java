@@ -59,6 +59,7 @@ public class MonsterFacadeTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testCreateMonster() {
         MonsterCreateDTO m = new MonsterCreateDTO();
+        m.setLocationId(2l);
         monsterFacade.createMonster(m);
         verify(monsterDao).create(any(Monster.class));
     }
