@@ -10,28 +10,28 @@
         <form:form method="post" action="${pageContext.request.contextPath}/monster/create" modelAttribute="monsterToCreate" style="margin-left:10px; width: 100%">
             <div class="monster-form-group">
                 <div class="monster-input-error">
-                    <form:errors path="name" cssClass="help-block"/>
+                    <form:errors path="name"/>
                 </div>
                 <form:label path="name" cssClass="monster-view-attrib">Name</form:label>
                 <form:input path="name" cssClass="monster-input"/>
             </div>
             <div class="monster-form-group">
                 <div class="monster-input-error">
-                    <form:errors path="height" cssClass="help-block"/>
+                    <form:errors path="height"/>
                 </div>
                 <form:label path="height" cssClass="monster-view-attrib">Height</form:label>
                 <form:input path="height" cssClass="monster-input"/>
             </div>
             <div class="monster-form-group">
                 <div class="monster-input-error">
-                    <form:errors path="weight" cssClass="error"/>
+                    <form:errors path="weight"/>
                 </div>
                 <form:label path="weight" cssClass="monster-view-attrib">Weight </form:label>
                 <form:input path="weight" cssClass="monster-input"/>
             </div>
             <div class="monster-form-group">
                 <div class="monster-input-error">
-                    <form:errors path="power" cssClass="error"/>
+                    <form:errors path="power"/>
                 </div>
                 <form:label path="power" cssClass="monster-view-attrib">Power</form:label>
                 <form:input path="power" cssClass="monster-input"/>
@@ -44,7 +44,7 @@
             </div>
             <div class="monster-form-group">
                 <div class="monster-input-error">
-                    <form:errors path="types" cssClass="error"/>
+                    <form:errors path="types"/>
                 </div>
                 <form:label path="types" cssClass="monster-view-attrib">Monster types</form:label>
                 <div/>
