@@ -55,7 +55,7 @@
                         </div>
                         <div class="service-info">
                             <h3>Weapon</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+                            <p>Find out which weapon is best for you.</p>
                         </div>
                     </div>
 
