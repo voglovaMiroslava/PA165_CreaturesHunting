@@ -1007,6 +1007,20 @@ ul.address {
     height: 100%;
 }
 
+.monster-input{
+    display: inline-block;
+    padding: 5px;
+    width: 70%
+}
+
+.monster-input-error{
+    display: block;
+    padding-top: 14px;
+    padding-left: 5px;
+    width: 80%;
+    color: darkred;
+}
+
 .monster-view-div{
     border-color: rgba(0,0,0,.075);
     border-bottom-style: groove;
@@ -1014,5 +1028,23 @@ ul.address {
     padding: 0px;
 }
 
+.monster-form-group{
+    margin-bottom: 15px;
+}
 
+.monster-select{
+    height: 35px;
+    min-width: 15%;
+    padding-left: 5px;
+}
 
+.monster-checkbox{
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.monster-checkbox label{
+    margin-right: 10px;
+    margin-left: 2px;
+}

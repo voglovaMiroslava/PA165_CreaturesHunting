@@ -9,7 +9,7 @@
     <jsp:attribute name="body">
         <div style="height: 50px;text-align: right;">
             <c:if test="${authenticatedUser.admin}">
-                <button style="display: inline-block;"><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
+                <my:a href="/monster/edit/${monster.id}"><button style="display: inline-block;">Edit monster</button></my:a>
                 <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
                     <button style="color: #028fcc;"type="submit">Delete monster</button>
                 </form>
@@ -42,13 +42,13 @@
                 <div class="monster-view-div">
                     <span class="monster-view-attrib">Height</span>
                     <span>
-                        <c:out value="${monster.height}"/>
+                        <c:out value="${monster.height == null ? 'Not known' : monster.height}"/>
                     </span>
                 </div>
                 <div class="monster-view-div">
                     <span class="monster-view-attrib">Weight</span>
                     <span>
-                        <c:out value="${monster.weight}"/>
+                        <c:out value="${monster.weight == null ? 'Not known' : monster.weight}"/>
                     </span>
                 </div>
                 <div>
@@ -57,16 +57,16 @@
                         <thead>
                         <th>Name</th>
                         <th>Description</th>
-                        <th  style="width: 50px;"/>
+                        <th style="width: 50px;"/>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><c:out value="${monster.location.name}"/></td>
                                 <td><c:out value="${monster.location.description}"/></td>
-                                <td><my:a href="/location/view/${monster.location.id}" title="View location details">
-                                        <button class="monster-button">VIEW</button></my:a>
-<!--                                    <a href="${pageContext.request.contextPath}/location/view/${monster.location.id}" title='View location details'>
-                                        <button class="monster-button">VIEW</button></a>-->
+                                <td>
+                                    <my:a href="/location/view/${monster.location.id}" title="View location details">
+                                        <button class="monster-button">VIEW</button>
+                                    </my:a>
                                 </td>
                             </tr>
                         </tbody>
