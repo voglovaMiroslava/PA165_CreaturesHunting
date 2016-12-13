@@ -11,11 +11,11 @@
         <section class="content wow fadeInDown animated">
             <img alt="monster" src="/pa165/static/dist/img/creepy-monster.png" style="width: 220px;">
             <c:if test="${authenticatedUser.admin}">
-                    <div class="input-group input-group-sm monster-add-button">
-                        <a href="/pa165/monster/new/">
-                            <button type="button" class="btn btn-info btn-flat" title="Add new monster"><span class="glyphicon glyphicon-plus"></span></button>
-                        </a>
-                    </div>
+                <div class="input-group input-group-sm monster-add-button">
+                    <a href="/pa165/monster/new/">
+                        <button type="button" class="btn btn-info btn-flat" title="Add new monster"><span class="glyphicon glyphicon-plus"></span></button>
+                    </a>
+                </div>
             </c:if>
             <div class="row">
                 <div class="col-xs-12">
@@ -27,10 +27,7 @@
                                 <th>Name</th>
                                 <th>Location</th>
                                 <th>Dangerousness</th>
-                                <th></th>
-                                    <c:if test="${authenticatedUser.admin}">
-                                    <th></th>
-                                    </c:if>
+                                <th colspan="${authenticatedUser.admin ? 2 : 1}"/>
                                 </thead>
                                 <tbody>
                                     <c:forEach items="${monsters}" var="monster">
@@ -60,7 +57,8 @@
 
                                         </tr>
                                     </c:forEach>
-                                </tbody></table>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
