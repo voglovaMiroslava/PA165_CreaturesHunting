@@ -44,7 +44,7 @@
                                             <div class="center">
 
                                                 <a href="${pageContext.request.contextPath}/weapon/view/${bestWeapon.id}" title='View best Weapon'>
-                                                    <button style="display:inline; border:0;" class="fa fa-shield"></button></a>
+                                                    <button style="display:inline; border:0; background-color: transparent" class="fa fa-shield"></button></a>
 
                                             </div>
                                         </td>
@@ -53,7 +53,7 @@
                                         <td class="actions">
                                             <div class="center">
                                                 <a href="${pageContext.request.contextPath}/location/${location.id}/comment/new/" title='Add comment'>
-                                                    <button style="display:inline; border:0;" class="fa fa-pencil"></button></a>
+                                                    <button style="display:inline; border:0; background-color: transparent" class="fa fa-pencil"></button></a>
                                             </div>
                                         </td>
                                     </c:if>
@@ -61,14 +61,14 @@
                                         <td class="actions">
                                             <div class="center">
                                                 <a href="${pageContext.request.contextPath}/location/edit/${location.id}" title='Edit location'>
-                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-edit"></button></a>
+                                                    <button style="display:inline; border:0;float: left; background-color: transparent" class="glyphicon glyphicon-edit"></button></a>
                                             </div>
                                         </td>
                                         <td class="actions">
                                             <div class="center">
                                                 <a href="#" title='Remove location' class="removeItem">
                                                     <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/location/delete/${location.id}">
-                                                        <button style="border:0" class="glyphicon glyphicon-trash"></button>
+                                                        <button style="border:0; background-color: transparent" class="glyphicon glyphicon-trash"></button>
                                                     </form>
                                                 </a>
                                             </div>
@@ -95,10 +95,9 @@
                                                 <td><c:out value="${monster.id}"/></td>
                                                 <td><c:out value="${monster.name}"/></td>
                                                 <td class="actions">
-                                                <td class="actions">
                                                     <div class="center">
                                                         <a href="${pageContext.request.contextPath}/monster/view/${monster.id}" title='View details'>
-                                                            <button style="display:inline; border:0;" class="glyphicon glyphicon-eye-open"></button></a>
+                                                            <button style="display:inline; border:0; background-color: transparent" class="glyphicon glyphicon-eye-open"></button></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -133,7 +132,7 @@
                                                         <div class="center">
                                                             <a href="#" title='Remove comment' class="removeItem">
                                                                 <form method="post" action="${pageContext.request.contextPath}/location/${location.id}/comment/delete/${comment.id}">
-                                                                    <button style="display:inline; border:0;float: left" class="glyphicon glyphicon-trash"></button>
+                                                                    <button style="display:inline; border:0;float: left; background-color: transparent" class="glyphicon glyphicon-trash"></button>
                                                                 </form>
                                                             </a>
                                                         </div>
@@ -153,7 +152,7 @@
                 <!--                <form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
                 <center>
                     <a href="${pageContext.request.contextPath}/location/list" title='Go to list of locations'>
-                        <button style="display:inline; border:0;" class="glyphicon glyphicon-backward"> Back to Locations</button></a>
+                        <button style="display:inline; border:0; background-color: transparent" class="glyphicon glyphicon-backward"> Back to Locations</button></a>
                 </center>
         </section>
 
