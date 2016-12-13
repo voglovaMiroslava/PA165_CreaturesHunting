@@ -32,7 +32,7 @@
                     <td><c:out value="${user.admin}"/></td>
                 </tr>
             </tbody>
-        </table>     
+        </table>
         <a href="${pageContext.request.contextPath}/user/changePassword" title='Save it'>
             <button class="btn btn-info btn-flat">Change Password</button></a>
 
