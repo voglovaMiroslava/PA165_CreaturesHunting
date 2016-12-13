@@ -8,12 +8,12 @@
 <my:pagetemplate title="Monster: ${monster.name}">
     <jsp:attribute name="body">
         <div style="height: 50px;text-align: right;">
-        <c:if test="${authenticatedUser.admin}">
-            <button style="display: inline-block;"><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
-            <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
-                <button style="color: #028fcc;"type="submit">Delete monster</button>
-            </form>
-        </c:if>
+            <c:if test="${authenticatedUser.admin}">
+                <button style="display: inline-block;"><my:a href="/monster/edit/${monster.id}">Edit monster</my:a></button>
+                <form style="display: inline-block;" method="post" action="${pageContext.request.contextPath}/monster/delete/${monster.id}">
+                    <button style="color: #028fcc;"type="submit">Delete monster</button>
+                </form>
+            </c:if>
         </div>
         <table width="100%">
             <thead>
@@ -63,8 +63,11 @@
                             <tr>
                                 <td><c:out value="${monster.location.name}"/></td>
                                 <td><c:out value="${monster.location.description}"/></td>
-                                <td><a href="${pageContext.request.contextPath}/location/view/${monster.location.id}" title='View location details'>
-                                        <button class="monster-button">VIEW</button></a></td>
+                                <td><my:a href="/location/view/${monster.location.id}" title="View location details">
+                                        <button class="monster-button">VIEW</button></my:a>
+<!--                                    <a href="${pageContext.request.contextPath}/location/view/${monster.location.id}" title='View location details'>
+                                        <button class="monster-button">VIEW</button></a>-->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -89,9 +92,11 @@
         </tr>
     </table>
     <div style="margin-top: 40px; display: block;text-align: center;">
-        <button style="color: #333333;">
-            <my:a href="/monster/list">Go back to list of monsters</my:a>
-        </button>
-    </div>
+
+        <my:a href="/monster/list">
+            <button style="color: #333333;">Go back to list of monsters</button>
+        </my:a>
+
+        </div>
 </jsp:attribute>
 </my:pagetemplate>
