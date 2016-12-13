@@ -14,28 +14,28 @@
              <div class="row">
                 <button style="float:right; margin: 10px" class="glyphicon glyphicon-floppy-disk btn" type="submit"></button>
              </div>
-            <div>
+            <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="name" cssClass="control-label" >Name</form:label>
                 <div>
                     <form:input path="name" cssClass="form-control" value="${weaponUpdate.name}"/>
                     <form:errors path="name" cssClass="help-block"/>
                 </div>
             </div>
-            <div>
+            <div class="form-group ${ammo_error?'has-error':''}">
                 <form:label path="ammo" cssClass="control-label">Ammo</form:label>
                 <div>
                     <form:input path="ammo" cssClass="form-control" value="${weaponUpdate.ammo}"/>
                     <form:errors path="ammo" cssClass="help-block"/>
                 </div>
             </div>
-            <div>
+            <div class="form-group ${gunReach_error?'has-error':''}">
                 <form:label path="gunReach" cssClass="control-label">Gun reach</form:label>
                 <div>
                     <form:input path="gunReach" cssClass="form-control" value="${weaponUpdate.gunReach}"/>
                     <form:errors path="gunReach" cssClass="help-block"/>
                 </div>
             </div>
-            <div>
+            <div class="form-group ${damage_error?'has-error':''}">
                 <form:label path="damage" cssClass="control-label">Damage</form:label>
                 <div>
                     <form:input path="damage" cssClass="form-control" value="${weaponUpdate.damage}"/>
