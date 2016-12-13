@@ -7,10 +7,8 @@
 
 <my:pagetemplate title="Edit monster">
     <jsp:attribute name="body">
-
         <form:form method="post" action="${pageContext.request.contextPath}/monster/update/${monsterToUpdate.id}"
                    modelAttribute="monsterToUpdate" cssClass="form-horizontal">
-
             <div>
                 <form:label path="name" cssClass="control-label">Name</form:label>
                     <div>

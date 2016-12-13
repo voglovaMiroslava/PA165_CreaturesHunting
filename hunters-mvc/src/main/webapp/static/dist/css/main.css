@@ -979,4 +979,25 @@ ul.address {
 
 /*Presets*/
 
+.monster-button{
+    display: inline;
+    border: 0;
+    background-color: #01c0ef;
+    color: white;
+    font-weight: bold;
+}
+
+.monster-thead{
+    background-color: #222222;
+    color: #9d9d9d;
+}
+
+.monster-add-button{
+    display: block;
+    text-align: right;
+    padding-bottom: inherit;
+    margin-top: -50px;
+}
+
+
 
