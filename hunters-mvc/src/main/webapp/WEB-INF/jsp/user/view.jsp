@@ -33,10 +33,12 @@
             </tr>
         </tbody>
     </table>
-    <button><my:a href="/user/changePassword" >
-        <span aria-hidden="true"></span>
-        Change Password
-    </my:a></button>
+    <button>
+        <my:a href="/user/changePassword" >
+            <span aria-hidden="true"></span>
+            Change Password
+        </my:a>
+    </button>
 
 
 </jsp:attribute>
