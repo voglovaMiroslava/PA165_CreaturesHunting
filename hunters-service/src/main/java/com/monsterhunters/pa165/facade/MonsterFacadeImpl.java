@@ -6,6 +6,7 @@ import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.entity.Location;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.service.LocationService;
 import com.monsterhunters.pa165.service.MappingService;
 import com.monsterhunters.pa165.service.MonsterService;
 import java.util.List;
@@ -27,14 +28,18 @@ public class MonsterFacadeImpl implements MonsterFacade {
 
     @Autowired
     private MonsterService monsterService;
+    
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private MappingService mappingService;
 
     @Override
     public Long createMonster(MonsterCreateDTO m) {
-        Monster monster = mappingService.mapTo(m, Monster.class);
-        monster = monsterService.createMonster(monster);
+        Monster mappedMonster = mappingService.mapTo(m, Monster.class);
+        mappedMonster.setLocation(locationService.findById(m.getLocationId()));
+        Monster monster = monsterService.createMonster(mappedMonster);
         return monster.getId();
     }
 

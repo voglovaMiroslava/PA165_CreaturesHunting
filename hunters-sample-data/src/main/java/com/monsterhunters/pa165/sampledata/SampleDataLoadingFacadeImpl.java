@@ -83,6 +83,36 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         novot.addComment(novotComment);
         dulov.addComment(dulovCommnet);
 
+        Monster drake = monster("Waterly Dragon", 290.0, 450.9, 120, mutne, new HashSet<MonsterType>() {
+            {
+                add(MonsterType.FAIRY);
+                add(MonsterType.DRAGON);
+                add(MonsterType.WATER);
+            }
+        });
+
+        Monster mug = monster("Tiny mug", 0.15, 7.4, 26, dulov, new HashSet<MonsterType>() {
+            {
+                add(MonsterType.UNDEAD);
+                add(MonsterType.GROUND);
+                add(MonsterType.FLYING);
+            }
+        });
+
+        Monster fly = monster("Serial killer", 4.35, 0.6, 240, novot, new HashSet<MonsterType>() {
+            {
+                add(MonsterType.HYPNOTIC);
+                add(MonsterType.LIGHTNING);
+                add(MonsterType.FIRE);
+                add(MonsterType.FLYING);
+            }
+        });
+
+        Monster zombie = monster("Standard zombie", 170.6, 75.2, 37, novot, new HashSet<MonsterType>() {
+            {
+                add(MonsterType.UNDEAD);
+            }
+        });
     }
 
     private static Date toDate(int year, int month, int day) {
@@ -135,4 +165,17 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         locationService.createLocation(location);
         return location;
     }
+
+    private Monster monster(String name, Double height, Double weight, int power, Location loc, Set<MonsterType> types) {
+        Monster monster = new Monster();
+        monster.setName(name);
+        monster.setHeight(height);
+        monster.setWeight(weight);
+        monster.setPower(power);
+        monster.setLocation(loc);
+        monster.setTypes(types);
+        monsterService.createMonster(monster);
+        return monster;
+    }
+
 }

@@ -29,8 +29,9 @@ public class MonsterCreateDTO {
     private int power;
     
     @NotNull
-    private LocationDTO location;
+    private Long locationId;
     
+    @NotNull
     private Set<MonsterType> types = new HashSet<>();
    
     public String getName() {
@@ -65,16 +66,16 @@ public class MonsterCreateDTO {
         this.power = power;
     }
 
-    public LocationDTO getLocation() {
-        return location;
+    public Long getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(LocationDTO location) {
-        this.location = location;
+    public void setLocationId(Long location_id) {
+        this.locationId = location_id;
     }
 
     public Set<MonsterType> getTypes() {
-        return Collections.unmodifiableSet(types);
+        return types;
     }
 
     public void setTypes(Set<MonsterType> types) {
@@ -88,7 +89,7 @@ public class MonsterCreateDTO {
         hash = 29 * hash + Objects.hashCode(this.height);
         hash = 29 * hash + Objects.hashCode(this.weight);
         hash = 29 * hash + this.power;
-        hash = 29 * hash + Objects.hashCode(this.location);
+        hash = 29 * hash + Objects.hashCode(this.locationId);
         hash = 29 * hash + Objects.hashCode(this.types);
         return hash;
     }
@@ -117,7 +118,7 @@ public class MonsterCreateDTO {
         if (!Objects.equals(this.weight, other.weight)) {
             return false;
         }
-        if (!Objects.equals(this.location, other.location)) {
+        if (!Objects.equals(this.locationId, other.locationId)) {
             return false;
         }
         return Objects.equals(this.types, other.types);
