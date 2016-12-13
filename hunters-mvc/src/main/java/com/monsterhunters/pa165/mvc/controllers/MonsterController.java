@@ -6,8 +6,7 @@ import com.monsterhunters.pa165.dto.MonsterDTO;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import com.monsterhunters.pa165.facade.MonsterFacade;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.monsterhunters.pa165.mvc.editors.LocationEditor;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,11 @@ public class MonsterController {
 
     @Autowired
     private LocationFacade locationFacade;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) throws Exception {
+        binder.registerCustomEditor(LocationDTO.class, new LocationEditor(locationFacade));
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
@@ -109,11 +115,7 @@ public class MonsterController {
     }
 
     private void prepateModelForMonsterForm(Model model) {
-        Map<Long, String> locations = new LinkedHashMap<>();
-        for (LocationDTO loc : locationFacade.getAllLocations()) {
-            locations.put(loc.getId(), loc.getName());
-        }
-        model.addAttribute("locationList", locations);
+        model.addAttribute("locationList", locationFacade.getAllLocations());
         model.addAttribute("monsterTypes", MonsterType.values());
     }
 }

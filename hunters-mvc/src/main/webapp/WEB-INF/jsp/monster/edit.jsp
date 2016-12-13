@@ -42,7 +42,9 @@
             <div>
                 <form:label path="location" cssClass="control-label">location</form:label>
                     <div>
-                    <form:select path="location" items="${locationList}" title="${monsterToUpdate.location.name}"/>
+                    <form:select path="location">
+                        <form:options items="${locationList}" itemLabel="name" itemValue="id"/>
+                    </form:select>
                     <form:errors path="location" cssClass="help-block"/>
                 </div>
             </div>

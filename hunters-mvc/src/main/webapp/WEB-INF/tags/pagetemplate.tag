@@ -88,10 +88,10 @@
                             <a href="${pageContext.request.contextPath}/location/list">Location</a>
                         </li>
                         <li>
-                            <a href="${pageContext.request.contextPath}/weapon/list"">Weapon</a>
+                            <a href="${pageContext.request.contextPath}/weapon/list">Weapon</a>
                         </li>
                         <li>
-                            <a href="#">Monster</a>
+                            <a href="${pageContext.request.contextPath}/monster/list">Monster</a>
                         </li>
                         <li>
                             <a href="#">Comment</a>

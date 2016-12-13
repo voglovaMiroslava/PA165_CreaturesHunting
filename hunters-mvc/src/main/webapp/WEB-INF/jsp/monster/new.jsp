@@ -42,12 +42,15 @@
                             </div>
                             <div class="form-group">
                                 <form:label path="locationId" cssClass="control-label">Location</form:label>
-                                <form:select path="locationId" items="${locationList}"/>
+                                <form:select path="locationId">
+                                    <form:options items="${locationList}" itemLabel="name" itemValue="id"/>
+                                </form:select>
                             </div>
                             <div class="form-group">
                                 <form:label path="types" cssClass="control-label">monsterTypes</form:label>
                                     <div>
                                     <form:checkboxes path="types" items="${monsterTypes}" />
+                                    <form:errors path="types" cssClass="help-block"/>
                                 </div>
                             </div>
                             <div class="box-footer">
