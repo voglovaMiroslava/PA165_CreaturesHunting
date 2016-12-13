@@ -13,7 +13,7 @@
                 <div class="col-xs-12">
                     <div style="border-top:0"class="box">
                         <div class="box-header">
-                            <h2 class="box-title">Location List</h2>
+                            <!--<h2 class="box-title"></h2>-->
                         </div>
                         <table class="table table-hover">
                             <caption>Details</caption>
@@ -22,7 +22,7 @@
                                     <th>Id</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <c:if test="${hasBestWeapon == true}">
+                                    <c:if test="${not empty bestWeapon}">
                                         <th>Best Weapon</th>
                                     </c:if>
                                     <c:if test="${not empty authenticatedUser}">
@@ -39,7 +39,7 @@
                                     <td>${location.id}</td>
                                     <td><c:out value="${location.name}"/></td>
                                     <td><c:out value="${location.description}"/></td>
-                                    <c:if test="${hasBestWeapon == true}">
+                                    <c:if test="${not empty bestWeapon}">
                                         <td class="actions">
                                             <div class="center">
 

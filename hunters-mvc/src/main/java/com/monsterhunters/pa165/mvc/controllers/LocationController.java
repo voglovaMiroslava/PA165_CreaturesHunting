@@ -55,7 +55,11 @@ public class LocationController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         log.debug("list of locations");
+        try {
         model.addAttribute("locations", locationFacade.getAllLocations());
+        } catch (HuntersServiceException ex) {
+            return "/404";
+        }
         return "location/list";
     }
 
@@ -70,10 +74,14 @@ public class LocationController {
 //        else {
 //            model.addAttribute("hasBestWeapon", false);
 //        }
+        try {
+        model.addAttribute("bestWeapon", locationFacade.getBestWeapon(id));
         model.addAttribute("location", locationFacade.getLocationById(id));
         model.addAttribute("monsters", locationFacade.getMonsters(id));
         model.addAttribute("comments", locationFacade.getComments(id));
-
+        } catch (HuntersServiceException ex) {
+            return "/404";
+        }
         return "location/view";
     }
 
@@ -121,23 +129,16 @@ public class LocationController {
         log.debug("update(locationUpdate={})", formBean);
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
-            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                log.trace("ObjectError: {}", ge);
-            }
-            for (FieldError fe : bindingResult.getFieldErrors()) {
-                model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
-            }
             return "location/edit";
         }
-        //create product
+        //create location
         try {
             id = locationFacade.updateLocation(formBean);
             log.debug("id of updated location", id);
             //report success
             redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was updated");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
-        } catch (Exception ex) {
+        } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
             return "location/edit";
         }
@@ -173,18 +174,11 @@ public class LocationController {
         }
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
-            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                log.trace("ObjectError: {}", ge);
-            }
-            for (FieldError fe : bindingResult.getFieldErrors()) {
-                model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
-            }
             model.addAttribute("locationId", id);
             return "/location/comment/new";
         }
         try {
-            //create product
+            //create comment
             Long cId = commentFacade.createComment(formBean);
             locationFacade.addComment(id, cId);
             //report success
@@ -204,23 +198,17 @@ public class LocationController {
         if (getUser(request) == null || getUser(request).isAdmin() == false) {
             return "/403";
         }
-        //in case of validation error forward back to the the form
+//        in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
-            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                log.trace("ObjectError: {}", ge);
-            }
-            for (FieldError fe : bindingResult.getFieldErrors()) {
-                model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
-            }
+            return "/location/new";
         }
-        //create product
+        //create location
         try {
             Long id = locationFacade.createLocation(formBean);
             //report success
             redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was created");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
-        } catch (Exception ex) {
+        } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
             return "location/new";
         }

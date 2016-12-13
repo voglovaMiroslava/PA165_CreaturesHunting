@@ -42,18 +42,22 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location createLocation(Location location) throws HuntersServiceException {
-        if (locationDao.create(location)) {
+        try {     
+            if(!locationDao.create(location))
+                throw new HuntersServiceException("Location with id: " + location.getId() + " and name: " + location.getName() + " already exists.");
             return location;
-        } else {
+        } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot create location with id: " + location.getId() + " and name: " + location.getName());
         }
     }
 
     @Override
     public boolean deleteLocation(Location location) throws HuntersServiceException {
-        if (locationDao.delete(location)) {
+        try {
+        if (!locationDao.delete(location)) 
+            throw new HuntersServiceException("Location not exists, cannot be deleted.");
             return true;
-        } else {
+        } catch (Throwable ex) {
             throw new HuntersServiceException("Cannot delete location with id: " + location.getId() + " and name: " + location.getName());
         }
     }
