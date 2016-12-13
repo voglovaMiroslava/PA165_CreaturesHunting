@@ -17,11 +17,11 @@
                     <form:input path="content" cssClass="form-control"/>
                     <form:errors path="content" cssClass="help-block"/>
                 </div>
-                <input type="hidden" id="userId" name="userId" value="${userId}">
+                <input type="hidden" id="userId" name="userId" value="${authenticatedUser.id}">
 
             </div>
             <div class="row">
-                <button style="float:right; margin: 10px;" class="glyphicon glyphicon-floppy-disk btn btn-primary" type="submit"></button>
+                <button style="float:left; margin: 10px;" class="glyphicon glyphicon-floppy-disk btn btn-primary" title="Save comment" type="submit"></button>
             </div>
 
         </form:form>

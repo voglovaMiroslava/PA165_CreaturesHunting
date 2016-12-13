@@ -7,13 +7,9 @@
 
 <my:pagetemplate title="New weapon">
     <jsp:attribute name="body">
-
+        <div class="container">
         <form:form method="post" action="${pageContext.request.contextPath}/weapon/create"
-                   modelAttribute="weaponCreate" cssClass="form-horizontal">
-            <div class="row">
-                <button style="float:right; margin: 10px" class="glyphicon glyphicon-floppy-disk btn"
-                        type="submit"></button>
-            </div>
+                   modelAttribute="weaponCreate" cssClass="form-horizontal" >
 
             <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="name" cssClass="control-label">Name</form:label>
@@ -57,9 +53,15 @@
                     </table>
                     <form:errors path="effectiveAgainst" cssClass="help-block"/>
                 </div>
-
+            </div>
+            <div class="row">
+                <button style="float:left; margin: 10px;" title="Save new weapon"
+                        class="btn-primary btn" type="submit">
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="false"></span> Save weapon
+                </button>
             </div>
 
         </form:form>
+        </div>
     </jsp:attribute>
 </my:pagetemplate>

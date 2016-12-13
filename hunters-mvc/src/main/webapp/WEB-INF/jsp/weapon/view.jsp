@@ -9,21 +9,21 @@
 <fmt:message var="title" key="weapon.view.title"><fmt:param value="${weapon.name}"/></fmt:message>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <div class="row">
-            <%--<form style="float:right; margin: 10px" method="post" action="${pageContext.request.contextPath}/weapon/delete/${weapon.id}">--%>
-            <%--<button class="glyphicon glyphicon-trash btn" type="submit" ></button>--%>
-            <%--</form>--%>
-        <button style="float:right; margin: 10px" class="glyphicon glyphicon-trash btn"
-                onclick=" openModal(${weapon.id}) ">
-        </button>
-        <button style="float:right; margin: 10px" class="glyphicon glyphicon-edit btn"
-                onclick="location.href='${pageContext.request.contextPath}/weapon/edit/${weapon.id}'">
-        </button>
 
-        <button style="float:right; margin: 10px" class="glyphicon glyphicon-list btn"
+    <div class="row">
+        <c:if test="${authenticatedUser.isAdmin()}">
+            <button style="float:right; margin: 10px" class="glyphicon glyphicon-trash " title='Delete weapon'
+                    onclick=" openModal(${weapon.id}) ">
+            </button>
+            <button style="float:right; margin: 10px" class="glyphicon glyphicon-edit" title='Edit weapon'
+                    onclick="location.href='${pageContext.request.contextPath}/weapon/edit/${weapon.id}'">
+            </button>
+        </c:if>
+        <button style="float:right; margin: 10px" class="glyphicon glyphicon-list" title='List of weapons'
                 onclick="location.href='${pageContext.request.contextPath}/weapon/list'">
         </button>
     </div>
+
     <%--Table with weapon stats--%>
     <table class="table">
         <thead>
@@ -57,17 +57,19 @@
         </tr>
         </tbody>
     </table>
+
     <%--Table of killable monsters--%>
-    <table class="table">
+    <table class="table-bordered table-hover" style="width:300px">
         <caption id="killableCaption">
-            <button id="showKillable" class="btn btn-primary" onclick="toggleTable()">
-                Show monsters that can be killed by "<c:out value="${weapon.name}"/>"
-            </button>
+            <button id="showKillable" class="btn btn-primary"
+                    onclick="toggleTable()">Hide monsters that can be killed</button>
         </caption>
-        <tbody id="killableBody" hidden>
+        <tbody id="killableBody">
         <c:forEach items="${killable}" var="monster">
             <tr>
-                <td>${monster.name}</td>
+                <td><a href="${pageContext.request.contextPath}/monster/view/${monster.id}">
+                <c:out value="${monster.name}"/></a>
+                </td>
             </tr>
         </c:forEach>
         <c:if test="${fn:length(killable) eq 0}">
@@ -78,40 +80,50 @@
         </tbody>
 
     </table>
-
     <br>
 
     <%--Add comment--%>
-    <button type="button" class="btn btn-default btn" style="float:right"
+    <c:if test="${not empty authenticatedUser}">
+    <button type="button" class="btn btn-default" style="float:right" title='Add comment for this weapon'
             onclick="location.href='${pageContext.request.contextPath}/weapon/${weapon.id}/comment/new'">
         <span class="glyphicon glyphicon-plus" aria-hidden="false"></span> Add Comment
     </button>
+    </c:if>
+    <c:if test="${empty authenticatedUser}">
+         <button type="button" class="btn btn-primary" style="float:right"
+                 onclick="location.href='${pageContext.request.contextPath}/user/login'">
+             LOGIN to add comment
+         </button>
+    </c:if>
+
+    <div class="container">
     <%--Table of comments--%>
-    <table class="table">
-        <caption>Comments</caption>
-        <thead>
-        <tr>
-            <th>User</th>
-            <th>Content</th>
-            <th style="float:right">Delete comment</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${weapon.comments}" var="comment">
+        <table class="table">
+            <caption><strong>Comments</strong></caption>
+            <thead>
             <tr>
-                <td><c:out value="${comment.user.nickname}"/></td>
-                <td><c:out value="${comment.content}"/></td>
-                <td>
-                    <button style="float:right; margin: 10px" class="glyphicon glyphicon-trash btn"
-                            onclick="openModal('comment_${comment.id}')">
-                    </button>
-                        <%--Modal for deleting comment--%>
-                        <my:modal suffix="comment_${comment.id}" title="Delete comment">
-                            <jsp:attribute name="body">
+                <th>User</th>
+                <th>Content</th>
+                <th style="float:right">Delete comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${weapon.comments}" var="comment">
+                <tr>
+                    <td><c:out value="${comment.user.nickname}"/></td>
+                    <td><c:out value="${comment.content}"/></td>
+                    <td>
+                        <c:if test="${authenticatedUser.isAdmin() or (authenticatedUser.id eq comment.user.id)}">
+                            <button style="float:right; margin: 10px" class="glyphicon glyphicon-trash btn-ls" title='Delete comment'
+                                    onclick="openModal('comment_${comment.id}')">
+                            </button>
+                                <%--Modal for deleting comment--%>
+                            <my:modal suffix="comment_${comment.id}" title="Delete comment">
+                                <jsp:attribute name="body">
                                 <strong>Do you really want to delete comment with id=<c:out value="${comment.id}"/>
-                                    written by user "<c:out value="${comment.user.nickname}"></c:out>"</strong>
-                            </jsp:attribute>
-                            <jsp:attribute name="footer">
+                                written by user "<c:out value="${comment.user.nickname}"></c:out>"</strong>
+                                </jsp:attribute>
+                                <jsp:attribute name="footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                                         onclick="closeModal('comment_${comment.id}')">Close
                                 </button>
@@ -120,13 +132,14 @@
                                     <input type="submit" class="btn btn-primary" value="Delete"/>
                                 </form>
                             </jsp:attribute>
-                        </my:modal>
-                </td>
-            </tr>
-           </c:forEach>
-        </tbody>
-    </table>
-
+                            </my:modal>
+                        </c:if>
+                    </td>
+                </tr>
+               </c:forEach>
+            </tbody>
+        </table>
+    </div>
     <%--Modal for deleting weapon--%>
     <my:modal suffix="${weapon.id}" title="Delete weapon">
         <jsp:attribute name="body">
@@ -157,9 +170,17 @@
     </script>
 
     <script>function toggleTable() {
-//        var tButton = document.getElementById("showKillable");
+        var tButton = document.getElementById("showKillable");
 //        var tCaption = document.getElementById("killableCaption");
         var tBody = document.getElementById("killableBody");
+        var buttonText = document.getElementById("showKillable").innerHTML;
+        if (buttonText=="Show monsters that can be killed"){
+            document.getElementById("showKillable").innerHTML="Hide monsters that can be killed";
+            location.reload();
+        }
+        if (buttonText=="Hide monsters that can be killed"){
+            document.getElementById("showKillable").innerHTML="Show monsters that can be killed";
+        }
         $(tBody).toggle();
     }</script>
 
