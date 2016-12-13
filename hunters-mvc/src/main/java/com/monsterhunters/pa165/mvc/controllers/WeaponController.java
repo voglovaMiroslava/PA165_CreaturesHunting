@@ -1,9 +1,6 @@
 package com.monsterhunters.pa165.mvc.controllers;
 
-import com.monsterhunters.pa165.dto.CommentCreateDTO;
-import com.monsterhunters.pa165.dto.CommentDTO;
-import com.monsterhunters.pa165.dto.WeaponCreateDTO;
-import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.dto.*;
 import com.monsterhunters.pa165.enums.MonsterType;
 import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.WeaponFacade;
@@ -20,7 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static com.monsterhunters.pa165.mvc.controllers.UserController.AUTHENTICATED_USER;
 
 /**
  * Created by babcang
@@ -144,7 +144,7 @@ public class WeaponController {
         model.addAttribute("commentCreate", new CommentCreateDTO());
         model.addAttribute("weaponId",id);
         //TODO change to get user id from loged user
-        model.addAttribute("userId",1L);
+//        model.addAttribute("userId",1L);
         return "/weapon/comment/new";
     }
 
@@ -164,7 +164,7 @@ public class WeaponController {
             }
             model.addAttribute("weaponId",id);
             //TODO also change automatic user id from authenticated user
-            model.addAttribute("userId",1L);
+//            model.addAttribute("userId",1L);
             return "/weapon/comment/new";
         }
 
@@ -172,7 +172,7 @@ public class WeaponController {
         Long commentId = commentFacade.createComment(formBean);
         weaponFacade.addComment(id, commentId);
         //report success
-        //redirectAttributes.addFlashAttribute("alert_success", "Comment was created and assigned to weapon");
+        redirectAttributes.addFlashAttribute("alert_success", "Comment was created and assigned to weapon");
         return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
     }
 
@@ -186,6 +186,11 @@ public class WeaponController {
         log.debug("deleteComment({})", cId);
         redirectAttributes.addFlashAttribute("alert_success", "Comment \"" + comment.getId() + "\" was deleted.");
         return "redirect:" + uriBuilder.path("/weapon/view/{id}").buildAndExpand(id).encode().toUriString();
+    }
+
+    @ModelAttribute("authenticatedUser")
+    public UserDTO getUser(HttpServletRequest request) {
+        return (UserDTO) request.getSession().getAttribute(AUTHENTICATED_USER);
     }
 
 }
