@@ -138,7 +138,7 @@ public class LocationController {
             //report success
             redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was updated");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
-        } catch (Exception ex) {
+        } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
             return "location/edit";
         }
@@ -208,7 +208,7 @@ public class LocationController {
             //report success
             redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was created");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
-        } catch (Exception ex) {
+        } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
             return "location/new";
         }
