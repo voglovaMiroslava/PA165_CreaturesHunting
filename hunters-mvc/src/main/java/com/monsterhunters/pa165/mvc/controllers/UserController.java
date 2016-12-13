@@ -1,6 +1,7 @@
 package com.monsterhunters.pa165.mvc.controllers;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
+import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
 import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
 import com.monsterhunters.pa165.facade.CommentFacade;
@@ -83,14 +84,7 @@ public class UserController {
                            UriComponentsBuilder uriBuilder,
                            HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                LOGGER.trace("ObjectError: {}", ge);
-            }
-            for (FieldError fe : bindingResult.getFieldErrors()) {
-                model.addAttribute(fe.getField() + "_error", true);
-                LOGGER.trace("FieldError: {}", fe);
-            }
-            return "user/login";
+            return bindingErrors(model, bindingResult, "user/login");
         }
         try {
             boolean result = userFacade.authenticateUser(formBean);
@@ -107,6 +101,49 @@ public class UserController {
             bindingResult.rejectValue("nickname", "error.nicknameDoesNotExists", "Please type correct nickname.");
             return "user/login";
         }
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+    public String changePassword(Model model) {
+        model.addAttribute("changePass", new UserChangePassDTO());
+        return "user/changePassword";
+    }
+
+    @RequestMapping(value = "/tryChangePassword", method = RequestMethod.POST)
+    public String tryChangePassword(Model model,
+                                    @Valid @ModelAttribute("changePass") UserChangePassDTO formBean,
+                                    BindingResult bindingResult,
+                                    RedirectAttributes redirectAttributes,
+                                    UriComponentsBuilder uriBuilder,
+                                    HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return bindingErrors(model, bindingResult, "user/changePassword");
+        }
+        try {
+            boolean result = userFacade.changePassword(formBean);
+            if(!result) {
+                bindingResult.rejectValue("oldPassword", "error.wrongNicknameOrPassword", "Authentication failed. Please type correct nickname/password");
+                return "user/changePassword";
+            }
+            redirectAttributes.addFlashAttribute("alert_success", "You have been logged in as " + formBean.getNickname() + ".");
+            LOGGER.debug("User logged in: " + formBean.getNickname());
+            return "redirect:/";
+        } catch (UserDoesNotExistsException e) {
+            LOGGER.trace("Login failed. Caused: ", e);
+            bindingResult.rejectValue("nickname", "error.nicknameDoesNotExists", "Please type correct nickname.");
+            return "user/changePassword";
+        }
+    }
+
+    private String bindingErrors(Model model, BindingResult bindingResult, String redirectString) {
+        for (ObjectError ge : bindingResult.getGlobalErrors()) {
+            LOGGER.trace("ObjectError: {}", ge);
+        }
+        for (FieldError fe : bindingResult.getFieldErrors()) {
+            model.addAttribute(fe.getField() + "_error", true);
+            LOGGER.trace("FieldError: {}", fe);
+        }
+        return redirectString;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
