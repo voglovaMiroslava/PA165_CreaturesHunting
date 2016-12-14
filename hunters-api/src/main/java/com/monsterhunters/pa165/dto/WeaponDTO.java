@@ -2,6 +2,9 @@ package com.monsterhunters.pa165.dto;
 
 import com.monsterhunters.pa165.enums.MonsterType;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -14,12 +17,17 @@ public class WeaponDTO {
 
     private Long id;
 
+    @NotNull
+    @Size(min = 2, max = 60)
     private String name;
 
+    @Min(0)
     private int gunReach;
 
+    @Min(0)
     private int ammo;
 
+    @Min(0)
     private int damage;
 
     private Set<MonsterType> effectiveAgainst = new HashSet<>();

@@ -1,5 +1,8 @@
 package com.monsterhunters.pa165.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Created by babcang on 17.11.2016.
  *
@@ -10,8 +13,11 @@ public class CommentDTO {
 
     private Long id;
 
+    @NotNull
     private UserDTO user;
 
+    @NotNull
+    @Size(min=5, max=400)
     private String content;
 
     public Long getId() {

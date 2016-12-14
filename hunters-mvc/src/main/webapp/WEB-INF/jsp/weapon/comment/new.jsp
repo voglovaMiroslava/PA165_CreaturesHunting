@@ -21,7 +21,10 @@
 
             </div>
             <div class="row">
-                <button style="float:left; margin: 10px;" class="glyphicon glyphicon-floppy-disk btn btn-primary" title="Save comment" type="submit"></button>
+                <button style="float:left; margin: 10px;" title="Save new weapon"
+                        class="btn-primary btn" type="submit">
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="false"></span> Save comment
+                </button>
             </div>
 
         </form:form>
