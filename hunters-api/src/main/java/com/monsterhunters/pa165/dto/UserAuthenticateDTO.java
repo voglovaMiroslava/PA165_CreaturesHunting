@@ -1,11 +1,15 @@
 package com.monsterhunters.pa165.dto;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Snurka on 11/20/2016.
  */
 public class UserAuthenticateDTO {
 
+    @NotNull
     private String nickname;
+    @NotNull
     private String password;
 
     public String getNickname() {

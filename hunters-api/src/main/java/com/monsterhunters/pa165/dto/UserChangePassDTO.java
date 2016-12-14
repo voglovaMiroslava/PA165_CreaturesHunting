@@ -8,9 +8,10 @@ import javax.validation.constraints.Size;
  */
 public class UserChangePassDTO {
 
+    @NotNull
     private String nickname;
+    @NotNull
     private String oldPassword;
-
     @NotNull
     @Size(min = 7, max = 20)
     // just overkill for this app
