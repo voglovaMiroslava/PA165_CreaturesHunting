@@ -97,12 +97,6 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/monster/list">Monster</a>
                 </li>
-                <li>
-                    <a href="#">Comment</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
                 <c:if test="${not empty authenticatedUser && authenticatedUser.admin}">
                     <li>
                         <a href="${pageContext.request.contextPath}/user/list">User list</a>
@@ -136,11 +130,28 @@
     <!-- /.container -->
 </nav>
 
+
 <!-- page title -->
 <c:if test="${not empty title}">
     <div class="page-header">
         <h1><c:out value="${title}"/></h1>
     </div>
+</c:if>
+
+<!-- alerts -->
+<c:if test="${not empty alert_danger}">
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <c:out value="${alert_danger}"/></div>
+</c:if>
+<c:if test="${not empty alert_info}">
+    <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
+</c:if>
+<c:if test="${not empty alert_success}">
+    <div class="alert alert-success" role="alert"><c:out value="${alert_success}"/></div>
+</c:if>
+<c:if test="${not empty alert_warning}">
+    <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
 </c:if>
 
 <!-- page body -->
