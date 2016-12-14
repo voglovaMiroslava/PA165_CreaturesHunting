@@ -17,9 +17,9 @@
                         </div>
                         <table class="table table-hover">
                             <caption>Details</caption>
-                            <thead>
+                            <thead class="monster-thead">
                                 <tr>
-                                    <th>Id</th>
+                                    <th>#</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <c:if test="${not empty bestWeapon}">
@@ -84,8 +84,9 @@
                                     <caption>Monsters</caption>
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>#</th>
                                             <th>Name</th>
+                                            <th>Dangerousness</th>
                                             <th>Detail</th>
                                         </tr>
                                     </thead>
@@ -94,6 +95,7 @@
                                             <tr>
                                                 <td><c:out value="${monster.id}"/></td>
                                                 <td><c:out value="${monster.name}"/></td>
+                                                <td><c:out value="${monster.power}"/></td>
                                                 <td class="actions">
                                                     <div class="center">
                                                         <a href="${pageContext.request.contextPath}/monster/view/${monster.id}" title='View details'>

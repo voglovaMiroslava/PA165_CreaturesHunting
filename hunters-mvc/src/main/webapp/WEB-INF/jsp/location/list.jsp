@@ -35,7 +35,7 @@
                         <div class="box-body table-responsive no-padding">
 
                             <table class="table table-hover">
-                                <tbody><tr>
+                                <thead class="monster-thead">
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Description</th>
@@ -43,7 +43,8 @@
                                             <c:if test="${authenticatedUser.isAdmin()==true}">
                                             <th>Delete</th> 
                                             </c:if>
-                                    </tr>
+                                    </thead>
+                                <tbody>
                                     <c:forEach items="${locations}" var="location">
                                         <tr>
                                             <td>${location.id}</td>
