@@ -2,7 +2,10 @@ package com.monsterhunters.pa165.mvc.controllers;
 
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
 import com.monsterhunters.pa165.dto.UserChangePassDTO;
+import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
+import com.monsterhunters.pa165.exceptions.user.EmailAlreadyExistsException;
+import com.monsterhunters.pa165.exceptions.user.NicknameAlreadyExistsException;
 import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
 import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.UserFacade;
@@ -68,6 +71,38 @@ public class UserController {
             return "404";
         }
 
+    }
+
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public String signin(Model model) {
+        model.addAttribute("userCreate", new UserCreateDTO());
+        return "user/signin";
+    }
+
+    @RequestMapping(value = "/trySignin", method = RequestMethod.POST)
+    public String trySignin(Model model,
+                           @Valid @ModelAttribute("userCreate") UserCreateDTO formBean,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes,
+                           UriComponentsBuilder uriBuilder,
+                           HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return bindingErrors(model, bindingResult, "user/signin");
+        }
+        try {
+            userFacade.registerUser(formBean);
+            redirectAttributes.addFlashAttribute("alert_success", String.format("User %s signed in", formBean.getNickname()));
+            LOGGER.debug("User signed in: " + formBean.getNickname());
+            return "redirect:/";
+        } catch (EmailAlreadyExistsException e) {
+            LOGGER.trace("Sign in failed. Caused by: ", e);
+            bindingResult.rejectValue("email", "error.emailAlreadyExists", String.format("Email %s is already registered.", e.getEmail()));
+            return "user/signin";
+        } catch (NicknameAlreadyExistsException e) {
+            LOGGER.trace("Sign in failed. Caused by: ", e);
+            bindingResult.rejectValue("email", "error.nicknameAlreadyExists", String.format("Nickname %s is already registered.", e.getNickname()));
+            return "user/signin";
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
