@@ -121,6 +121,9 @@
                     </c:when>
                     <c:otherwise>
                         <li>
+                            <a href="${pageContext.request.contextPath}/user/signin">Sign in</a>
+                        </li>
+                        <li>
                             <a href="${pageContext.request.contextPath}/user/login">Login</a>
                         </li>
                     </c:otherwise>
