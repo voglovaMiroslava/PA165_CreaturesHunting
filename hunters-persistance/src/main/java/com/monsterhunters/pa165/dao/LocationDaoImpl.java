@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * LocationDao implementation
@@ -84,7 +85,11 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Location update(Location location) {
+    public Location update(Location location) throws IllegalArgumentException {
+        Location loc = findByName(location.getName());
+        
+        if(loc != null && !Objects.equals(location.getId(), loc.getId()))
+            throw new IllegalArgumentException("Location with that name allready exists.");
         return em.merge(location);
     }
 

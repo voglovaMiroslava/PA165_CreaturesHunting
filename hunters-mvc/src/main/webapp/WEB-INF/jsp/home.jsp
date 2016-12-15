@@ -58,12 +58,16 @@
                             <p>Find out which weapon is best for you.</p>
                         </div>
                     </div>
-
                 </div> 
             </div>
         </div>
+        <!--   Footer -->
+        <footer class="footer">
+            <div class="pull-right hidden-xs">
+                <a href="https://www.fi.muni.cz" target="_blank"></a>
+            </div>
+            <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>
 
-    </div>
-
-</jsp:attribute>
+        </footer>
+    </jsp:attribute>
 </my:pagetemplate>
