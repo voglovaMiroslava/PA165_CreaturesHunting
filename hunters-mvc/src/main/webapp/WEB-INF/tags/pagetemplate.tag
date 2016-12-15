@@ -8,206 +8,169 @@
 
 <!DOCTYPE html>
 <html lang="${pageContext.request.locale}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><c:out value="${title}"/></title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/bootstrap/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/AdminLTE.min.css">
-    <!--link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/skins/skin-blue.min.css"-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><c:out value="${title}"/></title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/AdminLTE.min.css">
+        <!--link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/skins/skin-blue.min.css"-->
 
 
-    <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet">
-    <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">-->
-    <link href="${pageContext.request.contextPath}/static/dist/css/main.css" rel="stylesheet">
-    <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css"
-          rel="stylesheet">
-    <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">-->
+        <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet">
+        <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">-->
+        <link href="${pageContext.request.contextPath}/static/dist/css/main.css" rel="stylesheet">
+        <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css"
+              rel="stylesheet">
+        <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">-->
 
+        <style>
+            body {
+                /*background-image: url("
+                ${pageContext.request.contextPath} /static/dist/img/66617.jpg");*/
+                /*background-color: #CECB26;*/
+                padding: 20px;
+                padding-top: 70px;
+                /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+            }
 
-    <style>
-        body {
-            /*background-image: url("
-        ${pageContext.request.contextPath} /static/dist/img/66617.jpg");*/
-            /*background-color: #CECB26;*/
-            padding: 20px;
-            padding-top: 70px;
-            /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-        }
+            .center {
+                margin: auto;
+                width: 90%;
+                padding: 1px;
+            }
 
-        .center {
-            margin: auto;
-            width: 90%;
-            padding: 1px;
-        }
+            .actions {
+                width: 70px;
+            }
 
-        .actions {
-            width: 70px;
-        }
+            .actions a {
+                margin-right: 5px;
+            }
 
-        .actions a {
-            margin-right: 5px;
-        }
+            .alertCallout {
+                padding-top: 20px;
+                margin-left: 14px;
+                margin-bottom: -10px;
+            }
 
-        .alertCallout {
-            padding-top: 20px;
-            margin-left: 14px;
-            margin-bottom: -10px;
-        }
-    </style>
-    <!-- jQuery 2.1.4 -->
-    <script src="${pageContext.request.contextPath}/static/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+            .footer {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                padding: 1rem;
+                background-color: #efefef;
+                text-align: center;
+            }
+        </style>
+        <!-- jQuery 2.1.4 -->
+        <script src="${pageContext.request.contextPath}/static/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
-    <jsp:invoke fragment="head"/>
-</head>
-<!-- Navigation -->
-<c:set var="authenticatedUser" value="${pageContext.request.getSession().getAttribute('authenticatedUser')}"/>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}">MAIN MENU</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-left">
-                <li>
-                    <a href="${pageContext.request.contextPath}/location/list">Location</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/weapon/list">Weapon</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/monster/list">Monster</a>
-                </li>
-                <c:if test="${not empty authenticatedUser && authenticatedUser.admin}">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/user/list">User list</a>
-                    </li>
-                </c:if>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <c:choose>
-                    <c:when test="${not empty authenticatedUser}">
-                        <li>
-                            <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.id}">${authenticatedUser.nickname}</a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/user/signin">Sign in</a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/user/login">Login</a>
-                        </li>
-                    </c:otherwise>
-                </c:choose>
-
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-
-<!-- page title -->
-<c:if test="${not empty title}">
-    <div class="page-header">
-        <h1><c:out value="${title}"/></h1>
-    </div>
-</c:if>
-
-<!-- alerts -->
-<c:if test="${not empty alert_danger}">
-    <div class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <c:out value="${alert_danger}"/></div>
-</c:if>
-<c:if test="${not empty alert_info}">
-    <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
-</c:if>
-<c:if test="${not empty alert_success}">
-    <div class="alert alert-success" role="alert"><c:out value="${alert_success}"/></div>
-</c:if>
-<c:if test="${not empty alert_warning}">
-    <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
-</c:if>
-
-<!-- page body -->
-<jsp:invoke fragment="body"/>
-
-<!--   Footer -->
-<!--    <center>
-        <footer class="footer bottom">
-            <div class="pull-right hidden-xs">
-                <a href="https://www.fi.muni.cz" target="_blank"><fmt:message key="menu.fi"/></a>
+        <jsp:invoke fragment="head"/>
+    </head>
+    <!-- Navigation -->
+    <c:set var="authenticatedUser" value="${pageContext.request.getSession().getAttribute('authenticatedUser')}"/>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="${pageContext.request.contextPath}">MAIN MENU</a>
             </div>
-            <strong>Copyright &copy; 2016 <a href="https://github.com/voglovaMiroslava/PA165_CreaturesHunting">PA165 Hunters Team No. 1</a>.</strong> <fmt:message key="menu.rights"/>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/location/list">Location</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/weapon/list">Weapon</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/monster/list">Monster</a>
+                    </li>
+                    <c:if test="${not empty authenticatedUser && authenticatedUser.admin}">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/user/list">User list</a>
+                        </li>
+                    </c:if>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <c:choose>
+                        <c:when test="${not empty authenticatedUser}">
+                            <li>
+                                <a href="${pageContext.request.contextPath}/user/view/${authenticatedUser.id}">${authenticatedUser.nickname}</a>
+                            </li>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/user/signin">Sign in</a>
+                            </li>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/user/login">Login</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
 
-        </footer>
-    </center>-->
-<!--REQUIRED JS SCRIPTS -->
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
-<!-- Bootstrap 3.3.5 -->
-<script src="${pageContext.request.contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="${pageContext.request.contextPath}/static/dist/js/app.min.js"></script>
 
-<script>
+    <!-- page title -->
+    <c:if test="${not empty title}">
+        <div class="page-header">
+            <h1><c:out value="${title}"/></h1>
+        </div>
+    </c:if>
 
-    function bindRemoveItem() {
-        if ($(".removeItem").length > 0) {
-            $("body").delegate(".removeItem", "click", function () {
-                if (confirm("Do you want to delete this item?"))
-                    $(this).find("form").submit();
+    <!-- alerts -->
+    <c:if test="${not empty alert_danger}">
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <c:out value="${alert_danger}"/></div>
+        </c:if>
+        <c:if test="${not empty alert_info}">
+        <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
+    </c:if>
+    <c:if test="${not empty alert_success}">
+        <div class="alert alert-success" role="alert"><c:out value="${alert_success}"/></div>
+    </c:if>
+    <c:if test="${not empty alert_warning}">
+        <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
+    </c:if>
 
-                return false;
-            });
-        }
+    <!-- page body -->
+    <jsp:invoke fragment="body"/>
 
-        if ($(".rentItem").length > 0) {
-            $("body").delegate(".rentItem", "click", function () {
-                if (confirm("Do you want to rent this item?"))
-                    $(this).find("form").submit();
+    <!-- Bootstrap 3.3.5 -->
+    <script src="${pageContext.request.contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="${pageContext.request.contextPath}/static/dist/js/app.min.js"></script>
 
-                return false;
-            });
-        }
-    }
-
-    $(document).ready(function () {
-        setActiveMenu();
-
-        if ($(".callout").length > 0) {
-            setTimeout(function () {
-                $(".callout").fadeOut(400);
-            }, 5000);
-        }
-
-        bindRemoveItem();
-    });
-</script>
 </body>
 </html>
 

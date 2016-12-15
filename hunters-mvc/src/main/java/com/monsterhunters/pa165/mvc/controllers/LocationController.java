@@ -66,14 +66,6 @@ public class LocationController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
         log.debug("view({})", id);
-//        WeaponDTO bestWeapon = locationFacade.getBestWeapon(id);
-//        if (bestWeapon != null) {
-//            model.addAttribute("bestWeapon", bestWeapon);
-//            model.addAttribute("hasBestWeapon", true);
-//        }
-//        else {
-//            model.addAttribute("hasBestWeapon", false);
-//        }
         try {
         model.addAttribute("bestWeapon", locationFacade.getBestWeapon(id));
         model.addAttribute("location", locationFacade.getLocationById(id));
@@ -105,8 +97,9 @@ public class LocationController {
         if (getUser(request) == null || getUser(request).isAdmin() == false) {
             return "/403";
         }
-
+        
         locationFacade.removeComment(locationId, commentId);
+        redirectAttributes.addFlashAttribute("alert_success", "Comment was deleted.");
         return "redirect:" + uriBuilder.path("/location/view/" + locationId).toUriString();
     }
 
@@ -136,10 +129,10 @@ public class LocationController {
             id = locationFacade.updateLocation(formBean);
             log.debug("id of updated location", id);
             //report success
-            redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was updated");
+            redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was updated.");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
         } catch (HuntersServiceException ex) {
-            bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
+            bindingResult.rejectValue("name", "error.updateError", "Please type different name.");
             return "location/edit";
         }
     }
@@ -182,7 +175,7 @@ public class LocationController {
             Long cId = commentFacade.createComment(formBean);
             locationFacade.addComment(id, cId);
             //report success
-            redirectAttributes.addFlashAttribute("alert_success", "Comment " + cId + " was created");
+            redirectAttributes.addFlashAttribute("alert_success", "Comment to location " + locationFacade.getLocationById(id).getName() + " was created.");
             return "redirect:" + uriBuilder.path("/location/view/" + id).buildAndExpand(cId).encode().toUriString();
         } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("content", "error.commentAlreadyExist", "Same comment already exists for this location.");
