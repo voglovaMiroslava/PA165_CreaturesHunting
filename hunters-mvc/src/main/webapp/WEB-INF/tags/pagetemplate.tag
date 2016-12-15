@@ -22,21 +22,14 @@
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/AdminLTE.min.css">
-        <!--link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/css/skins/skin-blue.min.css"-->
-
-
         <link href="${pageContext.request.contextPath}/static/dist/css/animate.min.css" rel="stylesheet">
-        <!--<link href="${pageContext.request.contextPath}/static/dist/css/lightbox.css" rel="stylesheet">-->
         <link href="${pageContext.request.contextPath}/static/dist/css/main.css" rel="stylesheet">
-        <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css"
-              rel="stylesheet">
-        <!--<link href="${pageContext.request.contextPath}/static/dist/css/responsive.css" rel="stylesheet">-->
+        <link id="css-preset" href="${pageContext.request.contextPath}/static/dist/css/presets/preset1.css"rel="stylesheet">
 
         <style>
             body {
                 /*background-image: url("
                 ${pageContext.request.contextPath} /static/dist/img/66617.jpg");*/
-                /*background-color: #CECB26;*/
                 padding: 20px;
                 padding-top: 70px;
                 /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
@@ -72,9 +65,7 @@
                 text-align: center;
             }
         </style>
-        <!-- jQuery 2.1.4 -->
-        <script src="${pageContext.request.contextPath}/static/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-
+        
         <jsp:invoke fragment="head"/>
     </head>
     <!-- Navigation -->
@@ -168,8 +159,6 @@
 
     <!-- Bootstrap 3.3.5 -->
     <script src="${pageContext.request.contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="${pageContext.request.contextPath}/static/dist/js/app.min.js"></script>
 
 </body>
 </html>
