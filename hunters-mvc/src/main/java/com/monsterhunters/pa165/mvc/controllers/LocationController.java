@@ -10,6 +10,7 @@ import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.LocationFacade;
 import static com.monsterhunters.pa165.mvc.controllers.UserController.AUTHENTICATED_USER;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,8 @@ public class LocationController {
     @RequestMapping(value = "/{locationId}/comment/delete/{commentId}", method = RequestMethod.POST)
     public String deleteComment(@PathVariable long locationId, @PathVariable long commentId, Model model,
             UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+        Long uId = commentFacade.getCommentById(commentId).getUser().getId();
+        if (getUser(request) == null || (getUser(request).isAdmin() == false && !Objects.equals(getUser(request).getId(), uId))) {
             return "/403";
         }
         
@@ -108,8 +110,11 @@ public class LocationController {
         if (getUser(request) == null || getUser(request).isAdmin() == false) {
             return "/403";
         }
+        
         log.debug("editLocation()");
         LocationDTO location = locationFacade.getLocationById(id);
+        if(location == null)
+            return "/404";
         log.debug("locationDTO with id after locationFacede.getLocationById(id)", location.getId());
         log.debug(location.getId().toString());
         model.addAttribute("locationUpdate", location);
@@ -152,6 +157,10 @@ public class LocationController {
         if (getUser(request) == null) {
             return "/403";
         }
+        LocationDTO location = locationFacade.getLocationById(id);
+        if(location == null)
+            return "/404";
+        
         log.debug("newComment()");
         model.addAttribute("commentCreate", new CommentCreateDTO());
         model.addAttribute("locationId", id);
@@ -170,6 +179,9 @@ public class LocationController {
             model.addAttribute("locationId", id);
             return "/location/comment/new";
         }
+        LocationDTO location = locationFacade.getLocationById(id);
+        if(location == null)
+            return "/403";
         try {
             //create comment
             Long cId = commentFacade.createComment(formBean);
