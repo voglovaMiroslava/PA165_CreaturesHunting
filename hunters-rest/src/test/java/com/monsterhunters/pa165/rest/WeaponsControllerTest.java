@@ -2,11 +2,9 @@ package com.monsterhunters.pa165.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monsterhunters.pa165.dto.CommentDTO;
-import com.monsterhunters.pa165.dto.UserDTO;
-import com.monsterhunters.pa165.dto.WeaponCreateDTO;
-import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.dto.*;
 import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.WeaponFacade;
 import com.monsterhunters.pa165.rest.controllers.GlobalExceptionController;
 import com.monsterhunters.pa165.rest.controllers.WeaponsController;
@@ -54,6 +52,8 @@ public class WeaponsControllerTest {
     @Mock
     private WeaponFacade weaponFacade;
 
+    @Mock
+    private CommentFacade commentFacade;
 
     @InjectMocks
     WeaponsController weaponsController = new WeaponsController();
@@ -204,10 +204,15 @@ public class WeaponsControllerTest {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setUser(user());
         commentDTO.setContent("Test COMMENT");
-        commentDTO.setId(1L);
+        commentDTO.setId(20L);
 
-        String json = this.convertObjectToJsonBytes(commentDTO);
+        CommentCreateDTO commentCreateDTO = new CommentCreateDTO();
+        commentCreateDTO.setUserId(user().getId());
+        commentCreateDTO.setContent("Test COMMENT");
 
+        String json = this.convertObjectToJsonBytes(commentCreateDTO);
+
+        doReturn(commentDTO.getId()).when(commentFacade).createComment(any(CommentCreateDTO.class));
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -216,12 +221,12 @@ public class WeaponsControllerTest {
             }
         }).when(weaponFacade).addComment(weapons.get(0).getId(), commentDTO.getId());
 
-        mockMvc.perform(put("/weapons/10/comments").contentType(MediaType.APPLICATION_JSON_VALUE)
+        mockMvc.perform(post("/weapons/10/comments").contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==10)].name").value("Pistol"))
-                .andExpect(jsonPath("$.[?(@.id==10)].comments.[?(@.id==1)].content").value("Test COMMENT"));
+                .andExpect(jsonPath("$.[?(@.id==10)].comments.[?(@.id==20)].content").value("Test COMMENT"));
     }
 
     @Test
