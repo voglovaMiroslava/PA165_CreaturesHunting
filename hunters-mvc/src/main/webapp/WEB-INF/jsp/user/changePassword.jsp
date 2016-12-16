@@ -19,10 +19,8 @@
                    modelAttribute="changePass" cssClass="form-horizontal">
 
             <div>
-                <form:label path="nickname" cssClass="control-label">Nickname</form:label>
                 <div>
-                    <form:input path="nickname" cssClass="form-control"/>
-                    <form:errors path="nickname" cssClass="help-block"/>
+                    <form:input path="nickname" cssClass="form-control" value="${changePass.nickname}" type="hidden"/>
                 </div>
             </div>
             <div>
