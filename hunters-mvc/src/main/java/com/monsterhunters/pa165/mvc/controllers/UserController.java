@@ -96,6 +96,11 @@ public class UserController {
             userFacade.registerUser(formBean);
             redirectAttributes.addFlashAttribute("alert_success", String.format("User %s signed in", formBean.getNickname()));
             LOGGER.debug("User signed in: " + formBean.getNickname());
+            UserAuthenticateDTO user = new UserAuthenticateDTO();
+            user.setNickname(formBean.getNickname());
+            user.setPassword(formBean.getPlainPassword());
+            model.addAttribute("userAuthenticate", user);
+            tryLogin(model, user, bindingResult, redirectAttributes, uriBuilder, request);
             return "redirect:/";
         } catch (EmailAlreadyExistsException e) {
             LOGGER.trace("Sign in failed. Caused by: ", e);
@@ -143,9 +148,9 @@ public class UserController {
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
     public String changePassword(Model model, HttpServletRequest request) {
-        UserChangePassDTO userchange = new UserChangePassDTO();
-        userchange.setNickname(getUser(request).getNickname());
-        model.addAttribute("changePass", userchange);
+        UserChangePassDTO userChange = new UserChangePassDTO();
+        userChange.setNickname(getUser(request).getNickname());
+        model.addAttribute("changePass", userChange);
         return "user/changePassword";
     }
 
