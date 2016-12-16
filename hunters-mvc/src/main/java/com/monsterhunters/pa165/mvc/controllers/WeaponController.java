@@ -62,7 +62,11 @@ public class WeaponController {
     public String view(@PathVariable long id, Model model) {
         log.debug("view({})", id);
         try {
-            model.addAttribute("weapon", weaponFacade.getWeaponById(id));
+            WeaponDTO weaponDTO = weaponFacade.getWeaponById(id);
+            if (weaponDTO == null) {
+                return "/404";
+            }
+            model.addAttribute("weapon", weaponDTO);
             model.addAttribute("killable", weaponFacade.getKillableMonsters(id));
         } catch (HuntersServiceException ex) {
             return "/404";
@@ -95,16 +99,14 @@ public class WeaponController {
         if (getUser(request) == null || getUser(request).isAdmin() == false) {
             return "/403";
         }
-        try {
-            log.debug("editWeapon()");
-            WeaponDTO weapon = weaponFacade.getWeaponById(id);
-            log.debug("weaponDTO with id after weaponFacede.getWeaponById({})", weapon.getId());
-            log.debug(weapon.getId().toString());
-            model.addAttribute("weaponUpdate", weapon);
-            return "weapon/edit";
-        } catch (HuntersServiceException ex) {
+
+        log.debug("editWeapon()");
+        WeaponDTO weaponDTO = weaponFacade.getWeaponById(id);
+        if (weaponDTO == null) {
             return "/404";
         }
+        model.addAttribute("weaponUpdate", weaponDTO);
+        return "weapon/edit";
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
