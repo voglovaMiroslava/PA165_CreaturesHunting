@@ -1,12 +1,10 @@
 package com.monsterhunters.pa165.rest.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.monsterhunters.pa165.dto.CommentDTO;
-import com.monsterhunters.pa165.dto.MonsterDTO;
-import com.monsterhunters.pa165.dto.WeaponCreateDTO;
-import com.monsterhunters.pa165.dto.WeaponDTO;
+import com.monsterhunters.pa165.dto.*;
 import com.monsterhunters.pa165.entity.Monster;
 import com.monsterhunters.pa165.enums.MonsterType;
+import com.monsterhunters.pa165.facade.CommentFacade;
 import com.monsterhunters.pa165.facade.WeaponFacade;
 import com.monsterhunters.pa165.rest.exceptions.ResourceAlreadyExistingException;
 import com.monsterhunters.pa165.rest.exceptions.ResourceNotFoundException;
@@ -36,6 +34,9 @@ public class WeaponsController {
 
     @Autowired
     private WeaponFacade weaponFacade;
+
+    @Autowired
+    private CommentFacade commentFacade;
 
     /**
      * Get list of all Weapons by
@@ -107,21 +108,21 @@ public class WeaponsController {
     }
 
     /** Add comment to list of comments by PUT method
-     *  curl -X PUT -i -H "Content-Type: application/json"
-     *  --data '{"id":3,"user":{"id":2,"nickname":"JohnWick",
-     *  "email":"johnwick@getkill.com","admin":false},"content":"Test unassigned comment."}'
-     *  http://localhost:8080/pa165/rest/weapons/3/comments
+     * curl -X POST http://localhost:8080/pa165/rest/weapons/2/comments/
+     * -i -H "Content-Type: application/json" --data
+     * '{"userId":"1","content":"Test unassigned comment."}'
      * @param id is id of weapon
      * @param comment is CommentDTO object
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/{id}/comments", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public final WeaponDTO addComment(@PathVariable("id") long id, @RequestBody CommentDTO comment) throws Exception {
+    public final WeaponDTO addComment(@PathVariable("id") long id, @RequestBody CommentCreateDTO comment) throws Exception {
         logger.debug("rest addComment({)", id);
         try {
-            weaponFacade.addComment(id, comment.getId());
+            Long commentId = commentFacade.createComment(comment);
+            weaponFacade.addComment(id, commentId);
             return weaponFacade.getWeaponById(id);
         } catch (Exception ex) {
             throw new InvalidParameterException();
