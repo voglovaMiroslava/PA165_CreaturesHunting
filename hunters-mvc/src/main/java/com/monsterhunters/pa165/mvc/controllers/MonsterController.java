@@ -62,7 +62,11 @@ public class MonsterController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
         LOG.debug("[mvc] getting view of monster with id " + id);
-        model.addAttribute("monster", monsterFacade.findById(id));
+        MonsterDTO monster = monsterFacade.findById(id);
+        if (monster == null) {
+            return "/404";
+        }
+        model.addAttribute("monster", monster);
         return "monster/view";
     }
 
@@ -112,6 +116,9 @@ public class MonsterController {
         }
         LOG.debug("[mvc] getting form for editing monster");
         MonsterDTO monster = monsterFacade.findById(id);
+        if (monster == null) {
+            return "/404";
+        }
         model.addAttribute("monsterToUpdate", monster);
         prepateModelForMonsterForm(model);
         return "monster/edit";
