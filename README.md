@@ -68,13 +68,16 @@ $ curl -X PUT -i -H "Content-Type: application/json" --data '{"name":"TEST UPDAT
  ```
  Add comment to weapon:
  ```
-$  curl -X PUT http://localhost:8080/pa165/rest/weapons/2/comments/ -i -H "Content-Type: application/json" --data '{"id":3,"user":{"id":2,"nickname":"JohnWick", "email":"johnwick@getkill.com","admin":false},"content":"Test unassigned comment."}'
+  $  curl -X POST http://localhost:8080/pa165/rest/weapons/{id}/comments/ -i -H "Content-Type: application/json" --data '{"userId":"1","content":"Test unassigned comment."}'
  ```
  Remove comment from weapon:
   ```
 $  curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/{weaponID}/comments/{commentID}
  ```
-
+ List of monsters that can be killed with weapon:
+  ```
+$ curl -i -X GET http://localhost:8080/pa165/rest/weapons/{id}/killable
+ ```
 List of locations:
 ```
   $ curl -i -X GET http://localhost:8080/pa165/rest/locations
@@ -99,7 +102,7 @@ Delete location:
 ```
   $  curl -i -X DELETE http://localhost:8080/pa165/rest/locations/{id}
 ```
- Create comment to location:
+Create comment to location:
 ```
 curl -X POST http://localhost:8080/pa165/rest/locations/{locationId}/comments/{userNickName} -i -H "Content-Type: application/json" --data '{"content":"test content to comment"}'
 ```
