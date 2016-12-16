@@ -8,7 +8,7 @@
 <fmt:message var="title" key="weapon.list.title"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-bottom: 10px">
         <c:if test="${authenticatedUser.isAdmin()}">
             <button type="button" class="btn-primary btn" style="float:right" title='Add new weapon'
                          onclick="location.href='${pageContext.request.contextPath}/weapon/new'">
@@ -19,7 +19,7 @@
 
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
-            <thead>
+            <thead class="monster-thead">
             <tr>
                 <th>ID</th>
                 <th>Name</th>
