@@ -35,14 +35,14 @@ public class MonstersController {
      * @return list of MonsterDTO
      * @throws JsonProcessingException
      */
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final Collection<MonsterDTO> getMonsters() throws JsonProcessingException {
         LOG.debug("rest getting all monsters");
         
         return monsterFacade.findAll();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final MonsterDTO getMonster(@PathVariable("id") long id) throws Exception {
         LOG.debug("rest getting monster");
         
@@ -54,7 +54,7 @@ public class MonstersController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public final void deleteMonster(@PathVariable("id") long id) throws Exception {
         LOG.debug("rest deleting monster");
         
@@ -68,9 +68,9 @@ public class MonstersController {
     
     /**
      * Create new monster by POST
-     * curl -X POST http://localhost:8080/rest/monters/
+     * curl -X POST http://localhost:8080/pa165/rest/monsters/
      * -i -H "Content-Type: application/json" --data
-     * '{"name":"monter-name","height":"20","weight":"10","power":"200","locationId": {},
+     * '{"name":"monter-name","height":"20","weight":"10","power":"200","locationId": "2",
      * "types":["DRAGON"]}'
      *
      * @param monster

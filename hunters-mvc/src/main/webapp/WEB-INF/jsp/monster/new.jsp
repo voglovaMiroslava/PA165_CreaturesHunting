@@ -11,6 +11,7 @@
             <div class="monster-form-group">
                 <div class="monster-input-error">
                     <form:errors path="name"/>
+                    <c:out value="${duplicateName}"/>
                 </div>
                 <form:label path="name" cssClass="monster-view-attrib">Name</form:label>
                 <form:input path="name" cssClass="monster-input"/>
