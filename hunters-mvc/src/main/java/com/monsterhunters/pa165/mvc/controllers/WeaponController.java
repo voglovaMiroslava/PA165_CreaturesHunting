@@ -226,13 +226,14 @@ public class WeaponController {
                                 RedirectAttributes redirectAttributes,
                                 UriComponentsBuilder uriBuilder,
                                 HttpServletRequest request) {
-        if (getUser(request).getId() != id && getUser(request).isAdmin() == false) {
-            return "/403";
-        }
         if (getUser(request) == null) {
             return "/403";
         }
         CommentDTO comment = commentFacade.getCommentById(cId);
+        Long commentUserId = comment.getUser().getId();
+        if ((getUser(request).getId() != commentUserId) && (getUser(request).isAdmin() == false)) {
+            return "/403";
+        }
         weaponFacade.removeComment(id, cId);
         log.debug("deleteComment({})", cId);
         redirectAttributes.addFlashAttribute("alert_success", "Comment \"" + comment.getId() + "\" was deleted.");
