@@ -122,7 +122,7 @@
                                                 <tr>
                                                     <th>User</th>
                                                     <th>Content</th>
-                                                        <c:if test="${authenticatedUser.isAdmin() == true}">
+                                                        <c:if test="${authenticatedUser.admin}">
                                                         <th>Delete</th>
                                                         </c:if>
                                                 </tr>
@@ -132,7 +132,7 @@
                                                     <tr>
                                                         <td><c:out value="${comment.user.nickname}"/></td>
                                                         <td><c:out value="${comment.content}"/></td>
-                                                        <c:if test="${authenticatedUser.isAdmin() == true}">
+                                                        <c:if test="${authenticatedUser.admin  or (authenticatedUser.id eq comment.user.id)}">
                                                             <td class="actions">
                                                                 <div class="center">
                                                                     <a href="#" title='Remove comment' class="removeItem">
