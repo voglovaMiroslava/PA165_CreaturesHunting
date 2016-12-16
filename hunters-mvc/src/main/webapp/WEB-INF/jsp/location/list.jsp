@@ -36,14 +36,14 @@
 
                             <table class="table table-hover">
                                 <thead class="monster-thead">
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Detail</th>
-                                            <c:if test="${authenticatedUser.isAdmin()==true}">
-                                            <th>Delete</th> 
-                                            </c:if>
-                                    </thead>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Detail</th>
+                                    <c:if test="${authenticatedUser.isAdmin()==true}">
+                                    <th>Delete</th> 
+                                    </c:if>
+                                </thead>
                                 <tbody>
                                     <c:forEach items="${locations}" var="location">
                                         <tr>
@@ -78,6 +78,10 @@
                     <!-- /.box -->
                 </div>
             </div>
+            <center>
+                <a href="${pageContext.request.contextPath}/" title='Go to MainPage'>
+                    <button style="display:inline; border:0; background-color: transparent" class="btn-app"> Back to Menu</button></a>
+            </center>
             <!--<form ><input Type="button" VALUE="Go Back" onClick="history.go(-1);return true;"></form>-->
         </section><!-- /.content -->
 

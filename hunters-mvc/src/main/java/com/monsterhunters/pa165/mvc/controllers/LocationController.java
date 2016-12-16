@@ -199,7 +199,7 @@ public class LocationController {
         try {
             Long id = locationFacade.createLocation(formBean);
             //report success
-            redirectAttributes.addFlashAttribute("alert_success", "Location " + id + " was created");
+            redirectAttributes.addFlashAttribute("alert_success", "Location " + formBean.getName() + " was created");
             return "redirect:" + uriBuilder.path("/location/view/{id}").buildAndExpand(id).encode().toUriString();
         } catch (HuntersServiceException ex) {
             bindingResult.rejectValue("name", "error.nameAlreadyExist", "Please type different name.");
