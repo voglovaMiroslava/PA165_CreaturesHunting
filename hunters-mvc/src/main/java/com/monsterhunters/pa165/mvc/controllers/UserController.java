@@ -148,9 +148,9 @@ public class UserController {
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
     public String changePassword(Model model, HttpServletRequest request) {
-        UserChangePassDTO userchange = new UserChangePassDTO();
-        userchange.setNickname(getUser(request).getNickname());
-        model.addAttribute("changePass", userchange);
+        UserChangePassDTO userChange = new UserChangePassDTO();
+        userChange.setNickname(getUser(request).getNickname());
+        model.addAttribute("changePass", userChange);
         return "user/changePassword";
     }
 
