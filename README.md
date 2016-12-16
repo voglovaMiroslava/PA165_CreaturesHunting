@@ -22,15 +22,6 @@ After a nuclear disaster there are a lot of mutans, zombies and other creatures 
 ```
 ####CURL commands:
 
-List of locations:
-```
-  $ curl -i -X GET http://localhost:8080/pa165/rest/locations
-```
-Single location:
-```
-  $ curl -i -X GET http://localhost:8080/pa165/rest/locations/{id}
-```
-
 List of monsters:
 ```
   $ curl -i -X GET http://localhost:8080/pa165/rest/monsters
@@ -83,3 +74,36 @@ $  curl -X PUT http://localhost:8080/pa165/rest/weapons/2/comments/ -i -H "Conte
   ```
 $  curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/{weaponID}/comments/{commentID}
  ```
+
+List of locations:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/locations
+```
+Single location:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/locations/{id}
+```
+Best weapon in location
+```
+curl -i -X GET http://localhost:8080/pa165/rest/locations/{id}/bestweapon
+```
+Monsters in location
+```
+curl -i -X GET http://localhost:8080/pa165/rest/locations/{id}}/monsters
+```
+Create location:
+```
+curl -X POST http://localhost:8080/pa165/rest/locations/ -i -H "Content-Type: application/json" --data '{"name":"test","description":"testing description"}'
+```
+Delete location:
+```
+  $  curl -i -X DELETE http://localhost:8080/pa165/rest/locations/{id}
+```
+ Create comment to location:
+```
+curl -X POST http://localhost:8080/pa165/rest/locations/{locationId}/comments/{userNickName} -i -H "Content-Type: application/json" --data '{"content":"test content to comment"}'
+```
+Delete comment in location
+```
+curl -i -X DELETE http://localhost:8080/pa165/rest/locations/{locationId}/comments/{commentId}
+```
