@@ -206,6 +206,9 @@ public class WeaponServiceImpl implements WeaponService {
         }
         int powerOfMonster = m.getPower();
         int weaponAmmo = w.getAmmo();
+        if (weaponAmmo == 0) {
+            return false;
+        }
         int weaponDamage = w.getDamage();
         for (MonsterType mType : m.getTypes()) {
             if (w.getEffectiveAgainst().contains(mType)) {
