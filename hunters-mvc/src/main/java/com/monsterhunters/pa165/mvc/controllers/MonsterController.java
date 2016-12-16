@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -77,7 +78,7 @@ public class MonsterController {
         }
         LOG.debug("[mvc] getting form for new monster");
         model.addAttribute("monsterToCreate", new MonsterCreateDTO());
-        prepateModelForMonsterForm(model);
+        prepareModelForMonsterForm(model);
         return "monster/new";
     }
 
@@ -100,13 +101,20 @@ public class MonsterController {
         }
         LOG.debug("[mvc] creating new monster", formMonster);
         if (bindingResult.hasErrors()) {
-            prepateModelForMonsterForm(model);
+            prepareModelForMonsterForm(model);
             return "monster/new";
         }
 
-        Long id = monsterFacade.createMonster(formMonster);
-        redirectAttributes.addFlashAttribute("alert_success", "Monster " + formMonster.getName() + " was created");
-        return "redirect:" + uriBuilder.path("/monster/view/{id}").buildAndExpand(id).encode().toUriString();
+        try {
+            Long id = monsterFacade.createMonster(formMonster);
+            redirectAttributes.addFlashAttribute("alert_success", "Monster " + formMonster.getName() + " was created");
+            return "redirect:" + uriBuilder.path("/monster/view/{id}").buildAndExpand(id).encode().toUriString();
+        } catch (Exception ex) {
+            model.addAttribute("duplicateName", "Monster with same name is already in database, try another.");
+            prepareModelForMonsterForm(model);
+            return "monster/new";
+        }
+        
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -120,7 +128,7 @@ public class MonsterController {
             return "/404";
         }
         model.addAttribute("monsterToUpdate", monster);
-        prepateModelForMonsterForm(model);
+        prepareModelForMonsterForm(model);
         return "monster/edit";
     }
 
@@ -132,7 +140,7 @@ public class MonsterController {
         }
         LOG.debug("[mvc] updating monster with id " + id);
         if (bindingResult.hasErrors()) {
-            prepateModelForMonsterForm(model);
+            prepareModelForMonsterForm(model);
             return "monster/edit";
         }
 
@@ -143,7 +151,7 @@ public class MonsterController {
                 "/monster/view/{id}").buildAndExpand(id).encode().toUriString();
     }
 
-    private void prepateModelForMonsterForm(Model model) {
+    private void prepareModelForMonsterForm(Model model) {
         model.addAttribute("locationList", locationFacade.getAllLocations());
         model.addAttribute("monsterTypes", MonsterType.values());
     }
