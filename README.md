@@ -47,3 +47,39 @@ Create monster:
 ```
   $ curl -X POST http://localhost:8080/pa165/rest/monsters/ -i -H "Content-Type: application/json" --data '{"name":"monter-name", "height":20.0, "weight":10.0,"power":200,"locationId": 2, "types":["DRAGON"]}'
 ```
+List of weapons:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/weapons
+```
+Single weapon:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/weapons/{id}
+```
+Create weapon:
+```
+  $  curl -X POST http://localhost:8080/pa165/rest/weapons/ -i -H "Content-Type: application/json" --data '{"name":"test","ammo":"20","damage":"10","gunReach":"200", "effectiveAgainst":["DRAGON"]}'
+```
+Delete weapon:
+```
+  $  curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/{id}
+```
+Add monster type to weapon:
+```
+  $   curl -X PUT -G 'http://localhost:8080/pa165/rest/weapons/{id}/types' -d 'monsterType=GROUND'
+```
+Remove monster type from weapon:
+```
+  $   curl -X DELETE -G 'http://localhost:8080/pa165/rest/weapons/{id}/types' -d 'monsterType=FLYING'
+```
+Update weapon:
+```
+$ curl -X PUT -i -H "Content-Type: application/json" --data '{"name":"TEST UPDATE","ammo":"50","damage":"20","gunReach":"200", "effectiveAgainst":["DRAGON"]}' http://localhost:8080/pa165/rest/weapons/{id}
+ ```
+ Add comment to weapon:
+ ```
+$  curl -X PUT http://localhost:8080/pa165/rest/weapons/2/comments/ -i -H "Content-Type: application/json" --data '{"id":3,"user":{"id":2,"nickname":"JohnWick", "email":"johnwick@getkill.com","admin":false},"content":"Test unassigned comment."}'
+ ```
+ Remove comment from weapon:
+  ```
+$  curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/{weaponID}/comments/{commentID}
+ ```
