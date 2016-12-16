@@ -30,3 +30,20 @@ Single location:
 ```
   $ curl -i -X GET http://localhost:8080/pa165/rest/locations/{id}
 ```
+
+List of monsters:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/monsters
+```
+Single monster:
+```
+  $ curl -i -X GET http://localhost:8080/pa165/rest/monsters/{id}
+```
+Delete monster:
+```
+  $ curl -i -X DELETE http://localhost:8080/pa165/rest/monsters/{id}
+```
+Create monster:
+```
+  $ curl -X POST http://localhost:8080/pa165/rest/monsters/ -i -H "Content-Type: application/json" --data '{"name":"monter-name", "height":20.0, "weight":10.0,"power":200,"locationId": 2, "types":["DRAGON"]}'
+```
