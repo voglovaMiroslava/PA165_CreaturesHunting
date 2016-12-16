@@ -38,9 +38,8 @@ public class WeaponsController {
     private WeaponFacade weaponFacade;
 
     /**
-     * Get list of all Weapons GET
-     * http://localhost:8080/rest/weapons
-     *
+     * Get list of all Weapons by
+     * curl -i -X GET http://localhost:8080/pa165/rest/weapons
      * @return list of WeaponDTO
      * @throws JsonProcessingException
      */
@@ -51,9 +50,8 @@ public class WeaponsController {
     }
 
     /**
-     * Get weapon by id GET
-     * http://localhost:8080/rest/weapons/1
-     *
+     * Get weapon by id
+     * curl -i -X GET http://localhost:8080/pa165/rest/weapons/1
      * @param id is ID of weapon
      * @return WeaponDTO
      * @throws Exception
@@ -69,8 +67,7 @@ public class WeaponsController {
 
     /**
      * Delete weapon by id DELETE
-     * http://localhost:8080/rest/weapons/1
-     *
+     * curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/1
      * @param id of weapon
      * @throws Exception
      */
@@ -86,7 +83,7 @@ public class WeaponsController {
 
     /**
      * Create new weapon by POST
-     * curl -X POST http://localhost:8080/rest/weapons/
+     * curl -X POST http://localhost:8080/pa165/rest/weapons/
      * -i -H "Content-Type: application/json" --data
      * '{"name":"test","ammo":"20","damage":"10","gunReach":"200",
      * "effectiveAgainst":["DRAGON"]}'
@@ -110,8 +107,10 @@ public class WeaponsController {
     }
 
     /** Add comment to list of comments by PUT method
-     *
-     *
+     *  curl -X PUT -i -H "Content-Type: application/json"
+     *  --data '{"id":3,"user":{"id":2,"nickname":"JohnWick",
+     *  "email":"johnwick@getkill.com","admin":false},"content":"Test unassigned comment."}'
+     *  http://localhost:8080/pa165/rest/weapons/3/comments
      * @param id is id of weapon
      * @param comment is CommentDTO object
      * @return
@@ -130,7 +129,7 @@ public class WeaponsController {
     }
 
     /** Remove comment from list of comments by DELETE method
-     *
+     * curl -i -X DELETE http://localhost:8080/pa165/rest/weapons/2/comments/2
      * @param id is id of weapon
      * @param commentId is id of comment to be removed
      * @return
@@ -148,9 +147,9 @@ public class WeaponsController {
     }
 
     /** Get list of monsters which can be killed by the weapon by GET method
-     *
+     * curl -i -X GET http://localhost:8080/pa165/rest/weapons/3/killable
      * @param id of weapon
-     * @return list of monsters that can weapon kill
+     * @return list of monsters that can be killed by weapon
      * @throws Exception
      */
     @RequestMapping(value = "/{id}/killable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -164,7 +163,7 @@ public class WeaponsController {
 
     /**
      * Add effective monster type - type that can be hurt by weapon, by PUT method
-     * http://localhost:8080/rest/weapons/1/types?monsterType=FIRE
+     * curl -X PUT -G 'http://localhost:8080/pa165/rest/weapons/2/types' -d 'monsterType=GROUND'
      * @param id is id of weapon
      * @param monsterType is monsterType to be added to list
      * @return WeaponDTO object with modified effectiveAgainst list
@@ -182,7 +181,7 @@ public class WeaponsController {
     }
 
     /**Remove effective monster type from list in weapon by DELETE method
-     * http://localhost:8080/rest/weapons/1/types?monsterType=FLYING
+     * curl -X DELETE -G 'http://localhost:8080/pa165/rest/weapons/2/types' -d 'monsterType=FLYING'
      * @param id is id of weapon
      * @param monsterType is monsterType to be deleted from list
      * @return WeaponDTO object with modified effectiveAgainst list
@@ -200,7 +199,9 @@ public class WeaponsController {
     }
 
     /**Update parameters o weapon by PUT method
-     * http://localhost:8080/rest/weapons/3
+     * curl -X PUT -i -H "Content-Type: application/json"
+     * --data '{"name":"TEST UPDATE","ammo":"50","damage":"20","gunReach":"200",
+     * "effectiveAgainst":["DRAGON"]}' http://localhost:8080/pa165/rest/weapons/3
      * @param id is id of weapon to be updated
      * @param editedWeapon is WeaponDTO object with modified parameters
      * @return updated WeaponDTO object
