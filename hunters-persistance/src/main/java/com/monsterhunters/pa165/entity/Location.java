@@ -25,7 +25,8 @@ public class Location {
     @Column(nullable = false)
     private String description;
 
-    @OneToMany
+    @OneToMany()
+    @JoinColumn(name="Location_FK")
     private Set<Comment> comments = new HashSet<>();
 
     public Location() {
