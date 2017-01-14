@@ -198,4 +198,18 @@ public class UserController {
         model.addAttribute("alert_success", "You have been logged out.");
         return "home";
     }
+    
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public String delete(@PathVariable long id, Model model,
+            UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        if (getUser(request) == null || getUser(request).isAdmin() == false) {
+            return "/403";
+        }
+
+        UserDTO user = userFacade.getUserById(id);
+        userFacade.remove(user);
+        LOGGER.debug("delete({})", id);
+        redirectAttributes.addFlashAttribute("alert_success", "User \"" + user.getNickname()+ "\" was deleted.");
+        return "redirect:" + uriBuilder.path("/user/list").toUriString();
+    }
 }
