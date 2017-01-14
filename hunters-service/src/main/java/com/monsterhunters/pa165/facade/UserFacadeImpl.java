@@ -1,5 +1,6 @@
 package com.monsterhunters.pa165.facade;
 
+import com.monsterhunters.pa165.dto.CommentDTO;
 import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
 import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
@@ -25,6 +26,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private CommentFacade commentFacade;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -83,6 +87,10 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void remove(UserDTO userDTO) {
+        List<CommentDTO> comments = commentFacade.getCommentsByUserNickname(userDTO.getNickname());
+        for (CommentDTO c : comments) {
+            commentFacade.deleteComment(c.getId());
+        }
         userService.remove(mappingService.mapTo(userDTO, User.class));
     }
 

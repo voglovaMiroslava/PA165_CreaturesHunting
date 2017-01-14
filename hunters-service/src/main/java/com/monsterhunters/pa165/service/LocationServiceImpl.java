@@ -107,12 +107,24 @@ public class LocationServiceImpl implements LocationService {
                     + " Location ID:" + location.getId() + " Comment ID:" + comment.getId());
         }
         location.addComment(comment);
+
+        try {
+            locationDao.update(location);
+        } catch (Throwable ex) {
+            throw new HuntersServiceException("Cannot update location with " + location.getId() + " id.", ex);
+        }
     }
 
     @Override
     public void removeComment(Location location, Comment comment) {
         if (!location.removeComment(comment)) {
             throw new HuntersServiceException("Cannot remove comment from location.");
+        }
+        
+        try {
+            locationDao.update(location);
+        } catch (Throwable ex) {
+            throw new HuntersServiceException("Cannot update location with " + location.getId() + " id.", ex);
         }
     }
 

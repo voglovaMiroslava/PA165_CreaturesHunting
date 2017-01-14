@@ -4,6 +4,7 @@ import com.monsterhunters.pa165.dto.UserAuthenticateDTO;
 import com.monsterhunters.pa165.dto.UserChangePassDTO;
 import com.monsterhunters.pa165.dto.UserCreateDTO;
 import com.monsterhunters.pa165.dto.UserDTO;
+import com.monsterhunters.pa165.exceptions.HuntersServiceException;
 import com.monsterhunters.pa165.exceptions.user.EmailAlreadyExistsException;
 import com.monsterhunters.pa165.exceptions.user.NicknameAlreadyExistsException;
 import com.monsterhunters.pa165.exceptions.user.UserDoesNotExistsException;
@@ -207,7 +208,14 @@ public class UserController {
         }
 
         UserDTO user = userFacade.getUserById(id);
-        userFacade.remove(user);
+        try {
+            userFacade.remove(user);
+        } catch (HuntersServiceException e) {
+            LOGGER.trace("Deleting failed. Caused: ", e);
+            model.addAttribute("alert_info", "User cannot be deleted.");
+            return "redirect:" + uriBuilder.path("/user/list").toUriString();
+        }
+            
         LOGGER.debug("delete({})", id);
         redirectAttributes.addFlashAttribute("alert_success", "User \"" + user.getNickname()+ "\" was deleted.");
         return "redirect:" + uriBuilder.path("/user/list").toUriString();
